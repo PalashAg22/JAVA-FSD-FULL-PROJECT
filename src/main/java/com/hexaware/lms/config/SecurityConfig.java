@@ -32,12 +32,6 @@ public class SecurityConfig {
     			.authenticated().and().formLogin().and().build();
 
 	}
-				
-//		return http.csrf().disable()
-//			.authorizeHttpRequests().requestMatchers("/products/welcome","/registration/new").permitAll()
-//		  	.and()
-//		   	.authorizeHttpRequests().requestMatchers("/products/**")
-//		   	.authenticated().and().formLogin().and().build();
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
