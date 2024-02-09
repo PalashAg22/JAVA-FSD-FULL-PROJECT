@@ -1,6 +1,7 @@
 package com.hexaware.lms.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,5 +18,7 @@ public interface CustomerRepository extends JpaRepository<Customer,Long>{
 
 	@Query("select c from Customer c where c.email =?1")	
 	Customer findByEmail(String email);
+
+	Optional<Customer> findByName(String username);
 	
 }
