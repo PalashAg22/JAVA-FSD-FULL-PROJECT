@@ -39,7 +39,7 @@ public class LoanServiceImpl implements ILoanService{
 	LoanTypeRepository loanTypeRepo;
 	
 	@Autowired
-	CustomerRepository custRepo;
+	CustomerRepository customerRepo;
 	
 	@Autowired
 	LoanRepository loanRepo;
@@ -54,7 +54,7 @@ public class LoanServiceImpl implements ILoanService{
 		
 		LoanType loanType = loanTypeRepo.findById(loanTypeId).orElse(null);
 		double interestRate = loanTypeRepo.findLoanInterestBaseRateByLoanId(loanDto.getLoanTypeId());
-		Customer customer = custRepo.findById(customerId).orElse(null);
+		Customer customer = customerRepo.findById(customerId).orElse(null);
 		LocalDate loanApplicationDate = LocalDate.now();
 		
 		LoanApplication loan = new LoanApplication();
