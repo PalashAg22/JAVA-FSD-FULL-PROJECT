@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +28,8 @@ import com.hexaware.lms.service.IAdminService;
 import com.hexaware.lms.service.ICustomerService;
 import com.hexaware.lms.service.ILoanService;
 import com.hexaware.lms.service.ILoanTypeService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -54,7 +55,7 @@ public class AdminRestController {
 	}
 
 	@PostMapping("/createLoanType")
-	public String createNewLoanType(@RequestBody LoanTypeDTO loanTypeDto) throws LoanTypeAlreadyExistException{
+	public String createNewLoanType(@RequestBody @Valid LoanTypeDTO loanTypeDto) throws LoanTypeAlreadyExistException{
 		log.info("Request received to update loanType: "+loanTypeDto);
 		loanTypeService.createLoanType(loanTypeDto);
 		return "Loan Type created";

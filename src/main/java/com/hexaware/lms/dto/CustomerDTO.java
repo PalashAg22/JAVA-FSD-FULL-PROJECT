@@ -11,7 +11,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class CustomerDTO {
-	
 
 	@Size(min=3,max=20)
 	private String customerFirstName;
