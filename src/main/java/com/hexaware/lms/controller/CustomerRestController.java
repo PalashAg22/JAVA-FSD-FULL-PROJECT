@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,12 +50,14 @@ public class CustomerRestController {
 	ILoanTypeService loanTypeService;
 	
 	@PostMapping("/register")
+	@PreAuthorize("hasAuthority('User')")
 	public boolean registerCustomer(@RequestBody CustomerDTO customerDTO) throws DataAlreadyPresentException {
 		log.info("Request Received to register new Customer: "+customerDTO);
 		return customerService.register(customerDTO);
 	}
 	
 	@GetMapping("/login")
+	@PreAuthorize("hasAuthority('User')")
 	public boolean login(@RequestBody LoginDTO loginDto) {
 		log.info("Request Received to login Customer");
 		return customerService.login(loginDto.getUsername(),loginDto.getPassword());
@@ -89,6 +92,7 @@ public class CustomerRestController {
 	}
 	
 	@GetMapping("/dashboard")
+	@PreAuthorize("hasAuthority('User')")
 	public List<LoanType> viewAllAvailableLoans() {
 		log.info("Customer is logged In");
 		return loanTypeService.viewAvailableLoanType();
