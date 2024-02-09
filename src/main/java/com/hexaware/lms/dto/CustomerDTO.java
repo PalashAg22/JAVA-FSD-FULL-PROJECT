@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class CustomerDTO {
-	private long customerId;
+	
 
 	@Size(min=3,max=20)
 	private String customerFirstName;
@@ -67,14 +67,6 @@ public class CustomerDTO {
 		this.creditScore = creditScore;
 		this.panCardNumber = panCardNumber;
 		this.idProof = idProof;
-	}
-
-	public long getCustomerId() {
-		return customerId;
-	}
-
-	public void setCustomerId(long customerId) {
-		this.customerId = customerId;
 	}
 
 	public String getCustomerFirstName() {
@@ -183,7 +175,7 @@ public class CustomerDTO {
 
 	@Override
 	public String toString() {
-		return "CustomerDTO [customerId=" + customerId + ", customerFirstName=" + customerFirstName
+		return "CustomerDTO [" + " customerFirstName=" + customerFirstName
 				+ ", customerLastName=" + customerLastName + ", phoneNumer=" + phoneNumer + ", email=" + email
 				+ ", password=" + password + ", dateOfBirth=" + dateOfBirth + ", address=" + address + ", country="
 				+ country + ", state=" + state + ", creditScore=" + creditScore + ", panCardNumber=" + panCardNumber

@@ -43,10 +43,6 @@ public class Admin{
 		return AdminId;
 	}
 
-	public void setAdminId(long adminId) {
-		AdminId = adminId;
-	}
-
 	public String getAdminFirstName() {
 		return adminFirstName;
 	}

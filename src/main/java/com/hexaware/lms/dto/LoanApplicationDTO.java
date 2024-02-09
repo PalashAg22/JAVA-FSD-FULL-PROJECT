@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Min;
 
 public class LoanApplicationDTO {
 	
-	private long loanId;
+	
 
 	@Min(5000)
 	@Max(10000000)
@@ -41,14 +41,6 @@ public class LoanApplicationDTO {
 		this.loanTypeId = loanTypeId;
 		this.propertyId = propertyId;
 		this.customerId = customerId;
-	}
-
-	public long getLoanId() {
-		return loanId;
-	}
-
-	public void setLoanId(long loanId) {
-		this.loanId = loanId;
 	}
 
 	public double getPrincipal() {
@@ -117,7 +109,7 @@ public class LoanApplicationDTO {
 
 	@Override
 	public String toString() {
-		return "LoanApplicationDTO [loanId=" + loanId + ", principal=" + principal + ", interestRate=" + interestRate
+		return "LoanApplicationDTO [" + " principal=" + principal + ", interestRate=" + interestRate
 				+ ", tenureInMonths=" + tenureInMonths+ ", status=" + status
 				+ ", loanApplyDate=" + loanApplyDate + ", loanTypeId=" + loanTypeId + ", propertyId=" + propertyId
 				+ ", customerId=" + customerId + "]";

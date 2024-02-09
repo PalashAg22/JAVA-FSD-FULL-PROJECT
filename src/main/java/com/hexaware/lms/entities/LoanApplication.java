@@ -60,10 +60,6 @@ public class LoanApplication {
 		return loanId;
 	}
 
-	public void setLoanId(long loanId) {
-		this.loanId = loanId;
-	}
-
 	public double getPrincipal() {
 		return principal;
 	}
