@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.lms.dto.CustomerDTO;
 import com.hexaware.lms.dto.LoanApplicationRequestDTO;
+import com.hexaware.lms.dto.LoginDTO;
 import com.hexaware.lms.entities.LoanApplication;
 import com.hexaware.lms.entities.LoanType;
 import com.hexaware.lms.exception.DataAlreadyPresentException;
@@ -53,10 +54,10 @@ public class CustomerRestController {
 		return customerService.register(customerDTO);
 	}
 	
-	@GetMapping("/login/{username}/{password}")
-	public boolean login(@PathVariable (name="username") String username,@PathVariable(name="password") String password) {
+	@GetMapping("/login")
+	public boolean login(@RequestBody LoginDTO loginDto) {
 		log.info("Request Received to login Customer");
-		return customerService.login(username,password);
+		return customerService.login(loginDto.getUsername(),loginDto.getPassword());
 	}
 	
 	@PostMapping(value="/loan-application/applyLoan",consumes="application/json")

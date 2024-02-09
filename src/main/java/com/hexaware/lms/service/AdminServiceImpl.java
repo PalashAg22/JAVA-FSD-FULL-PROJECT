@@ -26,7 +26,7 @@ public class AdminServiceImpl implements IAdminService {
 
 	@Override
 	public boolean register(AdminDTO adminDto) throws DataAlreadyPresentException {
-		Admin localAdmin = repo.findByEmail(adminDto.getEmail());
+		Admin localAdmin = repo.findByEmail(adminDto.getEmail()).orElse(null);
 		if(localAdmin!=null) {
 			throw new DataAlreadyPresentException("Email Id already present");
 		}

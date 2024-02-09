@@ -9,7 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.hexaware.lms.entities.UserInfo;
+import com.hexaware.lms.entities.Admin;
+import com.hexaware.lms.entities.Customer;
 
 
 public class UserInfoUserDetails implements UserDetails {
@@ -18,10 +19,18 @@ public class UserInfoUserDetails implements UserDetails {
 	private String password;
 	private List<GrantedAuthority> authorities;
 	 
-	public UserInfoUserDetails (UserInfo userInfo) {
-		username=userInfo.getName();
+	public UserInfoUserDetails (Admin userInfo) {
+		username=userInfo.getEmail();
         password=userInfo.getPassword();
-        authorities= Arrays.stream(userInfo.getRoles().split(","))
+        authorities= Arrays.stream(userInfo.getRole().split(","))
+                .map(SimpleGrantedAuthority::new) // .map(str -> new SimpleGrantedAuthority(str))
+                .collect(Collectors.toList());
+	}
+	
+	public UserInfoUserDetails (Customer userInfo) {
+		username=userInfo.getEmail();
+        password=userInfo.getPassword();
+        authorities= Arrays.stream(userInfo.getRole().split(","))
                 .map(SimpleGrantedAuthority::new) // .map(str -> new SimpleGrantedAuthority(str))
                 .collect(Collectors.toList());
 	}
