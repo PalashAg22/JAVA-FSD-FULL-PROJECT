@@ -24,22 +24,19 @@ public class UserInfoUserDetailsService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<Admin> adminInfo = null;
+
+		Optional<Admin> adminInfo=null;
 		Optional<Customer> customerInfo = null;
-		boolean isCustomer=false;
+		
 		if(username.endsWith("@hexaware.com")) {
 			adminInfo = adminRepo.findByEmail(username);
+		       return adminInfo.map(UserInfoUserDetails::new)
+		                .orElseThrow(() -> new UsernameNotFoundException("user not found " + username));
 		}
-		else {
 			customerInfo = customerRepo.findByEmail(username);
-			isCustomer=true;
-		}
-		if(isCustomer) {
 			return customerInfo.map(UserInfoUserDetails::new)
-	                .orElseThrow(() -> new UsernameNotFoundException("user not found " + username));
-		}
-        return adminInfo.map(UserInfoUserDetails::new)
-                .orElseThrow(() -> new UsernameNotFoundException("user not found " + username));
+					.orElseThrow(() -> new UsernameNotFoundException("user not found "+username));
+		
 	}
 
 }
