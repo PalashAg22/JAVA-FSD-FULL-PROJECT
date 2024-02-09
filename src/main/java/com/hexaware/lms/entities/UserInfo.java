@@ -9,6 +9,16 @@ public class UserInfo {
 		super();
 	}
 	
+	public UserInfo(Customer customer) {
+		super();
+		this.customer = customer;
+	}
+
+	public UserInfo(Admin admin) {
+		super();
+		this.admin = admin;
+	}
+
 	public UserInfo(Admin admin, Customer customer) {
 		super();
 		this.admin = admin;

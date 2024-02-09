@@ -6,9 +6,6 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
 public class LoanApplicationDTO {
-	
-	
-
 	@Min(5000)
 	@Max(10000000)
 	private double principal;
