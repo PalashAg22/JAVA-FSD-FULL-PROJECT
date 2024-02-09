@@ -15,6 +15,13 @@ public class UserInfoUserDetails implements UserDetails {
 	
 
 	 
+	public UserInfoUserDetails(String name, String password, List<GrantedAuthority> authorities) {
+		super();
+		this.name = name;
+		this.password = password;
+		this.authorities = authorities;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
