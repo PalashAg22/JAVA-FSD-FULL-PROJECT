@@ -112,55 +112,22 @@ public class LoanServiceImpl implements ILoanService{
 
 	@Override
 	public List<LoanApplication> filterAppliedLoanByType(long customerId,String loanType) throws LoanNotFoundException {
-		List<LoanApplication> loans = allAppliedLoansOfCustomer(customerId);
-		boolean isPresent=false;
-		for(LoanApplication lp:loans) {
-			if(lp.getLoanType().equals(loanType)) {
-				logger.info("Loan Type found...");
-				isPresent=true;
-				break;
-			}
-		}
-		if(!isPresent) {
-			logger.warn("No loan type found for that user");
-			throw new LoanNotFoundException("You have not applied any "+loanType+" loan");
-		}
+		isLoanTypePresent(customerId, loanType);
+		logger.info("Loan Application with customerId "+customerId+" and loanType "+loanType+" is present");
 		return loanRepo.filterAppliedLoanByType(customerId,loanType);
 	}
 
 	@Override
 	public List<LoanApplication> filterAppliedLoanByStatus(long customerId,String status) throws LoanNotFoundException {
-		List<LoanApplication> loans = allAppliedLoansOfCustomer(customerId);
-		boolean isPresent=false;
-		for(LoanApplication lp:loans) {
-			if(lp.getStatus()==status) {
-				logger.info("Loan status found...");
-				isPresent=true;
-				break;
-			}
-		}
-		if(!isPresent) {
-			logger.warn("No loan status found for that user");
-			throw new LoanNotFoundException("None of your loan is "+status);
-		}
+		isLoanStatusPresent(customerId, status);
+		logger.info("Loan Application with customerId "+customerId+" and status "+status+" is present");
 		return loanRepo.filterAppliedLoanByStatus(customerId, status);
 	}
 
 	@Override
 	public LoanApplication searchAppliedLoan(long customerId,long loanId) throws LoanNotFoundException {
-		List<LoanApplication> loans = allAppliedLoansOfCustomer(customerId);
-		boolean isPresent=false;
-		for(LoanApplication lp:loans) {
-			if(lp.getLoanId()==loanId) {
-				logger.info("Loan is present for the customer...");
-				isPresent=true;
-				break;
-			}
-		}
-		if(!isPresent) {
-			logger.warn("Customer has input wrong loan number to search for...");
-			throw new LoanNotFoundException("No Loan found with that loan number");
-		}
+		isLoanIdPresent(customerId, loanId);
+		logger.info("Loan Application with customerId "+customerId+" and loanId "+loanId+" is present");
 		return loanRepo.findByLoanId(customerId,loanId);
 	}
 
@@ -185,12 +152,71 @@ public class LoanServiceImpl implements ILoanService{
 
 	@Override
 	public LoanApplication searchLoanById(long loanId) throws LoanNotFoundException {
+		LoanApplication loan = isLoanIdPresent(loanId);
+		logger.info("Loan found with id "+loanId);
+		return loan;
+	}
+	
+	
+	public boolean isLoanTypePresent(long customerId, String loanType) throws LoanNotFoundException {
+		List<LoanApplication> list = loanRepo.findAllByCustomerCustomerId(customerId);
+		boolean isPresent = false;
+		logger.info("searching for loanType");
+		for(LoanApplication lp : list) {
+			if(lp.getLoanType().equals(loanType)) {
+				logger.info("loanTtype found");
+				isPresent = true;
+				break;
+			}
+		}
+		if(!isPresent) {
+			logger.warn("No loan of type "+loanType+" found for that user");
+			throw new LoanNotFoundException("You have not applied for any loan of type"+loanType);
+		}
+		return isPresent;
+	}
+	
+	public boolean isLoanIdPresent(long customerId,long loanId) throws LoanNotFoundException {
+		List<LoanApplication> loans =  loanRepo.findAllByCustomerCustomerId(customerId);
+		boolean isPresent=false;
+		for(LoanApplication lp:loans) {
+			if(lp.getLoanId()==loanId) {
+				logger.info("Loan is present for the customer...");
+				isPresent=true;
+				break;
+			}
+		}
+		if(!isPresent) {
+			logger.warn("Customer has input wrong loan number "+ loanId +" to search for...");
+			throw new LoanNotFoundException("No Loan found with that loan number "+loanId);
+		}
+		return isPresent;
+	}
+	
+	public boolean isLoanStatusPresent(long customerId, String status) throws LoanNotFoundException {
+		List<LoanApplication> loans = loanRepo.findAllByCustomerCustomerId(customerId);
+		boolean isPresent=false;
+		for(LoanApplication lp:loans) {
+			if(lp.getStatus().equals(status)) {
+				logger.info("Loan status found...");
+				isPresent=true;
+				break;
+			}
+		}
+		if(!isPresent) {
+			logger.warn("No loan of status " + status +" found for that user");
+			throw new LoanNotFoundException("None of your loan is "+status);
+		}
+		return isPresent;
+	}
+	
+	public LoanApplication isLoanIdPresent(long loanId) throws LoanNotFoundException {
 		LoanApplication loan =loanRepo.findById(loanId).orElse(null);
 		if(loan==null) {
-			logger.warn("No Record Found for loanID: "+loanId);
-			throw new LoanNotFoundException("No Record Found for loanID: "+loanId);
+			logger.warn("No Record Found for loanID "+loanId);
+			throw new LoanNotFoundException("No Record Found for loanID "+loanId);
 		}
-		logger.info("Loan found with id: "+loanId);
+		logger.info("Loan found with id "+loanId);
 		return loan;
 	}
 	

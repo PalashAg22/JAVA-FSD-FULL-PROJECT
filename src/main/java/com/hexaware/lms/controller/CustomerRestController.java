@@ -27,6 +27,8 @@ import com.hexaware.lms.service.ILoanService;
 import com.hexaware.lms.service.ILoanTypeService;
 import com.hexaware.lms.service.IPropertyService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/customer")
 public class CustomerRestController {
@@ -58,7 +60,7 @@ public class CustomerRestController {
 	}
 	
 	@PostMapping(value="/loan-application/applyLoan",consumes="application/json")
-	public LoanApplication applyLoan(@RequestBody LoanApplicationRequestDTO loanRequest) throws PropertyAlreadyExistException {
+	public LoanApplication applyLoan(@RequestBody @Valid LoanApplicationRequestDTO loanRequest) throws PropertyAlreadyExistException {
 		return loanService.applyLoan(loanRequest.getLoanApplicationDto(),loanRequest.getPropertyDto());
 	}
 	
