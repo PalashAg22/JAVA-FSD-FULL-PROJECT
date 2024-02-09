@@ -93,7 +93,7 @@ public class CustomerServiceImpl implements ICustomerService {
 	@Override
 	public Customer getCustomerByEmail(String email) {
 		logger.info("Finding "+email+" in database");
-		return repo.findByEmail(email);
+		return repo.findByEmail(email).orElse(null);
 	}
 
 }

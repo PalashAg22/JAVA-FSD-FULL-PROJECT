@@ -17,7 +17,7 @@ public interface CustomerRepository extends JpaRepository<Customer,Long>{
 	Customer findByPhoneNumber(long phoneNumber);
 
 	@Query("select c from Customer c where c.email =?1")	
-	Customer findByEmail(String email);
+	Optional<Customer> findByEmail(String email);
 
 	Optional<Customer> findByName(String username);
 	
