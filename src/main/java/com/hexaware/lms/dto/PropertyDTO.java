@@ -8,8 +8,6 @@ import jakarta.validation.constraints.Size;
 
 public class PropertyDTO {
 
-	private int propertyId;
-
 	@Size(min=10)
 	private String propertyAddress;
 
@@ -36,14 +34,6 @@ public class PropertyDTO {
 		this.propertyValue = propertyValue;
 		this.propertyProof = propertyProof;
 		this.loanApplicationId = loanApplicationId;
-	}
-
-	public int getPropertyId() {
-		return propertyId;
-	}
-
-	public void setPropertyId(int propertyId) {
-		this.propertyId = propertyId;
 	}
 
 	public String getPropertyAddress() {
@@ -88,7 +78,7 @@ public class PropertyDTO {
 
 	@Override
 	public String toString() {
-		return "PropertyDTO [propertyId=" + propertyId + ", propertyAddress=" + propertyAddress + ", propertyAreaInm2="
+		return "PropertyDTO [" + " propertyAddress=" + propertyAddress + ", propertyAreaInm2="
 				+ propertyAreaInm2 + ", propertyValue=" + propertyValue + ", propertyProof="
 				+ Arrays.toString(propertyProof) + ", loanApplicationId=" + loanApplicationId + "]";
 	}

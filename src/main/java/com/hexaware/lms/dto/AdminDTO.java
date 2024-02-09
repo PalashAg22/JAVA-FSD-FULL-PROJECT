@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
 public class AdminDTO {
-	private long AdminId;
+	
 
 	@Size(min=3,max=20)
 	private String adminFirstName;
@@ -32,13 +32,6 @@ public class AdminDTO {
 		this.password = password;
 	}
 
-	public long getAdminId() {
-		return AdminId;
-	}
-
-	public void setAdminId(long adminId) {
-		AdminId = adminId;
-	}
 
 	public String getAdminFirstName() {
 		return adminFirstName;
@@ -82,7 +75,7 @@ public class AdminDTO {
 
 	@Override
 	public String toString() {
-		return "AdminDTO [AdminId=" + AdminId + ", adminFirstName=" + adminFirstName + ", adminLastName="
+		return "AdminDTO ["+ " adminFirstName=" + adminFirstName + ", adminLastName="
 				+ adminLastName + ", email=" + email + ", password=" + password + ", role=" + role + "]";
 	}
 	

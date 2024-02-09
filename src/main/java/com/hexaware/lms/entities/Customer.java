@@ -82,10 +82,6 @@ public class Customer{
 		return customerId;
 	}
 
-	public void setCustomerId(long customerId) {
-		this.customerId = customerId;
-	}
-
 	public String getCustomerFirstName() {
 		return customerFirstName;
 	}
