@@ -24,15 +24,22 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		return http
-			    .csrf().disable()
-			    .authorizeRequests()
-			        .antMatchers("/products/welcome", "/registration/new").permitAll()
-			        .antMatchers("/products/**").authenticated()
-			    .and()
-			    .formLogin()
-			    .and()
-			    .build();
+		return http.csrf().disable().authorizeHttpRequests()
+				.requestMatchers("/api/**").permitAll()
+				.and() 
+				.authorizeHttpRequests().requestMatchers("/api/admin")
+				.authenticated()
+				.and()
+				.formLogin()
+				.and()
+				.build();
+	}
+				
+//		return http.csrf().disable()
+//			.authorizeHttpRequests().requestMatchers("/products/welcome","/registration/new").permitAll()
+//		  	.and()
+//		   	.authorizeHttpRequests().requestMatchers("/products/**")
+//		   	.authenticated().and().formLogin().and().build();
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
