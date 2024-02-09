@@ -1,9 +1,12 @@
-HELP.md
+# Ignore specific files and directories
+
+# Ignore general build artifacts and compiled code
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Ignore IDE specific files and directories
 ### STS ###
 .apt_generated
 .classpath
@@ -12,8 +15,6 @@ target/
 .settings
 .springBeans
 .sts4-cache
-*.log
-*.properties
 
 ### IntelliJ IDEA ###
 .idea
@@ -33,3 +34,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore Help markdown file
+HELP.md
+
+# Ignore properties files
+*.properties
+*.log
