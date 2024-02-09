@@ -25,14 +25,12 @@ public class SecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		return http
-				.authorizeHttpRequests(auth->{
-					auth.requestMatchers("/").permitAll();
-					auth.anyRequest().authenticated();
-				})
-				.oauth2Login(Customizer.withDefaults())
-				.formLogin(Customizer.withDefaults())
-				.build();
+		return http.csrf().disable()
+    			.authorizeHttpRequests().requestMatchers("/api/customer/login","/api/customer/register","/api/admin/login").permitAll()
+    			.and()
+    			.authorizeHttpRequests().requestMatchers("/api/admin/**","/api/customer/**")
+    			.authenticated().and().formLogin().and().build();
+
 	}
 	
 	@Bean
