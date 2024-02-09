@@ -62,7 +62,7 @@ public class CustomerRestController {
 	public boolean login(@PathVariable (name="username") String username,@PathVariable(name="password") String password) {
 
 		log.info("Request Received to login Customer");
-		return customerService.login(loginDto.getUsername(),loginDto.getPassword());
+		return customerService.login(username, password);
 	}
 	
 	@PostMapping(value="/loan-application/applyLoan",consumes="application/json")
