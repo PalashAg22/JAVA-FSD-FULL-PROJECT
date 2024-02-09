@@ -62,7 +62,7 @@ public class AdminRestController {
 	}
 
 	@PostMapping("/createNewAdmin")
-	public boolean createNewAdmin(@RequestBody AdminDTO adminDto) throws DataAlreadyPresentException {
+	public boolean createNewAdmin(@RequestBody @Valid AdminDTO adminDto) throws DataAlreadyPresentException {
 		log.info("Request received to create new Admin: "+adminDto);
 		return adminService.register(adminDto);
 	}
