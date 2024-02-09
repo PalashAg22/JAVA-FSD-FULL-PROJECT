@@ -30,9 +30,7 @@ public class SecurityConfig {
     			.and()
     			.authorizeHttpRequests().requestMatchers("/api/admin/**","/api/customer/**")
     			.authenticated().and().formLogin().and().build();
-
 	}
-
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
