@@ -50,7 +50,7 @@ public class CustomerRestController {
 	ILoanTypeService loanTypeService;
 	
 	@PostMapping("/register")
-	@PreAuthorize("hasAuthority('User')")
+	
 	public boolean registerCustomer(@RequestBody CustomerDTO customerDTO) throws DataAlreadyPresentException {
 		log.info("Request Received to register new Customer: "+customerDTO);
 		return customerService.register(customerDTO);
