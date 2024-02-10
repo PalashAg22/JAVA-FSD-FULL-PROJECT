@@ -1,5 +1,7 @@
 package com.hexaware.lms.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,11 +27,14 @@ import com.hexaware.lms.filter.JwtAuthFilter;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+	Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+	
 	@Autowired
 	JwtAuthFilter authFilter;
 
 	@Bean
 	UserDetailsService userDetailsService() {
+		logger.info("returning new UserInfoUserDetailsService object");
 		return new UserInfoUserDetailsService();
 	}
 
@@ -42,6 +47,7 @@ public class SecurityConfig {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authenticationProvider(authenticationProvider())
 				.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class).build();
+
 	}
 
 	@Bean
@@ -51,6 +57,7 @@ public class SecurityConfig {
 
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
+		logger.info("inside my authenticationProvider()");
 		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 		authenticationProvider.setUserDetailsService(userDetailsService());
 		authenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -60,8 +67,10 @@ public class SecurityConfig {
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 
+	    	logger.info("inside authenticationManager");
 		return config.getAuthenticationManager();
 
 	}
+
 
 }
