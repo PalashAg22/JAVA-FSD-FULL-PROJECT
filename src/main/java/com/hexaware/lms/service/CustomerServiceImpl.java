@@ -48,7 +48,7 @@ public class CustomerServiceImpl implements ICustomerService {
 		customer.setPassword(passwordEncoder.encode(customerDTO.getPassword()));
 		customer.setDateOfBirth(customerDTO.getDateOfBirth());
 		customer.setAddress(customerDTO.getAddress());
-		customer.setCountry("India");
+//		customer.setCountry("India");
 		customer.setState(customerDTO.getState());
 		customer.setCreditScore(customerDTO.getCreditScore());
 		customer.setPanCardNumber(customerDTO.getPanCardNumber());
