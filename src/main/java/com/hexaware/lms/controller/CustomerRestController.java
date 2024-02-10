@@ -72,8 +72,8 @@ public class CustomerRestController {
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword()));
 		if(authentication.isAuthenticated()) {
 			token= jwtService.generateToken(loginDto.getUsername());
-			if(token != null) {
-				log.info("Token for User: "+token);
+			if(token != null) { 
+				log.info("Token for User: "+token); 
 			}else {
 				log.warn("Token not generated");
 			}

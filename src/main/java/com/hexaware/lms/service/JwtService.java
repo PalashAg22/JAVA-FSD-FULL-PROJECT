@@ -21,82 +21,57 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
 	 private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
+	public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";;
 
-	 public static final String SECRET = "cG9zaXRpb25iYXNlYmFsbHNwcmVhZG51bWVyYWxjdXJpb3VzaHVudGFtbGVhdmluZ20=";
-	
-		public String generateToken(String username) {
-	        logger.info("Generating token for username: {}", username);
+	public String generateToken(String username) {
+  logger.info("Generating token for username: {}", username);
+		Map<String, Object> claims = new HashMap<>();
+		return createToken(claims, username);
+	}
 
-			Map<String,Object>  claims = new HashMap<>();
-			
-			return createToken(claims, username);
-			
-		}
-		
-		public String createToken(Map<String,Object> claims , String username) {
-			
-	        logger.info("Creating token for username: {}", username);
+	public String createToken(Map<String, Object> claims, String username) {
+		return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+				.signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+	}
 
-			return Jwts.builder()
-					   .setClaims(claims)
-					   .setSubject(username)
-					   .setIssuedAt(new Date(System.currentTimeMillis()))
-					   .setExpiration(new Date(System.currentTimeMillis()+1000*60*120))
-					   .signWith(getSignKey() , SignatureAlgorithm.HS256).compact();
-					   
-					   
-		}
-		
-		 private Key getSignKey() {
-			 logger.info("generating keys");
-		        byte[] keyBytes= Decoders.BASE64.decode(SECRET);
-		        return Keys.hmacShaKeyFor(keyBytes);
-		    }
-		 
-		 
-		 
-		 
-		 
-		  public String extractUsername(String token) {
-		        logger.info("Extracting username from token");
+	private Key getSignKey() {
+ logger.info("generating keys");
+		byte[] keyBytes = Decoders.BASE64.decode(SECRET);
+		return Keys.hmacShaKeyFor(keyBytes);
+	}
 
-		        return extractClaim(token, Claims::getSubject);
-		    }
+	private Claims extractAllClaims(String token) {
+logger.info("Extracting all claims from token");
+		return Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
+	}
 
-		    public Date extractExpiration(String token) {
-		        logger.info("Extracting expiration from token");
+	public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+logger.info("extracting claims from token");
+		final Claims claims = extractAllClaims(token);
+		return claimsResolver.apply(claims);
+	}
 
-		        return extractClaim(token, Claims::getExpiration);
-		    }
+	public String extractUsername(String token) {
+logger.info("Extracting username from token");
+		return extractClaim(token, Claims::getSubject);
+	}
 
-		    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-		    	logger.info("extracting claims from token");
-		        final Claims claims = extractAllClaims(token);
-		        return claimsResolver.apply(claims);
-		    }
+	public Date extractExpiration(String token) {
+logger.info("Extracting expiration from token");
+		return extractClaim(token, Claims::getExpiration);
+	}
 
-		    private Claims extractAllClaims(String token) {
-		        logger.info("Extracting all claims from token");
+	private Boolean isTokenExpired(String token) {
+ logger.info("Checking if token is expired");
+		return extractExpiration(token).before(new Date());
+	}
 
-		        return Jwts
-		                .parserBuilder()
-		                .setSigningKey(getSignKey())
-		                .build()
-		                .parseClaimsJws(token)
-		                .getBody();
-		    }
-
-		    private Boolean isTokenExpired(String token) {
-		        logger.info("Checking if token is expired");
-
-		        return extractExpiration(token).before(new Date());
-		    }
-
-		    public Boolean validateToken(String token, UserDetails userDetails) {
-		    	logger.info("is valid token or not");
-		        final String username = extractUsername(token);
-		        logger.info(username +" ******************");
-		        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-		    }
-	
+	public Boolean validateToken(String token, UserDetails userDetails) {
+logger.info("is valid token or not");
+		final String username = extractUsername(token);
+		 logger.info(username);
+		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+	}
 }
+
