@@ -158,7 +158,19 @@ public class LoanServiceImpl implements ILoanService{
 	}
 	
 	
+	public boolean isLoanTypeValid(String loanType) {
+		loanType = loanType.strip();
+		logger.info("validating entered loanType");
+		if((loanType != null && loanType.length() > 0) && (loanType.equalsIgnoreCase("Home Loan") || loanType.equalsIgnoreCase("Gold Loan") || loanType.equalsIgnoreCase("Business Loan") || 
+				loanType.equalsIgnoreCase("Vehicle Loan") || loanType.equalsIgnoreCase("Personal Loan"))) {
+			logger.info("entered loanType is correct");
+			return true;
+		}
+		return false;
+	}
+	
 	public boolean isLoanTypePresent(long customerId, String loanType) throws LoanNotFoundException {
+		//if(isLoanTypeValid(loanType))
 		List<LoanApplication> list = loanRepo.findAllByCustomerCustomerId(customerId);
 		boolean isPresent = false;
 		logger.info("searching for loanType");
@@ -176,6 +188,16 @@ public class LoanServiceImpl implements ILoanService{
 		return isPresent;
 	}
 	
+	
+	public boolean isLoanIdValid(long loanId) {
+		logger.info("validating entered loanId");
+		if(loanId >= 2001 && loanId <= 5000) {
+			logger.info("entered loanId is correct");
+			return true;
+		}
+		return false;
+	}
+	
 	public boolean isLoanIdPresent(long customerId,long loanId) throws LoanNotFoundException {
 		List<LoanApplication> loans =  loanRepo.findAllByCustomerCustomerId(customerId);
 		boolean isPresent=false;
@@ -191,6 +213,16 @@ public class LoanServiceImpl implements ILoanService{
 			throw new LoanNotFoundException("No Loan found with that loan number "+loanId);
 		}
 		return isPresent;
+	}
+	
+	public boolean isLoanStatusValid(String status) {
+		status = status.strip();
+		logger.info("validating entered loan application status");
+		if((status != null && status.length() > 0) && (status.equalsIgnoreCase("Pending") || status.equalsIgnoreCase("Approved")|| status.equalsIgnoreCase("Rejected"))) {
+			logger.info("entered loan application status is correct");
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean isLoanStatusPresent(long customerId, String status) throws LoanNotFoundException {
