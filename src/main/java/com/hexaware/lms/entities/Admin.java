@@ -25,7 +25,7 @@ public class Admin{
 	private String password;
 	
 	@Column(columnDefinition = "varchar(5) default 'Admin'",nullable=false)
-	private String role;
+	private String role="Admin";
 	
 	public Admin() {
 		super();
