@@ -170,7 +170,7 @@ public class LoanServiceImpl implements ILoanService{
 	}
 	
 	public boolean isLoanTypePresent(long customerId, String loanType) throws LoanNotFoundException {
-		//if(isLoanTypeValid(loanType))
+		
 		List<LoanApplication> list = loanRepo.findAllByCustomerCustomerId(customerId);
 		boolean isPresent = false;
 		logger.info("searching for loanType");

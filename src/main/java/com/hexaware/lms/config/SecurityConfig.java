@@ -1,5 +1,7 @@
 package com.hexaware.lms.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,21 +26,27 @@ import com.hexaware.lms.filter.JwtAuthFilter;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+	Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+	
 	@Autowired
 	JwtAuthFilter authFilter;
 	
 	@Bean
 	UserDetailsService userDetailsService() {
+		logger.info("returning new UserInfoUserDetailsService object");
 		return new UserInfoUserDetailsService();
 	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+		logger.info("inside security chain");
 		return http.csrf().disable()
     			.authorizeHttpRequests().requestMatchers("/api/customer/login","/api/customer/register","/api/admin/login","/swagger-ui/**","/swagger-resources/**").permitAll()
     			.and()
-    			.authorizeHttpRequests().anyRequest()   //requestMatchers("/api/admin/**","/api/customer/**")
+    			.authorizeHttpRequests()
+    			.requestMatchers("/api/admin/**","/api/customer/**")
+    			//.anyRequest()   
     			.authenticated()
     			.and()
 			    .sessionManagement()
@@ -55,6 +63,7 @@ public class SecurityConfig {
 
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
+		logger.info("inside my authenticationProvider()");
 		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 		authenticationProvider.setUserDetailsService(userDetailsService());
 		authenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -63,7 +72,7 @@ public class SecurityConfig {
 
 	  @Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-	    	
+	    	logger.info("inside authenticationManager");
 	    	return config.getAuthenticationManager();
 	    	
 	    }
