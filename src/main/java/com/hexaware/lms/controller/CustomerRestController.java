@@ -73,7 +73,7 @@ public class CustomerRestController {
 		if(authentication.isAuthenticated()) {
 			token= jwtService.generateToken(loginDto.getUsername());
 			if(token != null) {
-				log.info("Token: "+token);
+				log.info("Token for User: "+token);
 			}else {
 				log.warn("Token not generated");
 			}
@@ -84,47 +84,47 @@ public class CustomerRestController {
 	}
 	
 	@PostMapping(value="/loan-application/applyLoan",consumes="application/json")
-	@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('USER')")
 	public LoanApplication applyLoan(@RequestBody @Valid LoanApplicationRequestDTO loanRequest) throws PropertyAlreadyExistException {
 		return loanService.applyLoan(loanRequest.getLoanApplicationDto(),loanRequest.getPropertyDto());
 	}
 	
 	@GetMapping("/searchLoanById/{customerId}/{loanId}")
-	@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('USER')")
 	public LoanApplication searchLoanById(@PathVariable long customerId, @PathVariable long loanId) throws LoanNotFoundException {
 		log.info("Request Received to search loan of Customer: "+customerId);
 		return loanService.searchAppliedLoan(customerId,loanId);
 	}
 	
 	@GetMapping("/viewAllAppliedLoans/{customerId}")
-	@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('USER')")
 	public List<LoanApplication> viewAllAppliedLoans(@PathVariable long customerId){
 		log.info("Request Received to view all loans of Customer: "+customerId);
 		return loanService.allAppliedLoansOfCustomer(customerId);
 	}
 	
 	@GetMapping("/viewAllAppliedLoansByStatus/{status}/{customerId}")
-	@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('USER')")
 	public List<LoanApplication> filterAppliedLoanByStatus(@PathVariable long customerId,@PathVariable String status) throws LoanNotFoundException {
 		log.info("Request Received to view loans by Status: "+status);
 		return loanService.filterAppliedLoanByStatus(customerId, status);
 	}
 	@GetMapping("/viewAllAppliedLoansByType/{loanType}/{customerId}")
-	@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('USER')")
 	public List<LoanApplication> filterAppliedLoanByType(@PathVariable long customerId,@PathVariable String loanType) throws LoanNotFoundException {
 		log.info("Request Received to view loan by loanType: "+loanType);
 		return loanService.filterAppliedLoanByType(customerId, loanType);
 	}
 	
 	@GetMapping("/dashboard")
-	@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('USER')")
 	public List<LoanType> viewAllAvailableLoans() {
 		log.info("Customer is logged In");
 		return loanTypeService.viewAvailableLoanType();
 	}
 	
 	@GetMapping("/dashboard/{loanType}")
-	@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('USER')")
 	public List<LoanType> filterDashboardLoans(@PathVariable String loanType) throws LoanNotFoundException{
 		log.info("Request Received filter DashBoard Loans by type");
 		return loanTypeService.searchDashboardLoansToApply(loanType);

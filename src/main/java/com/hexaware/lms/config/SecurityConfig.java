@@ -36,11 +36,12 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		return http.csrf().disable()
-    			.authorizeHttpRequests().requestMatchers("/api/customer/login","/api/customer/register","/api/admin/login").permitAll()
+    			.authorizeHttpRequests().requestMatchers("/api/customer/login","/api/customer/register","/api/admin/login","/swagger-ui/**","/swagger-resources/**").permitAll()
     			.and()
-    			.authorizeHttpRequests().requestMatchers("/api/admin/**","/api/customer/**")
-    			.authenticated().and() //.formLogin().and().build();
-    			.sessionManagement()
+    			.authorizeHttpRequests().anyRequest()   //requestMatchers("/api/admin/**","/api/customer/**")
+    			.authenticated()
+    			.and()
+			    .sessionManagement()
     			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     			.and()
     			.authenticationProvider(authenticationProvider())
