@@ -54,7 +54,7 @@ public class Customer{
 	@Lob
 	private byte[] idProof;
 
-	private String role="User";
+	private String role="USER";
 
 	public Customer(String customerFirstName, String customerLastName, long phoneNumer, String email, String password,
 			LocalDate dateOfBirth, String address, String state, int creditScore, String panCardNumber,
