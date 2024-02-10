@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.lms.dto.CustomerDTO;
@@ -21,6 +22,9 @@ public class CustomerServiceImpl implements ICustomerService {
 	
 	Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 	
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
 	@Override
 	public boolean login(String username, String password) {
 		// TODO Auto-generated method stub
@@ -32,7 +36,7 @@ public class CustomerServiceImpl implements ICustomerService {
 	public boolean register(CustomerDTO customerDTO) throws DataAlreadyPresentException {
 		Customer customerByPhone = getCustomerByPhoneNumber(customerDTO.getPhoneNumer());
 		Customer customerByEmail = getCustomerByEmail(customerDTO.getEmail());
-		if(customerDTO.getPhoneNumer()==customerByPhone.getPhoneNumer() || customerDTO.getEmail()==customerByEmail.getEmail()) {
+		if((customerByPhone!=null ||  customerByEmail != null)) {
 			logger.warn("User is trying to enter DUPLICATE data while registering");
 			throw new DataAlreadyPresentException("PhoneNumber or Email already taken...Trying Logging in..!");
 		}
@@ -41,7 +45,7 @@ public class CustomerServiceImpl implements ICustomerService {
 		customer.setCustomerLastName(customerDTO.getCustomerLastName());
 		customer.setEmail(customerDTO.getEmail());
 		customer.setPhoneNumer(customerDTO.getPhoneNumer());
-		customer.setPassword(customerDTO.getPassword());
+		customer.setPassword(passwordEncoder.encode(customerDTO.getPassword()));
 		customer.setDateOfBirth(customerDTO.getDateOfBirth());
 		customer.setAddress(customerDTO.getAddress());
 		customer.setCountry("India");
@@ -49,8 +53,8 @@ public class CustomerServiceImpl implements ICustomerService {
 		customer.setCreditScore(customerDTO.getCreditScore());
 		customer.setPanCardNumber(customerDTO.getPanCardNumber());
 		customer.setIdProof(customerDTO.getIdProof());
-		customer.setRole("Regular");
-		logger.info("Registerd Customer: "+customer);
+//		customer.setRole("User");
+		logger.info("Registering Customer: "+customer);
 		Customer addedCustomer = repo.save(customer);
 
 		if(addedCustomer != null) {

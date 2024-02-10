@@ -43,7 +43,7 @@ public class Customer{
 	
 	private String address;
 
-	private String country;
+	private String country = "India";
 	
 	private String state;
 
@@ -54,7 +54,7 @@ public class Customer{
 	@Lob
 	private byte[] idProof;
 
-	private String role;
+	private String role="User";
 
 	public Customer(String customerFirstName, String customerLastName, long phoneNumer, String email, String password,
 			LocalDate dateOfBirth, String address, String state, int creditScore, String panCardNumber,
