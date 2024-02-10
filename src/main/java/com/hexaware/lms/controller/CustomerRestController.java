@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +32,7 @@ import com.hexaware.lms.service.ICustomerService;
 import com.hexaware.lms.service.ILoanService;
 import com.hexaware.lms.service.ILoanTypeService;
 import com.hexaware.lms.service.IPropertyService;
+import com.hexaware.lms.service.JwtService;
 
 import jakarta.validation.Valid;
 
@@ -36,6 +41,12 @@ import jakarta.validation.Valid;
 public class CustomerRestController {
 	
 	Logger log = LoggerFactory.getLogger(CustomerRestController.class);
+	
+	@Autowired
+	JwtService jwtService;
+
+	@Autowired
+	AuthenticationManager authenticationManager;
 	
 	@Autowired
 	ICustomerService customerService;
@@ -50,19 +61,26 @@ public class CustomerRestController {
 	ILoanTypeService loanTypeService;
 	
 	@PostMapping("/register")
-	
 	public boolean registerCustomer(@RequestBody CustomerDTO customerDTO) throws DataAlreadyPresentException {
 		log.info("Request Received to register new Customer: "+customerDTO);
 		return customerService.register(customerDTO);
 	}
 	
-
-	@GetMapping("/login/{username}/{password}")
-	@PreAuthorize("hasAuthority('User')")
-	public boolean login(@PathVariable (name="username") String username,@PathVariable(name="password") String password) {
-
-		log.info("Request Received to login Customer");
-		return customerService.login(username, password);
+	@PostMapping("/login")
+	public String authenticateAndGetToken(@RequestBody LoginDTO loginDto) {
+		String token = null;
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword()));
+		if(authentication.isAuthenticated()) {
+			token= jwtService.generateToken(loginDto.getUsername());
+			if(token != null) {
+				log.info("Token: "+token);
+			}else {
+				log.warn("Token not generated");
+			}
+		}else {
+			throw new UsernameNotFoundException("Username not found");
+		}
+		return token;
 	}
 	
 	@PostMapping(value="/loan-application/applyLoan",consumes="application/json")
