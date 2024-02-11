@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class CommonException {
+public class CommonExceptions {
 	
-	Logger log = LoggerFactory.getLogger(CommonException.class);
+	Logger log = LoggerFactory.getLogger(CommonExceptions.class);
 	
 	@ExceptionHandler({DataAlreadyPresentException.class})
 	public ResponseEntity<String> handleCustomerPresentException(DataAlreadyPresentException e) {
@@ -21,6 +21,12 @@ public class CommonException {
 	@ExceptionHandler({LoanNotFoundException.class})
 	public ResponseEntity<String> handleException(LoanNotFoundException e){
 		log.warn("Some Exception has Occurred....See the logs above and below.");
-		return new ResponseEntity<>(e.getMessage(),HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler({LoginCredentialsNotFound.class})
+	public ResponseEntity<String> handleLoginException(LoginCredentialsNotFound e){
+		log.warn("Some Exception has Occurred....See the logs above and below.");
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 	}
 }

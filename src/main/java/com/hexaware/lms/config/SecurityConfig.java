@@ -3,7 +3,6 @@ package com.hexaware.lms.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -24,7 +23,7 @@ import com.hexaware.lms.filter.JwtAuthFilter;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-
+	
 	@Autowired
 	JwtAuthFilter authFilter;
 
@@ -37,8 +36,8 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		return http.csrf().disable().authorizeHttpRequests()
-				.requestMatchers("/api/customer/login", "/api/customer/register", "/api/admin/login")
-				.permitAll().and().authorizeHttpRequests().anyRequest().authenticated().and().sessionManagement()
+				.requestMatchers("/api/customer/login", "/api/customer/register", "/api/admin/login").permitAll().and()
+				.authorizeHttpRequests().anyRequest().authenticated().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authenticationProvider(authenticationProvider())
 				.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class).build();
@@ -59,9 +58,7 @@ public class SecurityConfig {
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-
 		return config.getAuthenticationManager();
-
 	}
 
 }

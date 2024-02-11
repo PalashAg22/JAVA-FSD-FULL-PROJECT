@@ -26,6 +26,7 @@ import com.hexaware.lms.exception.CustomerNotFoundException;
 import com.hexaware.lms.exception.DataAlreadyPresentException;
 import com.hexaware.lms.exception.LoanNotFoundException;
 import com.hexaware.lms.exception.LoanTypeAlreadyExistException;
+import com.hexaware.lms.exception.LoginCredentialsNotFound;
 import com.hexaware.lms.service.IAdminService;
 import com.hexaware.lms.service.ICustomerService;
 import com.hexaware.lms.service.ILoanService;
@@ -72,8 +73,8 @@ public class AdminRestController {
 	}
 
 	@PostMapping("/login")
-	public String login(@RequestBody LoginDTO loginDto) {
-		log.info("Request received to login as user: " + loginDto.getUsername() + ", Password: "
+	public String login(@RequestBody LoginDTO loginDto) throws LoginCredentialsNotFound {
+		log.info("Request received to login as admin: " + loginDto.getUsername() + ", Password: "
 				+ loginDto.getPassword());
 		return adminService.login(loginDto.getUsername(), loginDto.getPassword());
 	}
@@ -138,12 +139,12 @@ public class AdminRestController {
 	@ExceptionHandler({ LoanTypeAlreadyExistException.class })
 	public ResponseEntity<String> handleLoanTypeRelated(LoanTypeAlreadyExistException e) {
 		log.warn("Some Exception has Occurred....See the logs above and below.");
-		return new ResponseEntity<String>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
 	}
 
 	@ExceptionHandler({ CustomerNotFoundException.class })
 	public ResponseEntity<String> handleLoanTypeRelated(CustomerNotFoundException e) {
 		log.warn("Some Exception has Occurred....See the logs above and below.");
-		return new ResponseEntity<String>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
 	}
 }

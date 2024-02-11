@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.lms.dto.AdminDTO;
 import com.hexaware.lms.entities.Admin;
 import com.hexaware.lms.exception.DataAlreadyPresentException;
+import com.hexaware.lms.exception.LoginCredentialsNotFound;
 import com.hexaware.lms.repository.AdminRepository;
 
 @Service
@@ -21,16 +21,15 @@ public class AdminServiceImpl implements IAdminService {
 	Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
 
 	@Autowired
-	AuthenticationManager authenticationManager;
-
+	private AuthenticationManager authenticationManager;
 	@Autowired
-	JwtService jwtService;
-
+	private JwtService jwtService;
 	@Autowired
-	AdminRepository repo;
+	private AdminRepository repo;
 
 	@Override
-	public String login(String username, String password) {
+	public String login(String username, String password) throws LoginCredentialsNotFound {
+		logger.info("Admin is logging in...");
 		String token = null;
 		Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -42,7 +41,7 @@ public class AdminServiceImpl implements IAdminService {
 				logger.warn("Token not generated");
 			}
 		} else {
-			throw new UsernameNotFoundException("Username not found");
+			throw new LoginCredentialsNotFound("Credentials not matched");
 		}
 		return token;
 	}

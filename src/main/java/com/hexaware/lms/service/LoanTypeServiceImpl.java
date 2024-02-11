@@ -18,12 +18,12 @@ import com.hexaware.lms.repository.LoanTypeRepository;
 
 @Service
 public class LoanTypeServiceImpl implements ILoanTypeService {
-	
+
 	Logger logger = LoggerFactory.getLogger(LoanTypeServiceImpl.class);
 
 	@Autowired
 	LoanTypeRepository repo;
-	
+
 	@Override
 	public List<LoanType> viewAvailableLoanType() {
 		logger.info("Viewing all available Loan Types");
@@ -32,49 +32,80 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 
 	@Override
 	public void createLoanType(LoanTypeDTO loanTypeDto) throws LoanTypeAlreadyExistException {
-		List<LoanType> loanTypes =viewAvailableLoanType();
-		for(LoanType loan : loanTypes) {
-			if(loan.getLoanTypeName().equalsIgnoreCase(loanTypeDto.getLoanTypeName())) {
-				throw new LoanTypeAlreadyExistException("The loan-type with name "+loanTypeDto.getLoanTypeName()+" already exist");
+		List<LoanType> loanTypes = viewAvailableLoanType();
+		for (LoanType loan : loanTypes) {
+			if (loan.getLoanTypeName().equalsIgnoreCase(loanTypeDto.getLoanTypeName())) {
+				throw new LoanTypeAlreadyExistException(
+						"The loan-type with name " + loanTypeDto.getLoanTypeName() + " already exist");
 			}
 		}
 		LoanType loanType = new LoanType();
 		loanType.setLoanTypeName(loanTypeDto.getLoanTypeName());
 		loanType.setLoanInterestBaseRate(loanTypeDto.getLoanInterestBaseRate());
 		loanType.setLoanManagementFees(loanTypeDto.getLoanManagementFees());
-		logger.info("Creating Loan Type: "+loanType);
+		logger.info("Creating Loan Type: " + loanType);
 		repo.save(loanType);
 	}
-	
+
 	@Override
-	public List<LoanType> searchDashboardLoansToApply(String loanType) throws LoanNotFoundException {
-		List<LoanType> loanTypes =viewAvailableLoanType();
-		boolean isFound=false;
-		for(LoanType loan : loanTypes) {
-			if(loan.getLoanTypeName().equalsIgnoreCase(loanType)) {
-				throw new LoanNotFoundException("The loan-type with name "+loanType+" not exist");
+	public LoanType searchDashboardLoansToApply(String loanType) throws LoanNotFoundException {
+		LoanType returnLoanType = null;
+		if(isLoanTypeValid(loanType)) {
+			List<LoanType> loanTypes = viewAvailableLoanType();
+			for (LoanType loan : loanTypes) {
+				if (loan.getLoanTypeName().equalsIgnoreCase(loanType)) {
+					throw new LoanNotFoundException("The loan-type with name " + loanType + " not exist");
+				}
 			}
+			logger.info("Customer is Searching for Loan Type: " + loanType);
+			returnLoanType =repo.findAllByLoanTypeName(loanType);
 		}
-		logger.info("Customer is Searching for Loan Type: "+loanType);
-		return repo.findAllByLoanTypeName(loanType);
+		return returnLoanType;
+		
 	}
 
 	@Override
 	public LoanType updateLoanTypeById(LoanType loanType) {
-		logger.info("Updating LoanType: "+loanType);
+		logger.info("Updating LoanType: " + loanType);
 		return repo.save(loanType);
 	}
 
 	@Override
 	public LoanType getLoanTypeById(long loanTypeId) {
-		logger.info("Viewing Loan Type: "+loanTypeId);
-		return repo.findById(loanTypeId).orElse(null);
+		LoanType loanType = null;
+		if(isLoanTypIdValid(loanTypeId)) {
+			logger.info("Viewing Loan Type: " + loanTypeId);
+			loanType =repo.findById(loanTypeId).orElse(null);
+		}
+		return null;
+		
 	}
 	
-	@ExceptionHandler({LoanTypeAlreadyExistException.class})
-	public ResponseEntity<String> handleException(LoanTypeAlreadyExistException e){
+	public boolean isLoanTypeValid(String loanType) {
+		loanType = loanType.strip();
+		logger.info("validating entered loanType");
+		if ((loanType != null && loanType.length() > 0) && (loanType.equalsIgnoreCase("Home Loan")
+				|| loanType.equalsIgnoreCase("Gold Loan") || loanType.equalsIgnoreCase("Business Loan")
+				|| loanType.equalsIgnoreCase("Vehicle Loan") || loanType.equalsIgnoreCase("Personal Loan"))) {
+			logger.info("entered loanType is correct");
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isLoanTypIdValid(long loanTypeId) {
+		logger.info("validating entered loanId");
+		if (loanTypeId >= 2001 && loanTypeId <= 5000) {
+			logger.info("entered loanId is correct");
+			return true;
+		}
+		return false;
+	}
+
+	@ExceptionHandler({ LoanTypeAlreadyExistException.class })
+	public ResponseEntity<String> handleException(LoanTypeAlreadyExistException e) {
 		logger.warn("Some Exception has Occurred");
-		return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 
 }
