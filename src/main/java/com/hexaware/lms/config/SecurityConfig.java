@@ -30,7 +30,7 @@ public class SecurityConfig {
 	Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 	
 	@Autowired
-	JwtAuthFilter authFilter;
+	private JwtAuthFilter authFilter;
 
 	@Bean
 	UserDetailsService userDetailsService() {

@@ -40,7 +40,7 @@ public class CustomerDTO {
 	@Max(900)
 	private int creditScore;
 
-	@Pattern(regexp="[A-Z]{5}[1-0]{4}[A-Z]{1}")
+	@Pattern(regexp="[A-Z]{5}[0-1]{4}[A-Z]{1}")
 	private String panCardNumber;
 
 	private byte[] idProof;
@@ -49,23 +49,6 @@ public class CustomerDTO {
 
 	public CustomerDTO() {
 		super();
-	}
-
-	public CustomerDTO(String customerFirstName, String customerLastName, long phoneNumer, String email,
-			String password, LocalDate dateOfBirth, String address, String state, int creditScore, String panCardNumber,
-			byte[] idProof) {
-		super();
-		this.customerFirstName = customerFirstName;
-		this.customerLastName = customerLastName;
-		this.phoneNumer = phoneNumer;
-		this.email = email;
-		this.password = password;
-		this.dateOfBirth = dateOfBirth;
-		this.address = address;
-		this.state = state;
-		this.creditScore = creditScore;
-		this.panCardNumber = panCardNumber;
-		this.idProof = idProof;
 	}
 
 	public String getCustomerFirstName() {

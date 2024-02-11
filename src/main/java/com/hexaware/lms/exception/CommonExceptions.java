@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class CommonException {
+public class CommonExceptions {
 	
-	Logger log = LoggerFactory.getLogger(CommonException.class);
+	Logger log = LoggerFactory.getLogger(CommonExceptions.class);
 	
 	@ExceptionHandler({DataAlreadyPresentException.class})
 	public ResponseEntity<String> handleCustomerPresentException(DataAlreadyPresentException e) {

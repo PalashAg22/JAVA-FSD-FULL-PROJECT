@@ -56,22 +56,6 @@ public class Customer{
 
 	private String role="USER";
 
-	public Customer(String customerFirstName, String customerLastName, long phoneNumer, String email, String password,
-			LocalDate dateOfBirth, String address, String state, int creditScore, String panCardNumber,
-			byte[] idProof) {
-		super();
-		this.customerFirstName = customerFirstName;
-		this.customerLastName = customerLastName;
-		this.phoneNumer = phoneNumer;
-		this.email = email;
-		this.password = password;
-		this.dateOfBirth = dateOfBirth;
-		this.address = address;
-		this.state = state;
-		this.creditScore = creditScore;
-		this.panCardNumber = panCardNumber;
-		this.idProof = idProof;
-	}
 
 	public Customer() {
 		

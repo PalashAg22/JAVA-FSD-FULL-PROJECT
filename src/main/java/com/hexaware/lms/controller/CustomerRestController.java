@@ -42,23 +42,27 @@ public class CustomerRestController {
 	
 	Logger log = LoggerFactory.getLogger(CustomerRestController.class);
 	
-	@Autowired
-	JwtService jwtService;
+	private JwtService jwtService;
 
-	@Autowired
-	AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;
 	
-	@Autowired
-	ICustomerService customerService;
+	private ICustomerService customerService;
 	
-	@Autowired
-	IPropertyService propService;
+	private ILoanService loanService;
 	
-	@Autowired
-	ILoanService loanService;
+	private ILoanTypeService loanTypeService;
 	
-	@Autowired
-	ILoanTypeService loanTypeService;
+	public CustomerRestController(JwtService jwtService, AuthenticationManager authenticationManager,
+			ICustomerService customerService, ILoanService loanService,
+			ILoanTypeService loanTypeService) {
+		super();
+		this.jwtService = jwtService;
+		this.authenticationManager = authenticationManager;
+		this.customerService = customerService;
+		
+		this.loanService = loanService;
+		this.loanTypeService = loanTypeService;
+	}
 	
 	@PostMapping("/register")
 	public boolean registerCustomer(@RequestBody CustomerDTO customerDTO) throws DataAlreadyPresentException {
