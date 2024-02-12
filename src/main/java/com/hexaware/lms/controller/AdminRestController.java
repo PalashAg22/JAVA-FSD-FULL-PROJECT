@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +23,7 @@ import com.hexaware.lms.dto.LoginDTO;
 import com.hexaware.lms.entities.Customer;
 import com.hexaware.lms.entities.LoanApplication;
 import com.hexaware.lms.entities.LoanType;
+import com.hexaware.lms.entities.Property;
 import com.hexaware.lms.exception.CustomerNotFoundException;
 import com.hexaware.lms.exception.DataAlreadyPresentException;
 import com.hexaware.lms.exception.LoanNotFoundException;
@@ -31,6 +33,7 @@ import com.hexaware.lms.service.IAdminService;
 import com.hexaware.lms.service.ICustomerService;
 import com.hexaware.lms.service.ILoanService;
 import com.hexaware.lms.service.ILoanTypeService;
+import com.hexaware.lms.service.IPropertyService;
 
 import jakarta.validation.Valid;
 
@@ -40,22 +43,20 @@ public class AdminRestController {
 
 	Logger log = LoggerFactory.getLogger(AdminRestController.class);
 
+	@Autowired
 	private IAdminService adminService;
 
+	@Autowired
 	private ILoanTypeService loanTypeService;
 
+	@Autowired
 	private ILoanService loanService;
 
+	@Autowired
 	private ICustomerService custService;
-
-	public AdminRestController(IAdminService adminService, ILoanTypeService loanTypeService, ILoanService loanService,
-			ICustomerService custService) {
-		super();
-		this.adminService = adminService;
-		this.loanTypeService = loanTypeService;
-		this.loanService = loanService;
-		this.custService = custService;
-	}
+	
+	@Autowired
+	private IPropertyService propService;
 
 	@PostMapping("/createLoanType")
 	@PreAuthorize("hasAuthority('ADMIN')")
@@ -73,7 +74,7 @@ public class AdminRestController {
 	}
 
 	@PostMapping("/login")
-	public String login(@RequestBody LoginDTO loginDto) throws LoginCredentialsNotFound {
+	public String login(@RequestBody @Valid LoginDTO loginDto) throws LoginCredentialsNotFound {
 		log.info("Request received to login as admin: " + loginDto.getUsername() + ", Password: "
 				+ loginDto.getPassword());
 		return adminService.login(loginDto.getUsername(), loginDto.getPassword());
@@ -129,11 +130,18 @@ public class AdminRestController {
 		return loanService.searchLoanById(loanId);
 	}
 
-	@PutMapping("updateLoanType")
+	@PutMapping("/updateLoanType")
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public LoanType updateLoanType(@RequestBody LoanType loanType) {
+	public LoanType updateLoanType(@RequestBody @Valid LoanType loanType) {
 		log.info("Request received to update LoanType to: " + loanType);
 		return loanTypeService.updateLoanTypeById(loanType);
+	}
+	
+	@GetMapping("/viewPropertyForLoan/{loanId}")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public Property viewPropertyForLoan(@PathVariable long loanId) {
+		log.info("Viewing Property set for loan application");
+		return propService.viewPropertyForLoan(loanId);
 	}
 
 	@ExceptionHandler({ LoanTypeAlreadyExistException.class })

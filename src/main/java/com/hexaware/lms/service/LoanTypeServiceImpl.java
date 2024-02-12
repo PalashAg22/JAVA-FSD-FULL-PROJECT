@@ -72,7 +72,7 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 
 	@Override
 	public LoanType getLoanTypeById(long loanTypeId) {
-		if (isLoanTypIdValid(loanTypeId)) {
+		if (isLoanTypeIdValid(loanTypeId)) {
 			logger.info("Viewing Loan Type: " + loanTypeId);
 			return repo.findById(loanTypeId).orElse(null);
 		}
@@ -92,7 +92,7 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 		return false;
 	}
 
-	public boolean isLoanTypIdValid(long loanTypeId) {
+	public boolean isLoanTypeIdValid(long loanTypeId) {
 		logger.info("validating entered loanId");
 		if (loanTypeId >= 2001 && loanTypeId <= 5000) {
 			logger.info("entered loanId is correct");

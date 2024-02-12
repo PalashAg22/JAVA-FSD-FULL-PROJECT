@@ -59,13 +59,13 @@ public class CustomerRestController {
 	ILoanTypeService loanTypeService;
 
 	@PostMapping("/register")
-	public boolean registerCustomer(@RequestBody CustomerDTO customerDTO) throws DataAlreadyPresentException {
+	public boolean registerCustomer(@RequestBody @Valid CustomerDTO customerDTO) throws DataAlreadyPresentException {
 		log.info("Request Received to register new Customer: " + customerDTO);
 		return customerService.register(customerDTO);
 	}
 
 	@PostMapping("/login")
-	public String authenticateAndGetToken(@RequestBody LoginDTO loginDto) throws LoginCredentialsNotFound {
+	public String authenticateAndGetToken(@RequestBody @Valid  LoginDTO loginDto) throws LoginCredentialsNotFound {
 		log.info("Request received to login as user: " + loginDto.getUsername() + ", Password: "
 				+ loginDto.getPassword());
 		return customerService.login(loginDto.getUsername(), loginDto.getPassword());
