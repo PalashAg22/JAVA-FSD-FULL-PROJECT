@@ -50,7 +50,7 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 	@Override
 	public LoanType searchDashboardLoansToApply(String loanType) throws LoanNotFoundException {
 		LoanType returnLoanType = null;
-		if(isLoanTypeValid(loanType)) {
+		if (isLoanTypeValid(loanType)) {
 			List<LoanType> loanTypes = viewAvailableLoanType();
 			for (LoanType loan : loanTypes) {
 				if (loan.getLoanTypeName().equalsIgnoreCase(loanType)) {
@@ -58,10 +58,10 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 				}
 			}
 			logger.info("Customer is Searching for Loan Type: " + loanType);
-			returnLoanType =repo.findAllByLoanTypeName(loanType);
+			returnLoanType = repo.findAllByLoanTypeName(loanType);
 		}
 		return returnLoanType;
-		
+
 	}
 
 	@Override
@@ -72,15 +72,14 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 
 	@Override
 	public LoanType getLoanTypeById(long loanTypeId) {
-		LoanType loanType = null;
-		if(isLoanTypIdValid(loanTypeId)) {
+		if (isLoanTypIdValid(loanTypeId)) {
 			logger.info("Viewing Loan Type: " + loanTypeId);
-			loanType =repo.findById(loanTypeId).orElse(null);
+			return repo.findById(loanTypeId).orElse(null);
 		}
 		return null;
-		
+
 	}
-	
+
 	public boolean isLoanTypeValid(String loanType) {
 		loanType = loanType.strip();
 		logger.info("validating entered loanType");
