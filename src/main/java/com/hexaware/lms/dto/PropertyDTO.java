@@ -20,20 +20,16 @@ public class PropertyDTO {
 	@Lob
 	private byte[] propertyProof;
 
-	private long loanApplicationId;
-
 	public PropertyDTO() {
 		super();
 	}
 
-	public PropertyDTO(String propertyAddress, double propertyAreaInm2, double propertyValue, byte[] propertyProof,
-			int loanApplicationId) {
+	public PropertyDTO(String propertyAddress, double propertyAreaInm2, double propertyValue, byte[] propertyProof) {
 		super();
 		this.propertyAddress = propertyAddress;
 		this.propertyAreaInm2 = propertyAreaInm2;
 		this.propertyValue = propertyValue;
 		this.propertyProof = propertyProof;
-		this.loanApplicationId = loanApplicationId;
 	}
 
 	public String getPropertyAddress() {
@@ -67,21 +63,5 @@ public class PropertyDTO {
 	public void setPropertyProof(byte[] propertyProof) {
 		this.propertyProof = propertyProof;
 	}
-
-	public Long getLoanApplicationId() {
-		return loanApplicationId;
-	}
-
-	public void setLoanApplicationId(int loanApplicationId) {
-		this.loanApplicationId = loanApplicationId;
-	}
-
-	@Override
-	public String toString() {
-		return "PropertyDTO [" + " propertyAddress=" + propertyAddress + ", propertyAreaInm2="
-				+ propertyAreaInm2 + ", propertyValue=" + propertyValue + ", propertyProof="
-				+ Arrays.toString(propertyProof) + ", loanApplicationId=" + loanApplicationId + "]";
-	}
-	
 	
 }

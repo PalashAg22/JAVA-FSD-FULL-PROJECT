@@ -27,7 +27,7 @@ public class LoanApplication {
 	
 	private String status="Pending";
 	
-	private LocalDate loanApplyDate;
+	private LocalDate loanApplyDate = LocalDate.now();
 	
 	@ManyToOne
 	@JoinColumn(name="loanTypeId")

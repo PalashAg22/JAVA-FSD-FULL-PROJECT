@@ -18,8 +18,6 @@ public class LoanApplicationDTO {
 	
 	private String status;
 	
-	private LocalDate loanApplyDate;
-	
 	private long loanTypeId;
 	
 	private long propertyId;
@@ -72,14 +70,6 @@ public class LoanApplicationDTO {
 		this.status = status;
 	}
 
-	public LocalDate getLoanApplyDate() {
-		return loanApplyDate;
-	}
-
-	public void setLoanApplyDate(LocalDate loanApplyDate) {
-		this.loanApplyDate = loanApplyDate;
-	}
-
 	public long getLoanTypeId() {
 		return loanTypeId;
 	}
@@ -103,14 +93,5 @@ public class LoanApplicationDTO {
 	public void setCustomerId(long l) {
 		this.customerId = l;
 	}
-
-	@Override
-	public String toString() {
-		return "LoanApplicationDTO [" + " principal=" + principal + ", interestRate=" + interestRate
-				+ ", tenureInMonths=" + tenureInMonths+ ", status=" + status
-				+ ", loanApplyDate=" + loanApplyDate + ", loanTypeId=" + loanTypeId + ", propertyId=" + propertyId
-				+ ", customerId=" + customerId + "]";
-	}
-	
 	
 }

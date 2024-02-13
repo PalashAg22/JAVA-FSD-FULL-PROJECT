@@ -50,14 +50,12 @@ public class LoanServiceImpl implements ILoanService {
 		LoanType loanType = loanTypeRepo.findById(loanTypeId).orElse(null);
 		double interestRate = loanTypeRepo.findLoanInterestBaseRateByLoanId(loanDto.getLoanTypeId());
 		Customer customer = customerRepo.findById(customerId).orElse(null);
-		LocalDate loanApplicationDate = LocalDate.now();
 
 		LoanApplication loan = new LoanApplication();
 		loan.setCustomer(customer);
 		loan.setLoanType(loanType);
 		loan.setPrincipal(loanDto.getPrincipal());
 		loan.setTenureInMonths(loanDto.getTenureInMonths());
-		loan.setLoanApplyDate(loanApplicationDate);
 		loan.setInterestRate(interestRate);
 
 		logger.info("Loan application started...");

@@ -15,9 +15,9 @@ public class CustomerDTO {
 	@Size(min = 3, max = 20)
 	private String customerFirstName;
 
+	@Size(min = 3, max = 20)
 	private String customerLastName;
 
-	@Size(min = 10, max = 12)
 	private long phoneNumer;
 
 	@Email

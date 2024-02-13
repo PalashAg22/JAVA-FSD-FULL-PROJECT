@@ -33,15 +33,15 @@ class LoanServiceImplTest {
 		LoanApplicationDTO loan = new LoanApplicationDTO();
 		PropertyDTO property = new PropertyDTO();
 
-		loan.setCustomerId(1052);
+		loan.setCustomerId(1053);
 		loan.setLoanTypeId(3);
 		loan.setPrincipal(97384735);
 		loan.setTenureInMonths(48);
-		loan.setLoanApplyDate(LocalDate.now());
+//		loan.setLoanApplyDate(LocalDate.now());
 		loan.setInterestRate(17);
 		loan.setStatus("PENDING");
 
-		property.setPropertyAddress("Bhopal");
+		property.setPropertyAddress("Indore");
 		property.setPropertyAreaInm2(100000);
 		property.setPropertyValue(1232423);
 		property.setPropertyProof(new byte[5]);

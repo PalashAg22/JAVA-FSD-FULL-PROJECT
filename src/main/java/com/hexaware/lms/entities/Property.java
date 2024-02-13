@@ -23,7 +23,7 @@ public class Property{
 	private double propertyAreaInm2;
 	
 	private double propertyValue;
-	
+
 	@Lob
 	private byte[] propertyProof;
 	

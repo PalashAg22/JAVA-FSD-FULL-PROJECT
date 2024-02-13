@@ -8,7 +8,7 @@ public class LoanTypeDTO {
 	
 	private long loanTypeId;
 	
-	@Pattern(regexp="[A-Z]{20}")
+	@Pattern(regexp="^[A-Z0-9\s-]{1,20}$")
 	private String loanTypeName;
 	
 	@Min(8)
