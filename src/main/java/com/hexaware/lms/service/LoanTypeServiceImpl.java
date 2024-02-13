@@ -22,7 +22,7 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 	Logger logger = LoggerFactory.getLogger(LoanTypeServiceImpl.class);
 
 	@Autowired
-	LoanTypeRepository repo;
+	private LoanTypeRepository repo;
 	
 	@Override
 	public List<LoanType> viewAvailableLoanType() {
@@ -47,9 +47,9 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 	}
 	
 	@Override
-	public List<LoanType> searchDashboardLoansToApply(String loanType) throws LoanNotFoundException {
+	public LoanType searchDashboardLoansToApply(String loanType) throws LoanNotFoundException {
 		List<LoanType> loanTypes =viewAvailableLoanType();
-		boolean isFound=false;
+		
 		for(LoanType loan : loanTypes) {
 			if(loan.getLoanTypeName().equalsIgnoreCase(loanType)) {
 				throw new LoanNotFoundException("The loan-type with name "+loanType+" not exist");
@@ -74,7 +74,7 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 	@ExceptionHandler({LoanTypeAlreadyExistException.class})
 	public ResponseEntity<String> handleException(LoanTypeAlreadyExistException e){
 		logger.warn("Some Exception has Occurred");
-		return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 	}
 
 }

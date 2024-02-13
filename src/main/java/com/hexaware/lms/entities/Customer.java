@@ -2,25 +2,18 @@ package com.hexaware.lms.entities;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 
 @Entity
 public class Customer{
+	
 	@Id
 	@SequenceGenerator(name="customer_sequence",initialValue=1001)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="customer_sequence")// We have to set the initial value for id field in the database
@@ -58,8 +51,8 @@ public class Customer{
 
 
 	public Customer() {
-		
-	}
+   // TODO document why this constructor is empty
+ }
 
 	
 	public long getCustomerId() {

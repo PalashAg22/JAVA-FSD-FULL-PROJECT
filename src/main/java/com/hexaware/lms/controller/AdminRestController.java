@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,22 +40,17 @@ public class AdminRestController {
 
 	Logger log = LoggerFactory.getLogger(AdminRestController.class);
 
+	@Autowired
 	private IAdminService adminService;
 
+	@Autowired
 	private ILoanTypeService loanTypeService;
 
+	@Autowired
 	private ILoanService loanService;
 
+	@Autowired
 	private ICustomerService custService;
-
-	public AdminRestController(IAdminService adminService, ILoanTypeService loanTypeService, ILoanService loanService,
-			ICustomerService custService) {
-		super();
-		this.adminService = adminService;
-		this.loanTypeService = loanTypeService;
-		this.loanService = loanService;
-		this.custService = custService;
-	}
 
 	@PostMapping("/createLoanType")
 	@PreAuthorize("hasAuthority('ADMIN')")
@@ -138,12 +134,12 @@ public class AdminRestController {
 	@ExceptionHandler({ LoanTypeAlreadyExistException.class })
 	public ResponseEntity<String> handleLoanTypeRelated(LoanTypeAlreadyExistException e) {
 		log.warn("Some Exception has Occurred....See the logs above and below.");
-		return new ResponseEntity<String>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.ALREADY_REPORTED);//??
 	}
 
 	@ExceptionHandler({ CustomerNotFoundException.class })
 	public ResponseEntity<String> handleLoanTypeRelated(CustomerNotFoundException e) {
 		log.warn("Some Exception has Occurred....See the logs above and below.");
-		return new ResponseEntity<String>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.ALREADY_REPORTED);//?
 	}
 }

@@ -17,17 +17,15 @@ import com.hexaware.lms.repository.CustomerRepository;
 @Service
 public class CustomerServiceImpl implements ICustomerService {
 
-	@Autowired
-	CustomerRepository repo;
-	
 	Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
-	
+
 	@Autowired
-	PasswordEncoder passwordEncoder;
-	
+	private CustomerRepository repo;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	@Override
 	public boolean login(String username, String password) {
-		// TODO Auto-generated method stub
 		logger.info("Customer is loggin in...");
 		return false;
 	}
@@ -48,21 +46,15 @@ public class CustomerServiceImpl implements ICustomerService {
 		customer.setPassword(passwordEncoder.encode(customerDTO.getPassword()));
 		customer.setDateOfBirth(customerDTO.getDateOfBirth());
 		customer.setAddress(customerDTO.getAddress());
-//		customer.setCountry("India");
 		customer.setState(customerDTO.getState());
 		customer.setCreditScore(customerDTO.getCreditScore());
 		customer.setPanCardNumber(customerDTO.getPanCardNumber());
 		customer.setIdProof(customerDTO.getIdProof());
-//		customer.setRole("User");
 		logger.info("Registering Customer: "+customer);
 		Customer addedCustomer = repo.save(customer);
 
-		if(addedCustomer != null) {
-			logger.info("Registerd Customer: "+addedCustomer);
-			return true;
-		}
-		logger.error("Customer not registered");
-		return false;
+		logger.info("Registerd Customer: "+addedCustomer);
+		return true;
 	}
 
 	@Override

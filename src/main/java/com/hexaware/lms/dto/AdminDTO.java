@@ -73,11 +73,7 @@ public class AdminDTO {
 		this.role = role;
 	}
 
-	@Override
-	public String toString() {
-		return "AdminDTO ["+ " adminFirstName=" + adminFirstName + ", adminLastName="
-				+ adminLastName + ", email=" + email + ", password=" + password + ", role=" + role + "]";
-	}
+	
 	
 	
 

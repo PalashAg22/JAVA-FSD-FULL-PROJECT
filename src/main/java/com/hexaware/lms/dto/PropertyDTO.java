@@ -20,7 +20,7 @@ public class PropertyDTO {
 	@Lob
 	private byte[] propertyProof;
 
-	private long loanApplicationId;
+	private long loanApplicationId;///
 
 	public PropertyDTO() {
 		super();
@@ -75,13 +75,4 @@ public class PropertyDTO {
 	public void setLoanApplicationId(int loanApplicationId) {
 		this.loanApplicationId = loanApplicationId;
 	}
-
-	@Override
-	public String toString() {
-		return "PropertyDTO [" + " propertyAddress=" + propertyAddress + ", propertyAreaInm2="
-				+ propertyAreaInm2 + ", propertyValue=" + propertyValue + ", propertyProof="
-				+ Arrays.toString(propertyProof) + ", loanApplicationId=" + loanApplicationId + "]";
-	}
-	
-	
 }

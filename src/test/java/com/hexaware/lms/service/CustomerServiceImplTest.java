@@ -27,9 +27,9 @@ class CustomerServiceImplTest {
 
 	@Test
 	void testLogin() {
-//		String username="suraj@kumar.com";
-//		String password="password123";
-//		assertTrue(serviceTest.login(username, password));
+		String username="suraj@kumar.com";
+		String password="password123";
+		assertTrue(serviceTest.login(username, password));
 	}
 
 	@Test

@@ -5,7 +5,6 @@ import java.util.List;
 import com.hexaware.lms.dto.LoanApplicationDTO;
 import com.hexaware.lms.dto.PropertyDTO;
 import com.hexaware.lms.entities.LoanApplication;
-import com.hexaware.lms.entities.LoanType;
 import com.hexaware.lms.exception.LoanNotFoundException;
 import com.hexaware.lms.exception.PropertyAlreadyExistException;
 

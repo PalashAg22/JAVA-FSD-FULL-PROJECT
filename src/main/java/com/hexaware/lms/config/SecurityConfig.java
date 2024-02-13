@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -33,14 +32,14 @@ public class SecurityConfig {
 	private JwtAuthFilter authFilter;
 
 	@Bean
-	UserDetailsService userDetailsService() {
+	public UserDetailsService userDetailsService() {
 		logger.info("returning new UserInfoUserDetailsService object");
 		return new UserInfoUserDetailsService();
 	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+		
 		return http.csrf().disable().authorizeHttpRequests()
 				.requestMatchers("/api/customer/login", "/api/customer/register", "/api/admin/login")
 				.permitAll().and().authorizeHttpRequests().anyRequest().authenticated().and().sessionManagement()
@@ -66,7 +65,7 @@ public class SecurityConfig {
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-
+		logger.info("2");
 	    	logger.info("inside authenticationManager");
 		return config.getAuthenticationManager();
 

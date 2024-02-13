@@ -31,7 +31,6 @@ import com.hexaware.lms.exception.PropertyAlreadyExistException;
 import com.hexaware.lms.service.ICustomerService;
 import com.hexaware.lms.service.ILoanService;
 import com.hexaware.lms.service.ILoanTypeService;
-import com.hexaware.lms.service.IPropertyService;
 import com.hexaware.lms.service.JwtService;
 
 import jakarta.validation.Valid;
@@ -42,27 +41,21 @@ public class CustomerRestController {
 	
 	Logger log = LoggerFactory.getLogger(CustomerRestController.class);
 	
+	@Autowired
 	private JwtService jwtService;
 
+	@Autowired
 	private AuthenticationManager authenticationManager;
 	
+	@Autowired
 	private ICustomerService customerService;
 	
+	@Autowired
 	private ILoanService loanService;
 	
+	@Autowired
 	private ILoanTypeService loanTypeService;
-	
-	public CustomerRestController(JwtService jwtService, AuthenticationManager authenticationManager,
-			ICustomerService customerService, ILoanService loanService,
-			ILoanTypeService loanTypeService) {
-		super();
-		this.jwtService = jwtService;
-		this.authenticationManager = authenticationManager;
-		this.customerService = customerService;
-		
-		this.loanService = loanService;
-		this.loanTypeService = loanTypeService;
-	}
+
 	
 	@PostMapping("/register")
 	public boolean registerCustomer(@RequestBody CustomerDTO customerDTO) throws DataAlreadyPresentException {
@@ -72,9 +65,12 @@ public class CustomerRestController {
 	
 	@PostMapping("/login")
 	public String authenticateAndGetToken(@RequestBody LoginDTO loginDto) {
+		log.info("1");
 		String token = null;
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword()));
+		log.info("loaded auth obj");
 		if(authentication.isAuthenticated()) {
+			log.info("3");
 			token= jwtService.generateToken(loginDto.getUsername());
 			if(token != null) { 
 				log.info("Token for User: "+token); 
@@ -129,7 +125,7 @@ public class CustomerRestController {
 	
 	@GetMapping("/dashboard/{loanType}")
 	@PreAuthorize("hasAuthority('USER')")
-	public List<LoanType> filterDashboardLoans(@PathVariable String loanType) throws LoanNotFoundException{
+	public LoanType filterDashboardLoans(@PathVariable String loanType) throws LoanNotFoundException{
 		log.info("Request Received filter DashBoard Loans by type");
 		return loanTypeService.searchDashboardLoansToApply(loanType);
 	}

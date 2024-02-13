@@ -62,11 +62,6 @@ public class LoanTypeDTO {
 		this.loanManagementFees = loanManagementFees;
 	}
 
-	@Override
-	public String toString() {
-		return "LoanTypeDTO [loanTypeId=" + loanTypeId + ", loanTypeName=" + loanTypeName + ", loanInterestBaseRate="
-				+ loanInterestBaseRate + ", loanManagementFees=" + loanManagementFees + "]";
-	}
 	
 	
 }

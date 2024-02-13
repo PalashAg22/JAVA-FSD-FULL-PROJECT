@@ -12,7 +12,7 @@ public interface ILoanTypeService {
 	
 	void createLoanType(LoanTypeDTO loanTypeDto) throws LoanTypeAlreadyExistException;
 
-	List<LoanType> searchDashboardLoansToApply(String loanType) throws LoanNotFoundException;
+	LoanType searchDashboardLoansToApply(String loanType) throws LoanNotFoundException;
 	
 	LoanType updateLoanTypeById(LoanType loanType);
 	

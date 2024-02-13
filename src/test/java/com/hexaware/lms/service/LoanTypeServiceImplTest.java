@@ -1,5 +1,6 @@
 package com.hexaware.lms.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hexaware.lms.dto.LoanTypeDTO;
 import com.hexaware.lms.entities.LoanType;
+import com.hexaware.lms.exception.LoanNotFoundException;
 import com.hexaware.lms.exception.LoanTypeAlreadyExistException;
 
 @SpringBootTest
@@ -32,10 +34,12 @@ class LoanTypeServiceImplTest {
 	}
 
 	@Test
-	void testCreateLoanType() throws LoanTypeAlreadyExistException {
+	void testCreateLoanType() throws LoanTypeAlreadyExistException, LoanNotFoundException {
 		LoanTypeDTO loanTypeDto = new LoanTypeDTO("HOME LOAN",8.5,200.0);
 		log.info("Test running to create a new LoanType: "+loanTypeDto);
 		serviceTest.createLoanType(loanTypeDto);
+		LoanType loanType = serviceTest.searchDashboardLoansToApply("HOME LOAN");
+		assertEquals("HOME LOAN" , loanType.getLoanTypeName());
 	}
 	
 	@Test

@@ -26,7 +26,7 @@ public class CustomerDTO {
 	@Size(min=6,max=20)
 	private String password;
 
-	private LocalDate dateOfBirth;
+	private LocalDate dateOfBirth;//yyyyMMdd
 
 	@Size(max=100)
 	private String address;
@@ -40,12 +40,12 @@ public class CustomerDTO {
 	@Max(900)
 	private int creditScore;
 
-	@Pattern(regexp="[A-Z]{5}[0-1]{4}[A-Z]{1}")
+	@Pattern(regexp="[A-Z]{5}[0-1]{4}[A-Z]")
 	private String panCardNumber;
 
 	private byte[] idProof;
 
-	private String role;
+	private String role;///?
 
 	public CustomerDTO() {
 		super();
@@ -155,14 +155,7 @@ public class CustomerDTO {
 		this.role = role;
 	}
 
-	@Override
-	public String toString() {
-		return "CustomerDTO [" + " customerFirstName=" + customerFirstName
-				+ ", customerLastName=" + customerLastName + ", phoneNumer=" + phoneNumer + ", email=" + email
-				+ ", password=" + password + ", dateOfBirth=" + dateOfBirth + ", address=" + address + ", country="
-				+ country + ", state=" + state + ", creditScore=" + creditScore + ", panCardNumber=" + panCardNumber
-				+ ", idProof=" + Arrays.toString(idProof) + ", role=" + role + "]";
-	}
+
 	
 	
 

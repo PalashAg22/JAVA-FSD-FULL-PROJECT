@@ -20,22 +20,14 @@ public class AdminServiceImpl implements IAdminService {
 
 	Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
 
-	
+	@Autowired
 	private AuthenticationManager authenticationManager;
 
-	
+	@Autowired
 	private JwtService jwtService;
 
-	
+	@Autowired
 	private AdminRepository repo;
-
-	
-	public AdminServiceImpl(AuthenticationManager authenticationManager, JwtService jwtService, AdminRepository repo) {
-		super();
-		this.authenticationManager = authenticationManager;
-		this.jwtService = jwtService;
-		this.repo = repo;
-	}
 
 	public String login(String username, String password) {
 		String token = null;

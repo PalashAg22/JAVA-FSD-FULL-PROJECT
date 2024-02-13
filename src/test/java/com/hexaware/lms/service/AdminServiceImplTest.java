@@ -1,6 +1,7 @@
 package com.hexaware.lms.service;
 
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -25,9 +26,11 @@ class AdminServiceImplTest {
 
 	@Test
 	void testLogin() {
-//		String username="suraj@kumar.com";
-//		String password="password123";
-//		assertTrue(testService.login(username, password));
+		String username="palash@hexaware.com";
+		String password="password123";
+		boolean flag= testService.login(username, password);
+		assertTrue(flag);
+		
 	}
 
 	@Test
@@ -36,9 +39,9 @@ class AdminServiceImplTest {
 		AdminDTO adminDto = new AdminDTO();
 		adminDto.setAdminFirstName("Palash");
 		adminDto.setAdminLastName("Agrawal");
-		adminDto.setEmail("palash@agrawal.com");
+		adminDto.setEmail("palash@hexaware.com");
 		adminDto.setPassword("palash123");
-		adminDto.setRole("Admin");
+		adminDto.setRole("ADMIN");
 		log.info("Registering a new Admin: "+adminDto);
 		assertTrue(testAdmin.register(adminDto));
 	}
