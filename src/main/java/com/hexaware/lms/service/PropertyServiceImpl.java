@@ -2,6 +2,7 @@ package com.hexaware.lms.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.lms.entities.Property;
@@ -13,13 +14,10 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class PropertyServiceImpl implements IPropertyService {
 
-	private final PropertyRepository propertyRepo;
+	@Autowired
+	PropertyRepository propertyRepo;
 	
 	Logger logger = LoggerFactory.getLogger(PropertyServiceImpl.class);
-
-    public PropertyServiceImpl(PropertyRepository propertyRepo) {
-        this.propertyRepo = propertyRepo;
-    }
 
 	@Override
 	public Property viewPropertyForLoan(long loanId) {

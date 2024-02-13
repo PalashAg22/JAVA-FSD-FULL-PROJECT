@@ -12,7 +12,7 @@ public class Admin{
 	@Id
 	@SequenceGenerator(name="admin_sequence",initialValue=10001)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="admin_sequence")
-	private long AdminId;
+	private long adminId;
 	
 	@Column(name = "firstName")
 	private String adminFirstName;
@@ -40,7 +40,7 @@ public class Admin{
 	}
 
 	public long getAdminId() {
-		return AdminId;
+		return adminId;
 	}
 
 	public String getAdminFirstName() {
@@ -85,7 +85,7 @@ public class Admin{
 
 	@Override
 	public String toString() {
-		return "Admin [AdminId=" + AdminId + ", adminFirstName=" + adminFirstName + ", adminLastName=" + adminLastName
+		return "Admin [AdminId=" + adminId + ", adminFirstName=" + adminFirstName + ", adminLastName=" + adminLastName
 				+ ", email=" + email + ", password=" + password + ", role=" + role + "]";
 	}
 
