@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -12,11 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hexaware.lms.dto.LoanApplicationDTO;
 import com.hexaware.lms.dto.PropertyDTO;
+import com.hexaware.lms.dto.PropertyProofDTO;
 import com.hexaware.lms.entities.LoanApplication;
-import com.hexaware.lms.entities.LoanType;
 import com.hexaware.lms.exception.LoanNotFoundException;
 import com.hexaware.lms.exception.PropertyAlreadyExistException;
 
@@ -29,23 +31,26 @@ class LoanServiceImplTest {
 	ILoanService serviceTest;
 
 	@Test
-	void testApplyLoan() throws PropertyAlreadyExistException {
+	void testApplyLoan() throws PropertyAlreadyExistException, IOException {
 		LoanApplicationDTO loan = new LoanApplicationDTO();
 		PropertyDTO property = new PropertyDTO();
-
+		
 		loan.setCustomerId(1053);
 		loan.setLoanTypeId(3);
 		loan.setPrincipal(97384735);
 		loan.setTenureInMonths(48);
-//		loan.setLoanApplyDate(LocalDate.now());
 		loan.setInterestRate(17);
 		loan.setStatus("PENDING");
 
-		property.setPropertyAddress("Indore");
-		property.setPropertyAreaInm2(100000);
+		property.setPropertyAddress("MFP");
+		property.setPropertyAreaInm2(100);
 		property.setPropertyValue(1232423);
-		property.setPropertyProof(new byte[5]);
-		LoanApplication newLoan= serviceTest.applyLoan(loan,property);
+		
+		String dummyFileName = "defaultFileName.png";
+	    byte[] dummyFileContent = new byte[0];
+	    MultipartFile file = new MockMultipartFile(dummyFileName, dummyFileContent);
+
+		LoanApplication newLoan= serviceTest.applyLoan(loan,property,file);
 		logger.info("Test running for applying loan: "+loan);
 		assertEquals(loan.getPrincipal(),newLoan.getPrincipal());
 	}

@@ -1,6 +1,9 @@
 package com.hexaware.lms.service;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hexaware.lms.dto.LoanApplicationDTO;
 import com.hexaware.lms.dto.PropertyDTO;
@@ -10,7 +13,7 @@ import com.hexaware.lms.exception.PropertyAlreadyExistException;
 
 public interface ILoanService {
 
-	LoanApplication applyLoan(LoanApplicationDTO loan, PropertyDTO propertyDto) throws PropertyAlreadyExistException;
+	LoanApplication applyLoan(LoanApplicationDTO loan, PropertyDTO propertyDto, MultipartFile file) throws PropertyAlreadyExistException, IOException;
 
 	List<LoanApplication> filterAppliedLoanByType(long customerId, String loanType) throws LoanNotFoundException; 
 

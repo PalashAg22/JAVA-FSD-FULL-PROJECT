@@ -1,8 +1,5 @@
 package com.hexaware.lms.dto;
 
-import java.util.Arrays;
-
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
@@ -16,20 +13,19 @@ public class PropertyDTO {
 
 	@Min(1000)
 	private double propertyValue;
-
-	@Lob
-	private byte[] propertyProof;
+	
+	private long propertyProofId;
 
 	public PropertyDTO() {
 		super();
 	}
 
-	public PropertyDTO(String propertyAddress, double propertyAreaInm2, double propertyValue, byte[] propertyProof) {
+	public PropertyDTO(String propertyAddress, double propertyAreaInm2, double propertyValue, int propertyProof) {
 		super();
 		this.propertyAddress = propertyAddress;
 		this.propertyAreaInm2 = propertyAreaInm2;
 		this.propertyValue = propertyValue;
-		this.propertyProof = propertyProof;
+		this.propertyProofId = propertyProof;
 	}
 
 	public String getPropertyAddress() {
@@ -56,12 +52,12 @@ public class PropertyDTO {
 		this.propertyValue = propertyValue;
 	}
 
-	public byte[] getPropertyProof() {
-		return propertyProof;
+	public long getPropertyProof() {
+		return propertyProofId;
 	}
 
-	public void setPropertyProof(byte[] propertyProof) {
-		this.propertyProof = propertyProof;
+	public void setPropertyProof(long propertyProof) {
+		this.propertyProofId = propertyProof;
 	}
 	
 }

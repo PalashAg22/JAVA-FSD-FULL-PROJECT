@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,7 +24,7 @@ import com.hexaware.lms.dto.LoginDTO;
 import com.hexaware.lms.entities.Customer;
 import com.hexaware.lms.entities.LoanApplication;
 import com.hexaware.lms.entities.LoanType;
-import com.hexaware.lms.entities.Property;
+import com.hexaware.lms.entities.PropertyInfo;
 import com.hexaware.lms.exception.CustomerNotFoundException;
 import com.hexaware.lms.exception.DataAlreadyPresentException;
 import com.hexaware.lms.exception.LoanNotFoundException;
@@ -34,6 +35,7 @@ import com.hexaware.lms.service.ICustomerService;
 import com.hexaware.lms.service.ILoanService;
 import com.hexaware.lms.service.ILoanTypeService;
 import com.hexaware.lms.service.IPropertyService;
+import com.hexaware.lms.service.IUploadPropertyService;
 
 import jakarta.validation.Valid;
 
@@ -54,6 +56,9 @@ public class AdminRestController {
 
 	@Autowired
 	private ICustomerService custService;
+	
+	@Autowired
+	private IUploadPropertyService uploadService;
 	
 	@Autowired
 	private IPropertyService propService;
@@ -139,9 +144,18 @@ public class AdminRestController {
 	
 	@GetMapping("/viewPropertyForLoan/{loanId}")
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public Property viewPropertyForLoan(@PathVariable long loanId) {
+	public PropertyInfo viewPropertyForLoan(@PathVariable long loanId) {
 		log.info("Viewing Property set for loan application");
 		return propService.viewPropertyForLoan(loanId);
+	}
+
+	@GetMapping("/property-file/{fileName}")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public ResponseEntity<?> downloadImage(@PathVariable String fileName){
+		byte[] imageData=uploadService.downloadImage(fileName);
+		return ResponseEntity.status(HttpStatus.OK)
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.body(imageData);
 	}
 
 	@ExceptionHandler({ LoanTypeAlreadyExistException.class })
