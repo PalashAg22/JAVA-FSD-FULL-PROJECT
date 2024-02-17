@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.hexaware.lms.dto.LoanApplicationDTO;
 import com.hexaware.lms.dto.PropertyDTO;
-import com.hexaware.lms.dto.PropertyProofDTO;
 import com.hexaware.lms.entities.Customer;
 import com.hexaware.lms.entities.LoanApplication;
 import com.hexaware.lms.entities.LoanType;
@@ -80,8 +79,7 @@ public class LoanServiceImpl implements ILoanService {
 		logger.info("Property details saved...");
 		
 		PropertyProof proof = uploadService.uploadPdf(file);
-	    
-		
+	    		
 		property.setPropertyProof(proof);
 		loan.setProperty(property);
 		logger.info("loanApplication submitted successfully");

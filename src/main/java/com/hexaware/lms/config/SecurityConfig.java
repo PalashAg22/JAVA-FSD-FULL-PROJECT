@@ -41,9 +41,8 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		return http.csrf().disable().authorizeHttpRequests()
-				.requestMatchers("/api/customer/login", "/api/customer/register", "/api/admin/login").permitAll()
-				.requestMatchers(AUTH_WHITELIST).permitAll()
-				.requestMatchers("/swagger-ui.html", "/webjars/**", "/swagger-resources/**", "/v2/api-docs").permitAll()
+				.requestMatchers("/api/customer/login", "/api/customer/register", "/api/admin/login",
+						"/v3/api-docs/**", "/swagger-ui/**","/swagger-resources/**").permitAll()
 				.and()
 				.authorizeHttpRequests().anyRequest().authenticated().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
@@ -51,14 +50,6 @@ public class SecurityConfig {
 				.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class).build();
 
 	}
-	
-	private static final String[] AUTH_WHITELIST = {
-			"api/v1/auth/**",
-			"v3/api-docs/**",
-			"v3/api-docs.yaml",
-			"/swagger-ui/**",
-			"/swagger-ui.html"
-	};
 
 	@Bean
 	PasswordEncoder passwordEncoder() {

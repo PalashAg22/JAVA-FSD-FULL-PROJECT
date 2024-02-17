@@ -1,7 +1,5 @@
 package com.hexaware.lms.dto;
 
-import java.time.LocalDate;
-
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
@@ -10,13 +8,9 @@ public class LoanApplicationDTO {
 	@Max(10000000)
 	private double principal;
 	
-	private double interestRate;
-	
 	@Min(6)
 	@Max(72)
 	private int tenureInMonths;
-	
-	private String status;
 	
 	private long loanTypeId;
 	
@@ -46,28 +40,12 @@ public class LoanApplicationDTO {
 		this.principal = principal;
 	}
 
-	public double getInterestRate() {
-		return interestRate;
-	}
-
-	public void setInterestRate(double interestRate) {
-		this.interestRate = interestRate;
-	}
-
 	public int getTenureInMonths() {
 		return tenureInMonths;
 	}
 
 	public void setTenureInMonths(int tenureInMonths) {
 		this.tenureInMonths = tenureInMonths;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 	public long getLoanTypeId() {

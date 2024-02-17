@@ -13,19 +13,16 @@ public class PropertyDTO {
 
 	@Min(1000)
 	private double propertyValue;
-	
-	private long propertyProofId;
 
 	public PropertyDTO() {
 		super();
 	}
 
-	public PropertyDTO(String propertyAddress, double propertyAreaInm2, double propertyValue, int propertyProof) {
+	public PropertyDTO(String propertyAddress, double propertyAreaInm2, double propertyValue) {
 		super();
 		this.propertyAddress = propertyAddress;
 		this.propertyAreaInm2 = propertyAreaInm2;
 		this.propertyValue = propertyValue;
-		this.propertyProofId = propertyProof;
 	}
 
 	public String getPropertyAddress() {
@@ -51,13 +48,4 @@ public class PropertyDTO {
 	public void setPropertyValue(double propertyValue) {
 		this.propertyValue = propertyValue;
 	}
-
-	public long getPropertyProof() {
-		return propertyProofId;
-	}
-
-	public void setPropertyProof(long propertyProof) {
-		this.propertyProofId = propertyProof;
-	}
-	
 }

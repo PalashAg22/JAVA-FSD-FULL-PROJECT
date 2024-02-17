@@ -37,7 +37,6 @@ class AdminServiceImplTest {
 		adminDto.setAdminLastName("Agrawal");
 		adminDto.setEmail("Suraj123@hexaware.com");
 		adminDto.setPassword("suraj123");
-		adminDto.setRole("Admin");
 		log.info("Registering a new Admin: "+adminDto);
 		assertTrue(testAdmin.register(adminDto));
 	}

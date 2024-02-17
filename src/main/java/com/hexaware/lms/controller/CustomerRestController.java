@@ -61,10 +61,10 @@ public class CustomerRestController {
 	@Autowired
 	ILoanTypeService loanTypeService;
 
-	@PostMapping("/register")
-	public boolean registerCustomer(@RequestBody @Valid CustomerDTO customerDTO) throws DataAlreadyPresentException {
+	@PostMapping(value="/register",consumes="multipart/form-data")
+	public boolean registerCustomer(@RequestPart("register") @Valid CustomerDTO customerDTO,@RequestPart("file") MultipartFile file) throws DataAlreadyPresentException, IOException {
 		log.info("Request Received to register new Customer: " + customerDTO);
-		return customerService.register(customerDTO);
+		return customerService.register(customerDTO,file);
 	}
 
 	@PostMapping("/login")
