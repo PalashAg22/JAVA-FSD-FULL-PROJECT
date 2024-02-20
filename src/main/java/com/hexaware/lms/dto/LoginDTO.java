@@ -1,7 +1,12 @@
 package com.hexaware.lms.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+
 public class LoginDTO {
+	@Email
 	private String username;
+	@Size(min=5,max=20)
 	private String password;
 	public LoginDTO() {
 		super();

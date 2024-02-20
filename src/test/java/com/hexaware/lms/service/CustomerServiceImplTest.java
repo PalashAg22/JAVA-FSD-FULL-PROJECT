@@ -16,6 +16,7 @@ import com.hexaware.lms.dto.CustomerDTO;
 import com.hexaware.lms.entities.Customer;
 import com.hexaware.lms.exception.CustomerNotFoundException;
 import com.hexaware.lms.exception.DataAlreadyPresentException;
+import com.hexaware.lms.exception.LoginCredentialsNotFound;
 
 @SpringBootTest
 class CustomerServiceImplTest {
@@ -26,10 +27,10 @@ class CustomerServiceImplTest {
 	ICustomerService serviceTest;
 
 	@Test
-	void testLogin() {
-//		String username="suraj@kumar.com";
-//		String password="password123";
-//		assertTrue(serviceTest.login(username, password));
+	void testLogin() throws LoginCredentialsNotFound {
+		String username="Surajkumar@gmail.com";
+		String password="password123";
+		assertNotNull(serviceTest.login(username, password));
 	}
 
 	@Test
@@ -37,15 +38,15 @@ class CustomerServiceImplTest {
 		CustomerDTO customer = new CustomerDTO();
 		customer.setCustomerFirstName("Suraj");
 		customer.setCustomerLastName("Kumar");
-		customer.setEmail("Suraj@kumar.com");
-		customer.setPhoneNumer(7352442612L);
+		customer.setEmail("Surajkumar@gmail.com");
+		customer.setPhoneNumer(735564612L);
 		customer.setPassword("password123");
 		customer.setDateOfBirth(LocalDate.of(2010, 10, 10));
 		customer.setAddress("Muzaffarpur");
 		customer.setCountry("India");
 		customer.setState("Bihar");
 		customer.setCreditScore(345);
-		customer.setPanCardNumber("PAN123");
+		customer.setPanCardNumber("PANNY1234R");
 		customer.setIdProof(new byte[5]);
 		customer.setRole("Regular");
 

@@ -1,6 +1,5 @@
 package com.hexaware.lms.filter;
 
-
 import java.io.IOException;
 
 import org.slf4j.Logger;
@@ -25,7 +24,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
 	Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
-	
+
 	@Autowired
 	JwtService jwtService;
 
@@ -45,17 +44,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 		logger.info("extracted username from token ");
 
-
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-			logger.info("validating username and userdetails");
-			if (jwtService.validateToken(token, userDetails)) {
-				logger.info("validated userdetails and token");
+			boolean isTokenValid = jwtService.validateToken(token, userDetails);
+			if (isTokenValid) {
 				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
 						null, userDetails.getAuthorities());
 				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authToken);
-				 logger.info("verified");
+				logger.info("verified");
 			}
 		}
 		filterChain.doFilter(request, response);
