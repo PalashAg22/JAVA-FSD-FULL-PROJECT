@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.hexaware.lms.dto.LoanApplicationDTO;
 import com.hexaware.lms.dto.PropertyDTO;
 import com.hexaware.lms.entities.LoanApplication;
+import com.hexaware.lms.exception.CustomerNotEligibleException;
 import com.hexaware.lms.exception.LoanNotFoundException;
 import com.hexaware.lms.exception.PropertyAlreadyExistException;
 
@@ -30,7 +31,7 @@ class LoanServiceImplTest {
 	ILoanService serviceTest;
 
 	@Test
-	void testApplyLoan() throws PropertyAlreadyExistException, IOException {
+	void testApplyLoan() throws PropertyAlreadyExistException, IOException, CustomerNotEligibleException {
 		LoanApplicationDTO loan = new LoanApplicationDTO();
 		PropertyDTO property = new PropertyDTO();
 

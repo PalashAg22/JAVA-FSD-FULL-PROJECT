@@ -25,6 +25,7 @@ import com.hexaware.lms.dto.LoanApplicationRequestDTO;
 import com.hexaware.lms.dto.LoginDTO;
 import com.hexaware.lms.entities.LoanApplication;
 import com.hexaware.lms.entities.LoanType;
+import com.hexaware.lms.exception.CustomerNotEligibleException;
 import com.hexaware.lms.exception.DataAlreadyPresentException;
 import com.hexaware.lms.exception.LoanNotFoundException;
 import com.hexaware.lms.exception.LoginCredentialsNotFound;
@@ -79,7 +80,7 @@ public class CustomerRestController {
 	@PreAuthorize("hasAuthority('USER')")
 	public LoanApplication applyLoan(@RequestPart("loanRequest") @Valid LoanApplicationRequestDTO loanRequest,
 	                                 @RequestPart("file") MultipartFile file)
-	        throws PropertyAlreadyExistException, IOException {
+	        throws PropertyAlreadyExistException, IOException, CustomerNotEligibleException {
 	    return loanService.applyLoan(loanRequest.getLoanApplicationDto(), loanRequest.getPropertyDto(), file);
 	}
 
@@ -132,6 +133,12 @@ public class CustomerRestController {
 	public ResponseEntity<String> handlePropertyException(PropertyAlreadyExistException e) {
 		log.warn("Some Exception has occurred");
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler({CustomerNotEligibleException.class})
+	public ResponseEntity<String> handleEligibilityException(CustomerNotEligibleException e){
+		log.warn("Customer is not eligible to apply for a loan but he is eager to.");
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.FORBIDDEN);
 	}
 
 }
