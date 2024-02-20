@@ -12,26 +12,25 @@ import jakarta.validation.constraints.Size;
 
 public class CustomerDTO {
 
-	@Size(min=3,max=20)
+	@Size(min = 3, max = 20)
 	private String customerFirstName;
 
+	@Size(min = 3, max = 20)
 	private String customerLastName;
 
-	@Size(min=10,max=12)
+
 	private long phoneNumer;
 
 	@Email
 	private String email;
 
-	@Size(min=6,max=20)
+	@Size(min = 6, max = 20)
 	private String password;
 
 	private LocalDate dateOfBirth;//yyyyMMdd
 
-	@Size(max=100)
+	@Size(max = 100)
 	private String address;
-
-	private String country;
 
 	@NotBlank
 	private String state;
@@ -40,16 +39,21 @@ public class CustomerDTO {
 	@Max(900)
 	private int creditScore;
 
-	@Pattern(regexp="[A-Z]{5}[0-1]{4}[A-Z]")
+	@Pattern(regexp = "[A-Z]{5}\\d{4}[A-Z]")
+
 	private String panCardNumber;
+
 
 	private byte[] idProof;
 
 	private String role;///?
 
+
 	public CustomerDTO() {
 		super();
 	}
+
+
 
 	public String getCustomerFirstName() {
 		return customerFirstName;
@@ -107,14 +111,6 @@ public class CustomerDTO {
 		this.address = address;
 	}
 
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
 	public String getState() {
 		return state;
 	}
@@ -154,9 +150,5 @@ public class CustomerDTO {
 	public void setRole(String role) {
 		this.role = role;
 	}
-
-
-	
-	
 
 }

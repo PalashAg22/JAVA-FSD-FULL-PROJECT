@@ -18,8 +18,6 @@ public class AdminDTO {
 	@Size(min=5,max=20)
 	private String password;
 
-	private String role;
-
 	public AdminDTO() {
 		super();
 	}

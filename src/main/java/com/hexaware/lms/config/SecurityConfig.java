@@ -41,8 +41,10 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		
 		return http.csrf().disable().authorizeHttpRequests()
-				.requestMatchers("/api/customer/login", "/api/customer/register", "/api/admin/login")
-				.permitAll().and().authorizeHttpRequests().anyRequest().authenticated().and().sessionManagement()
+				.requestMatchers("/api/customer/login", "/api/customer/register", "/api/admin/login",
+						"/v3/api-docs/**", "/swagger-ui/**","/swagger-resources/**").permitAll()
+				.and()
+				.authorizeHttpRequests().anyRequest().authenticated().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authenticationProvider(authenticationProvider())
 				.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class).build();
@@ -65,10 +67,10 @@ public class SecurityConfig {
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-		logger.info("2");
-	    	logger.info("inside authenticationManager");
-		return config.getAuthenticationManager();
 
+	    	logger.info("Inside authenticationManager");
+
+		return config.getAuthenticationManager();
 	}
 
 

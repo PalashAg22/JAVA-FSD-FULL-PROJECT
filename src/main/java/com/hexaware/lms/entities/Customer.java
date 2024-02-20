@@ -1,60 +1,62 @@
 package com.hexaware.lms.entities;
 
 import java.time.LocalDate;
+
 import java.util.Arrays;
+
+
+
+import jakarta.persistence.CascadeType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 
 @Entity
-public class Customer{
-	
+public class Customer {
+
 	@Id
-	@SequenceGenerator(name="customer_sequence",initialValue=1001)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="customer_sequence")// We have to set the initial value for id field in the database
+	@SequenceGenerator(name = "customer_sequence", initialValue = 1001)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")																					// value for id field in the																			
 	private long customerId;
-	
-	@Column(name="firstName")
+
+	@Column(name = "firstName")
 	private String customerFirstName;
 
-	@Column(name="lastName")
+	@Column(name = "lastName")
 	private String customerLastName;
-	
+
 	private long phoneNumer;
 
 	private String email;
 
 	private String password;
-	
-	@Column(name="dob")
+
+	@Column(name = "dob")
 	private LocalDate dateOfBirth;
-	
+
 	private String address;
 
 	private String country = "India";
-	
+
 	private String state;
 
 	private int creditScore;
-	
+
 	private String panCardNumber;
-	
-	@Lob
-	private byte[] idProof;
 
-	private String role="USER";
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="customer_proof_id")
+	private CustomerProof idProofFile;
 
+	private String role = "USER";
 
-	public Customer() {
-   // TODO document why this constructor is empty
- }
-
-	
 	public long getCustomerId() {
 		return customerId;
 	}
@@ -147,12 +149,12 @@ public class Customer{
 		this.panCardNumber = panCardNumber;
 	}
 
-	public byte[] getIdProof() {
-		return idProof;
+	public CustomerProof getIdProofFile() {
+		return idProofFile;
 	}
 
-	public void setIdProof(byte[] idProof) {
-		this.idProof = idProof;
+	public void setIdProofFile(CustomerProof idProofFile) {
+		this.idProofFile = idProofFile;
 	}
 
 	public String getRole() {
@@ -162,17 +164,13 @@ public class Customer{
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Customer [customerId=" + customerId + ", customerFirstName=" + customerFirstName + ", customerLastName="
 				+ customerLastName + ", phoneNumer=" + phoneNumer + ", email=" + email + ", password=" + password
 				+ ", dateOfBirth=" + dateOfBirth + ", address=" + address + ", country=" + country + ", state=" + state
-				+ ", creditScore=" + creditScore + ", panCardNumber=" + panCardNumber + ", idProof="
-				+ Arrays.toString(idProof) + ", role=" + role +"]";
+				+ ", creditScore=" + creditScore + ", panCardNumber=" + panCardNumber +", role=" + role + "]";
 	}
-	
-	
-	
-	
+
 }

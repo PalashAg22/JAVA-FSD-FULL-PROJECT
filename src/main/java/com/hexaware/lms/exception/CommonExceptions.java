@@ -21,6 +21,12 @@ public class CommonExceptions {
 	@ExceptionHandler({LoanNotFoundException.class})
 	public ResponseEntity<String> handleException(LoanNotFoundException e){
 		log.warn("Some Exception has Occurred....See the logs above and below.");
-		return new ResponseEntity<>(e.getMessage(),HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler({LoginCredentialsNotFound.class})
+	public ResponseEntity<String> handleLoginException(LoginCredentialsNotFound e){
+		log.warn("Some Exception has Occurred....See the logs above and below.");
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 	}
 }

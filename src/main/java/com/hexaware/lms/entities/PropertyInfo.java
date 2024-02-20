@@ -2,17 +2,21 @@ package com.hexaware.lms.entities;
 
 import java.util.Arrays;
 
+import jakarta.persistence.CascadeType;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name="property_details")
-public class Property{
+public class PropertyInfo{
 	@Id
 	@SequenceGenerator(name="property_sequence",initialValue=3001)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="property_sequence")
@@ -23,22 +27,23 @@ public class Property{
 	private double propertyAreaInm2;
 	
 	private double propertyValue;
+
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="proofId")
+	private PropertyProof propertyProof;
 	
-	@Lob
-	private byte[] propertyProof;
-	
-	public Property() {
+	public PropertyInfo() {
 		super();
 	}
 
-	public Property(String propertyAddress, double propertyAreaInm2, double propertyValue, byte[] propertyProof) {
+	public PropertyInfo(String propertyAddress, double propertyAreaInm2, double propertyValue, PropertyProof propertyProof) {
 		super();
 		this.propertyAddress = propertyAddress;
 		this.propertyAreaInm2 = propertyAreaInm2;
 		this.propertyValue = propertyValue;
 		this.propertyProof = propertyProof;
 	}
-
+	
 	public long getPropertyId() {
 		return propertyId;
 	}
@@ -67,20 +72,11 @@ public class Property{
 		this.propertyValue = propertyValue;
 	}
 
-	public byte[] getPropertyProof() {
+	public PropertyProof getPropertyProof() {
 		return propertyProof;
 	}
 
-	public void setPropertyProof(byte[] propertyProof) {
+	public void setPropertyProof(PropertyProof propertyProof) {
 		this.propertyProof = propertyProof;
-	}
-	
-	@Override
-	public String toString() {
-		return "Property [propertyId=" + propertyId + ", propertyAddress=" + propertyAddress + ", propertyAreaInm2="
-				+ propertyAreaInm2 + ", propertyValue=" + propertyValue + ", propertyProof="
-				+ Arrays.toString(propertyProof)+ "]";
-	}
-	
-	
+	}	
 }

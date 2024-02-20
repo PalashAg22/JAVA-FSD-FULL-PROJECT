@@ -1,25 +1,26 @@
 package com.hexaware.lms.service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hexaware.lms.dto.LoanApplicationDTO;
 import com.hexaware.lms.dto.PropertyDTO;
 import com.hexaware.lms.entities.Customer;
 import com.hexaware.lms.entities.LoanApplication;
 import com.hexaware.lms.entities.LoanType;
-import com.hexaware.lms.entities.Property;
+import com.hexaware.lms.entities.PropertyInfo;
+import com.hexaware.lms.entities.PropertyProof;
 import com.hexaware.lms.exception.LoanNotFoundException;
 import com.hexaware.lms.exception.PropertyAlreadyExistException;
 import com.hexaware.lms.repository.CustomerRepository;
 import com.hexaware.lms.repository.LoanRepository;
 import com.hexaware.lms.repository.LoanTypeRepository;
-import com.hexaware.lms.repository.PropertyRepository;
+import com.hexaware.lms.repository.PropertyInfoRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -30,54 +31,65 @@ public class LoanServiceImpl implements ILoanService {
 	Logger logger = LoggerFactory.getLogger(LoanServiceImpl.class);
 
 	@Autowired
-	private LoanTypeRepository loanTypeRepo;
+
+	LoanTypeRepository loanTypeRepo;
 
 	@Autowired
-	private CustomerRepository customerRepo;
+	CustomerRepository customerRepo;
+
 
 	@Autowired
 	private LoanRepository loanRepo;
 
 	@Autowired
-	private PropertyRepository propRepo;
 
-	private final String invalid = "Invalid loanType name entered";
+	IUploadPropertyService uploadService;
+	
+	@Autowired
+	PropertyInfoRepository propRepo;
 
 	@Override
-	public LoanApplication applyLoan(LoanApplicationDTO loanDto, PropertyDTO propertyDto)
-			throws PropertyAlreadyExistException {
+	public LoanApplication applyLoan(LoanApplicationDTO loanDto, PropertyDTO propertyDto,MultipartFile file)
+			throws PropertyAlreadyExistException, java.io.IOException {
+
 		long loanTypeId = loanDto.getLoanTypeId();
 		long customerId = loanDto.getCustomerId();
 
 		LoanType loanType = loanTypeRepo.findById(loanTypeId).orElse(null);
 		double interestRate = loanTypeRepo.findLoanInterestBaseRateByLoanId(loanDto.getLoanTypeId());
 		Customer customer = customerRepo.findById(customerId).orElse(null);
+
 		LocalDate loanApplicationDate = LocalDate.now();
+
 
 		LoanApplication loan = new LoanApplication();
 		loan.setCustomer(customer);
 		loan.setLoanType(loanType);
 		loan.setPrincipal(loanDto.getPrincipal());
 		loan.setTenureInMonths(loanDto.getTenureInMonths());
-		loan.setLoanApplyDate(loanApplicationDate);
 		loan.setInterestRate(interestRate);
 
 		logger.info("Loan application started...");
 		String propertyDtoAddress = propertyDto.getPropertyAddress();
 		double propertyDtoArea = propertyDto.getPropertyAreaInm2();
 
-		Property tempProperty = propRepo.getProperty(propertyDtoAddress, propertyDtoArea);
+
+		PropertyInfo tempProperty = propRepo.getProperty(propertyDtoAddress, propertyDtoArea);
+
 		logger.info("Property details read...");
 		if (tempProperty != null) {
 			logger.warn("User is entering duplicate property details");
 			throw new PropertyAlreadyExistException("Property details already taken.");
 		}
-		Property property = new Property();
+		PropertyInfo property = new PropertyInfo();
 		property.setPropertyAddress(propertyDto.getPropertyAddress());
 		property.setPropertyAreaInm2(propertyDto.getPropertyAreaInm2());
 		property.setPropertyValue(propertyDto.getPropertyValue());
-		property.setPropertyProof(propertyDto.getPropertyProof());
 		logger.info("Property details saved...");
+		
+		PropertyProof proof = uploadService.uploadPdf(file);
+	    		
+		property.setPropertyProof(proof);
 		loan.setProperty(property);
 		logger.info("loanApplication submitted successfully");
 		return loanRepo.save(loan);
@@ -114,26 +126,34 @@ public class LoanServiceImpl implements ILoanService {
 			List<LoanApplication> list = loanRepo.findAllByCustomerCustomerId(customerId);
 			boolean isPresent = false;
 
+			logger.info("searching for loanType");
 			for (LoanApplication lp : list) {
 				if (lp.getLoanType().getLoanTypeName().equals(loanType)) {
+					logger.info("loanTtype found");
+
 					isPresent = true;
 					break;
 				}
 			}
 			if (!isPresent) {
-				logger.warn("Customer having no loan application of loanType " + loanType);
-				throw new LoanNotFoundException("Customer having no loan application of loanType " + loanType);
+
+				logger.warn("No loan of type " + loanType + " found for that user");
+				throw new LoanNotFoundException("You have not applied for any loan of type" + loanType);
 			}
+			logger.info("Loan Application with customerId " + customerId + " and loanType " + loanType + " is present");
 			return loanRepo.filterAppliedLoanByType(customerId, loanType);
 		}
 		return null;
+
 	}
 
 	@Override
 	public List<LoanApplication> filterAppliedLoanByStatus(long customerId, String status)
 			throws LoanNotFoundException {
+
+		List<LoanApplication> loans = null;
 		if (isLoanStatusValid(status)) {
-			List<LoanApplication> loans = loanRepo.findAllByCustomerCustomerId(customerId);
+
 			boolean isPresent = false;
 			for (LoanApplication lp : loans) {
 				if (lp.getStatus().equals(status)) {
@@ -147,25 +167,37 @@ public class LoanServiceImpl implements ILoanService {
 				throw new LoanNotFoundException("None of your loan is " + status);
 			}
 			logger.info("Loan Application with customerId " + customerId + " and status " + status + " is present");
-			return loanRepo.filterAppliedLoanByStatus(customerId, status);
+
+			loans = loanRepo.filterAppliedLoanByStatus(customerId, status);
 		}
-		return null;
+		return loans;
 	}
 	
 	@Override
 	public LoanApplication searchAppliedLoan(long customerId, long loanId) throws LoanNotFoundException {
+
+		LoanApplication loan = null;
 		if (isLoanIdValid(loanId)) {
-			LoanApplication loans = loanRepo.findByLoanId(customerId, loanId);
-			if (loans!= null && loans.getLoanId() == loanId) {
-				logger.info("Loan is present for the customer...");
-			} else {
+			List<LoanApplication> loans = loanRepo.findAllByCustomerCustomerId(customerId);
+			boolean isPresent = false;
+			for (LoanApplication lp : loans) {
+				if (lp.getLoanId() == loanId) {
+					logger.info("Loan is present for the customer...");
+					isPresent = true;
+					break;
+				}
+			}
+			if (!isPresent) {
+
 				logger.warn("Customer has input wrong loan number " + loanId + " to search for...");
 				throw new LoanNotFoundException("No Loan found with that loan number " + loanId);
 			}
 			logger.info("Loan Application with customerId " + customerId + " and loanId " + loanId + " is present");
-			return loanRepo.findByLoanId(customerId, loanId);
+
+			loan = loanRepo.findByLoanId(customerId, loanId);
 		}
-		return null;
+		return loan;
+
 	}
 
 	@Override
@@ -182,23 +214,28 @@ public class LoanServiceImpl implements ILoanService {
 
 	@Override
 	public void customerUpdateLoanStatus(long loanId, String status) {
-		logger.info("Admin is updating the loan application: " + loanId);
-		loanRepo.updateLoanStatus(status, loanId);
+
+		if (isLoanIdValid(loanId) && isLoanStatusValid(status)) {
+			logger.info("Admin is updating the loan application: " + loanId);
+			loanRepo.updateLoanStatus(status, loanId);
+		}
+
 	}
 
 	@Override
 	public LoanApplication searchLoanById(long loanId) throws LoanNotFoundException {
+
+		LoanApplication loan = null;
 		if (isLoanIdValid(loanId)) {
-			LoanApplication loan = loanRepo.findById(loanId).orElse(null);
-			if(loan!=null) {
-				logger.info("Loan found with id " + loanId);
-			} else {
-				logger.warn("loan application with loadId "+ loanId + " is not present" );
-				throw new LoanNotFoundException("Invalid loanType name entered");
+			loan = loanRepo.findById(loanId).orElse(null);
+			if (loan == null) {
+				logger.warn("No Record Found for loanID " + loanId);
+				throw new LoanNotFoundException("No Record Found for loanID " + loanId);
 			}
-			return loan;
+			logger.info("Loan found with id " + loanId);
 		}
-		return null;
+		return loan;
+
 	}
 
 	public boolean isLoanTypeValid(String loanType) {

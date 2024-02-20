@@ -1,6 +1,9 @@
 package com.hexaware.lms.service;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hexaware.lms.dto.LoanApplicationDTO;
 import com.hexaware.lms.dto.PropertyDTO;
@@ -9,18 +12,18 @@ import com.hexaware.lms.exception.LoanNotFoundException;
 import com.hexaware.lms.exception.PropertyAlreadyExistException;
 
 public interface ILoanService {
-	
-	LoanApplication applyLoan(LoanApplicationDTO loan, PropertyDTO propertyDto) throws PropertyAlreadyExistException; //DONE
 
-	List<LoanApplication> filterAppliedLoanByType(long customerId,String loanType) throws LoanNotFoundException; //DONE
+	LoanApplication applyLoan(LoanApplicationDTO loan, PropertyDTO propertyDto, MultipartFile file) throws PropertyAlreadyExistException, IOException;
 
-	List<LoanApplication> filterAppliedLoanByStatus(long customerId,String status) throws LoanNotFoundException; //DONE
-	
-	void customerUpdateLoanStatus(long loanId, String status);  //DONE
+	List<LoanApplication> filterAppliedLoanByType(long customerId, String loanType) throws LoanNotFoundException; 
 
-	List<LoanApplication> allAppliedLoansOfCustomer(long customerId); //DONE
+	List<LoanApplication> filterAppliedLoanByStatus(long customerId, String status) throws LoanNotFoundException; 
 
-	List<LoanApplication> allAppliedLoansOfCustomerForAdmin(); //DONE
+	void customerUpdateLoanStatus(long loanId, String status);
+
+	List<LoanApplication> allAppliedLoansOfCustomer(long customerId); 
+
+	List<LoanApplication> allAppliedLoansOfCustomerForAdmin(); 
 
 	double interestCalculator(long customerId);
 
@@ -29,7 +32,7 @@ public interface ILoanService {
 	double emiCalculator(double principal, double rate, int tenure);
 
 	LoanApplication searchAppliedLoan(long customerId, long loanId) throws LoanNotFoundException;
-	
+
 	LoanApplication searchLoanById(long loanId) throws LoanNotFoundException;
-	
+
 }

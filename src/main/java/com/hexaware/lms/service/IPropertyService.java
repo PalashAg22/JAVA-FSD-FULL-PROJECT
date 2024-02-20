@@ -1,9 +1,9 @@
 package com.hexaware.lms.service;
 
-import com.hexaware.lms.entities.Property;
+import com.hexaware.lms.entities.PropertyInfo;
 
 public interface IPropertyService {
-	
-	Property viewPropertyForLoan(long loanId);
+
+	PropertyInfo viewPropertyForLoan(long loanId);
 
 }
