@@ -1,6 +1,8 @@
 package com.hexaware.lms.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -34,10 +36,10 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Autowired
 	CustomerRepository repo;
-	
+
 	@Autowired
 	IUploadIdProofService idUploadService;
-	
+
 	@Autowired
 	UploadIdentityProofRepository proofRepo;
 
@@ -67,7 +69,8 @@ public class CustomerServiceImpl implements ICustomerService {
 	}
 
 	@Override
-	public boolean register(CustomerDTO customerDTO, MultipartFile file) throws DataAlreadyPresentException, IOException {
+	public boolean register(CustomerDTO customerDTO, MultipartFile file)
+			throws DataAlreadyPresentException, IOException {
 		Customer customerByPhone = getCustomerByPhoneNumber(customerDTO.getPhoneNumer());
 		Customer customerByEmail = getCustomerByEmail(customerDTO.getEmail());
 		if ((customerByPhone != null || customerByEmail != null)) {
@@ -80,18 +83,24 @@ public class CustomerServiceImpl implements ICustomerService {
 		customer.setEmail(customerDTO.getEmail());
 		customer.setPhoneNumer(customerDTO.getPhoneNumer());
 		customer.setPassword(passwordEncoder.encode(customerDTO.getPassword()));
-		customer.setDateOfBirth(customerDTO.getDateOfBirth());
+		LocalDate dob = customerDTO.getDateOfBirth();
+		customer.setDateOfBirth(dob);
+		LocalDate now = LocalDate.now();
+		Period period = Period.between(dob, now);
+		int age = period.getYears();		
+		customer.setAge(age);
+		customer.setGender(customerDTO.getGender());
 		customer.setAddress(customerDTO.getAddress());
 		customer.setState(customerDTO.getState());
 		customer.setCreditScore(customerDTO.getCreditScore());
 		customer.setPanCardNumber(customerDTO.getPanCardNumber());
 
-		
+
 		CustomerProof customerProof = idUploadService.uploadPdf(file);
-		if(customerProof!=null) {
+		if (customerProof != null) {
 			logger.info("Customer Id Proof uploaded succesfully");
 		}
-		
+
 		customer.setIdProofFile(customerProof);
 		logger.info("Registering Customer: " + customer);
 		Customer addedCustomer = repo.save(customer);

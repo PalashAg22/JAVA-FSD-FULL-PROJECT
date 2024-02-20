@@ -1,6 +1,7 @@
 package com.hexaware.lms.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import com.hexaware.lms.entities.LoanApplication;
 import com.hexaware.lms.entities.LoanType;
 import com.hexaware.lms.entities.PropertyInfo;
 import com.hexaware.lms.entities.PropertyProof;
+import com.hexaware.lms.exception.CustomerNotEligibleException;
 import com.hexaware.lms.exception.LoanNotFoundException;
 import com.hexaware.lms.exception.PropertyAlreadyExistException;
 import com.hexaware.lms.repository.CustomerRepository;
@@ -50,7 +52,8 @@ public class LoanServiceImpl implements ILoanService {
 
 	@Override
 	public LoanApplication applyLoan(LoanApplicationDTO loanDto, PropertyDTO propertyDto,MultipartFile file)
-			throws PropertyAlreadyExistException, java.io.IOException {
+
+			throws PropertyAlreadyExistException, java.io.IOException, CustomerNotEligibleException {
 
 		long loanTypeId = loanDto.getLoanTypeId();
 		long customerId = loanDto.getCustomerId();
@@ -58,6 +61,17 @@ public class LoanServiceImpl implements ILoanService {
 		LoanType loanType = loanTypeRepo.findById(loanTypeId).orElse(null);
 		double interestRate = loanTypeRepo.findLoanInterestBaseRateByLoanId(loanDto.getLoanTypeId());
 		Customer customer = customerRepo.findById(customerId).orElse(null);
+		
+		int age=customer.getAge();
+		String panCard=customer.getPanCardNumber();
+		int creditScore=customer.getCreditScore();
+		if(age<=18 && age>=60) {
+			throw new CustomerNotEligibleException("You are not eligible apply for a loan from our bank.");
+		}
+		if(creditScore<500) {
+			throw new CustomerNotEligibleException("Your Credit score is too low to apply for a new loan");
+		}
+		
 
 		LocalDate loanApplicationDate = LocalDate.now();
 

@@ -40,6 +40,10 @@ public class Customer {
 
 	@Column(name = "dob")
 	private LocalDate dateOfBirth;
+	
+	private String gender;
+	
+	private int age;
 
 	private String address;
 
@@ -63,6 +67,22 @@ public class Customer {
 
 	public String getCustomerFirstName() {
 		return customerFirstName;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
 	}
 
 	public void setCustomerFirstName(String customerFirstName) {
