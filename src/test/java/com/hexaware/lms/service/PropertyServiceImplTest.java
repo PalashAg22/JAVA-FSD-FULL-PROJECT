@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.hexaware.lms.entities.Property;
+import com.hexaware.lms.entities.PropertyInfo;
 
 @SpringBootTest
 class PropertyServiceImplTest {
@@ -22,7 +22,7 @@ class PropertyServiceImplTest {
 	void testViewPropertyForLoan() {
 		long loanID=2001;
 		logger.info("Test running for viewing property of laon: "+loanID);
-		Property property =serviceTest.viewPropertyForLoan(loanID);
+		PropertyInfo property =serviceTest.viewPropertyForLoan(loanID);
 		logger.info("Property found Id: "+property.getPropertyId());
 		assertNotNull(property);
 	}

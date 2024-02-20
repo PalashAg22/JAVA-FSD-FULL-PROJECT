@@ -6,9 +6,7 @@ import jakarta.validation.constraints.Pattern;
 
 public class LoanTypeDTO {
 	
-	private long loanTypeId;
-	
-	@Pattern(regexp="[A-Z]{20}")
+	@Pattern(regexp="^[A-Z0-9\s-]{1,20}$")
 	private String loanTypeName;
 	
 	@Min(8)
@@ -28,14 +26,6 @@ public class LoanTypeDTO {
 		this.loanTypeName = loanTypeName;
 		this.loanInterestBaseRate = loanInterestBaseRate;
 		this.loanManagementFees = loanManagementFees;
-	}
-
-	public long getLoanTypeId() {
-		return loanTypeId;
-	}
-
-	public void setLoanTypeId(long loanTypeId) {
-		this.loanTypeId = loanTypeId;
 	}
 
 	public String getLoanTypeName() {
@@ -61,12 +51,5 @@ public class LoanTypeDTO {
 	public void setLoanManagementFees(double loanManagementFees) {
 		this.loanManagementFees = loanManagementFees;
 	}
-
-	@Override
-	public String toString() {
-		return "LoanTypeDTO [loanTypeId=" + loanTypeId + ", loanTypeName=" + loanTypeName + ", loanInterestBaseRate="
-				+ loanInterestBaseRate + ", loanManagementFees=" + loanManagementFees + "]";
-	}
-	
 	
 }

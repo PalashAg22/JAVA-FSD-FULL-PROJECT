@@ -1,5 +1,6 @@
 package com.hexaware.lms.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,13 +11,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hexaware.lms.dto.CustomerDTO;
 import com.hexaware.lms.entities.Customer;
+import com.hexaware.lms.entities.CustomerProof;
 import com.hexaware.lms.exception.CustomerNotFoundException;
 import com.hexaware.lms.exception.DataAlreadyPresentException;
 import com.hexaware.lms.exception.LoginCredentialsNotFound;
 import com.hexaware.lms.repository.CustomerRepository;
+import com.hexaware.lms.repository.UploadIdentityProofRepository;
 
 @Service
 public class CustomerServiceImpl implements ICustomerService {
@@ -29,6 +33,12 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Autowired
 	CustomerRepository repo;
+	
+	@Autowired
+	IUploadIdProofService idUploadService;
+	
+	@Autowired
+	UploadIdentityProofRepository proofRepo;
 
 	Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
@@ -55,7 +65,7 @@ public class CustomerServiceImpl implements ICustomerService {
 	}
 
 	@Override
-	public boolean register(CustomerDTO customerDTO) throws DataAlreadyPresentException {
+	public boolean register(CustomerDTO customerDTO, MultipartFile file) throws DataAlreadyPresentException, IOException {
 		Customer customerByPhone = getCustomerByPhoneNumber(customerDTO.getPhoneNumer());
 		Customer customerByEmail = getCustomerByEmail(customerDTO.getEmail());
 		if ((customerByPhone != null || customerByEmail != null)) {
@@ -73,7 +83,13 @@ public class CustomerServiceImpl implements ICustomerService {
 		customer.setState(customerDTO.getState());
 		customer.setCreditScore(customerDTO.getCreditScore());
 		customer.setPanCardNumber(customerDTO.getPanCardNumber());
-		customer.setIdProof(customerDTO.getIdProof());
+		
+		CustomerProof customerProof = idUploadService.uploadPdf(file);
+		if(customerProof!=null) {
+			logger.info("Customer Id Proof uploaded succesfully");
+		}
+		
+		customer.setIdProofFile(customerProof);
 		logger.info("Registering Customer: " + customer);
 		Customer addedCustomer = repo.save(customer);
 		logger.info("Registerd Customer: " + addedCustomer);

@@ -1,22 +1,22 @@
 package com.hexaware.lms.entities;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 
 @Entity
 public class Customer {
 	@Id
 	@SequenceGenerator(name = "customer_sequence", initialValue = 1001)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")																					// value for id field in the
-																							
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")																					// value for id field in the																			
 	private long customerId;
 
 	@Column(name = "firstName")
@@ -44,8 +44,9 @@ public class Customer {
 
 	private String panCardNumber;
 
-	@Lob
-	private byte[] idProof;
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="customer_proof_id")
+	private CustomerProof idProofFile;
 
 	private String role = "USER";
 
@@ -142,12 +143,12 @@ public class Customer {
 		this.panCardNumber = panCardNumber;
 	}
 
-	public byte[] getIdProof() {
-		return idProof;
+	public CustomerProof getIdProofFile() {
+		return idProofFile;
 	}
 
-	public void setIdProof(byte[] idProof) {
-		this.idProof = idProof;
+	public void setIdProofFile(CustomerProof idProofFile) {
+		this.idProofFile = idProofFile;
 	}
 
 	public String getRole() {
@@ -163,8 +164,7 @@ public class Customer {
 		return "Customer [customerId=" + customerId + ", customerFirstName=" + customerFirstName + ", customerLastName="
 				+ customerLastName + ", phoneNumer=" + phoneNumer + ", email=" + email + ", password=" + password
 				+ ", dateOfBirth=" + dateOfBirth + ", address=" + address + ", country=" + country + ", state=" + state
-				+ ", creditScore=" + creditScore + ", panCardNumber=" + panCardNumber + ", idProof="
-				+ Arrays.toString(idProof) + ", role=" + role + "]";
+				+ ", creditScore=" + creditScore + ", panCardNumber=" + panCardNumber +", role=" + role + "]";
 	}
 
 }

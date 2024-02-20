@@ -1,25 +1,26 @@
 package com.hexaware.lms.service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hexaware.lms.dto.LoanApplicationDTO;
 import com.hexaware.lms.dto.PropertyDTO;
 import com.hexaware.lms.entities.Customer;
 import com.hexaware.lms.entities.LoanApplication;
 import com.hexaware.lms.entities.LoanType;
-import com.hexaware.lms.entities.Property;
+import com.hexaware.lms.entities.PropertyInfo;
+import com.hexaware.lms.entities.PropertyProof;
 import com.hexaware.lms.exception.LoanNotFoundException;
 import com.hexaware.lms.exception.PropertyAlreadyExistException;
 import com.hexaware.lms.repository.CustomerRepository;
 import com.hexaware.lms.repository.LoanRepository;
 import com.hexaware.lms.repository.LoanTypeRepository;
-import com.hexaware.lms.repository.PropertyRepository;
+import com.hexaware.lms.repository.PropertyInfoRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -37,45 +38,49 @@ public class LoanServiceImpl implements ILoanService {
 
 	@Autowired
 	LoanRepository loanRepo;
-
+	
 	@Autowired
-	PropertyRepository propRepo;
+	IUploadPropertyService uploadService;
+	
+	@Autowired
+	PropertyInfoRepository propRepo;
 
 	@Override
-	public LoanApplication applyLoan(LoanApplicationDTO loanDto, PropertyDTO propertyDto)
-			throws PropertyAlreadyExistException {
+	public LoanApplication applyLoan(LoanApplicationDTO loanDto, PropertyDTO propertyDto,MultipartFile file)
+			throws PropertyAlreadyExistException, java.io.IOException {
 		long loanTypeId = loanDto.getLoanTypeId();
 		long customerId = loanDto.getCustomerId();
 
 		LoanType loanType = loanTypeRepo.findById(loanTypeId).orElse(null);
 		double interestRate = loanTypeRepo.findLoanInterestBaseRateByLoanId(loanDto.getLoanTypeId());
 		Customer customer = customerRepo.findById(customerId).orElse(null);
-		LocalDate loanApplicationDate = LocalDate.now();
 
 		LoanApplication loan = new LoanApplication();
 		loan.setCustomer(customer);
 		loan.setLoanType(loanType);
 		loan.setPrincipal(loanDto.getPrincipal());
 		loan.setTenureInMonths(loanDto.getTenureInMonths());
-		loan.setLoanApplyDate(loanApplicationDate);
 		loan.setInterestRate(interestRate);
 
 		logger.info("Loan application started...");
 		String propertyDtoAddress = propertyDto.getPropertyAddress();
 		double propertyDtoArea = propertyDto.getPropertyAreaInm2();
 
-		Property tempProperty = propRepo.getProperty(propertyDtoAddress, propertyDtoArea);
+		PropertyInfo tempProperty = propRepo.getProperty(propertyDtoAddress, propertyDtoArea);
 		logger.info("Property details read...");
 		if (tempProperty != null) {
 			logger.warn("User is entering duplicate property details");
 			throw new PropertyAlreadyExistException("Property details already taken.");
 		}
-		Property property = new Property();
+		PropertyInfo property = new PropertyInfo();
 		property.setPropertyAddress(propertyDto.getPropertyAddress());
 		property.setPropertyAreaInm2(propertyDto.getPropertyAreaInm2());
 		property.setPropertyValue(propertyDto.getPropertyValue());
-		property.setPropertyProof(propertyDto.getPropertyProof());
 		logger.info("Property details saved...");
+		
+		PropertyProof proof = uploadService.uploadPdf(file);
+	    		
+		property.setPropertyProof(proof);
 		loan.setProperty(property);
 		logger.info("loanApplication submitted successfully");
 		return loanRepo.save(loan);

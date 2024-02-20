@@ -27,15 +27,15 @@ public class LoanApplication {
 	
 	private String status="Pending";
 	
-	private LocalDate loanApplyDate;
+	private LocalDate loanApplyDate = LocalDate.now();
 	
 	@ManyToOne
 	@JoinColumn(name="loanTypeId")
 	private LoanType loanType;
 	
 	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="property_id")
-	private Property property;
+	@JoinColumn(name="propertyInfo_id")
+	private PropertyInfo propertyInfo;
 	
 	@ManyToOne
 	@JoinColumn(name="customer_id")
@@ -45,13 +45,13 @@ public class LoanApplication {
 		super();
 	}
 
-	public LoanApplication(double principal, int tenureInMonths, LoanType loanType, Property property,
+	public LoanApplication(double principal, int tenureInMonths, LoanType loanType, PropertyInfo propertyInfo,
 			Customer customer) {
 		super();
 		this.principal = principal;
 		this.tenureInMonths = tenureInMonths;
 		this.loanType = loanType;
-		this.property = property;
+		this.propertyInfo = propertyInfo;
 		this.customer = customer;
 	}
 
@@ -103,12 +103,12 @@ public class LoanApplication {
 		this.loanType = loanType;
 	}
 
-	public Property getProperty() {
-		return property;
+	public PropertyInfo getProperty() {
+		return propertyInfo;
 	}
 
-	public void setProperty(Property property) {
-		this.property = property;
+	public void setProperty(PropertyInfo propertyInfo) {
+		this.propertyInfo = propertyInfo;
 	}
 
 	public Customer getCustomer() {
@@ -123,7 +123,7 @@ public class LoanApplication {
 	public String toString() {
 		return "LoanApplication [loanId=" + loanId + ", principal=" + principal + ", interestRate=" + interestRate
 				+ ", tenureInMonths=" + tenureInMonths + ", status=" + this.getStatus() + ", loanApplyDate=" + loanApplyDate
-				+ ", loanType=" + loanType.getLoanTypeName() + ", property=" + property.getPropertyId() + ", customer=" + customer.getCustomerFirstName() 
+				+ ", loanType=" + loanType.getLoanTypeName() + ", property=" + propertyInfo.getPropertyId() + ", customer=" + customer.getCustomerFirstName() 
 				+ "]";
 	}
 

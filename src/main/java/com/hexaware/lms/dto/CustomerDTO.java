@@ -15,9 +15,10 @@ public class CustomerDTO {
 	@Size(min = 3, max = 20)
 	private String customerFirstName;
 
+	@Size(min = 3, max = 20)
 	private String customerLastName;
 
-//	@Size(min = 10, max = 12)
+
 	private long phoneNumer;
 
 	@Email
@@ -31,8 +32,6 @@ public class CustomerDTO {
 	@Size(max = 100)
 	private String address;
 
-	private String country;
-
 	@NotBlank
 	private String state;
 
@@ -45,6 +44,7 @@ public class CustomerDTO {
 
 	private String panCardNumber;
 
+
 	private byte[] idProof;
 
 	private String role;
@@ -53,6 +53,7 @@ public class CustomerDTO {
 	public CustomerDTO() {
 		super();
 	}
+
 
 
 	public String getCustomerFirstName() {
@@ -111,14 +112,6 @@ public class CustomerDTO {
 		this.address = address;
 	}
 
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
 	public String getState() {
 		return state;
 	}
@@ -142,30 +135,4 @@ public class CustomerDTO {
 	public void setPanCardNumber(String panCardNumber) {
 		this.panCardNumber = panCardNumber;
 	}
-
-	public byte[] getIdProof() {
-		return idProof;
-	}
-
-	public void setIdProof(byte[] idProof) {
-		this.idProof = idProof;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	@Override
-	public String toString() {
-		return "CustomerDTO [" + " customerFirstName=" + customerFirstName + ", customerLastName=" + customerLastName
-				+ ", phoneNumer=" + phoneNumer + ", email=" + email + ", password=" + password + ", dateOfBirth="
-				+ dateOfBirth + ", address=" + address + ", country=" + country + ", state=" + state + ", creditScore="
-				+ creditScore + ", panCardNumber=" + panCardNumber + ", idProof=" + Arrays.toString(idProof) + ", role="
-				+ role + "]";
-	}
-
 }

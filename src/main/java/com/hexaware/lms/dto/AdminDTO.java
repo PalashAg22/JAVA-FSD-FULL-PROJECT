@@ -18,8 +18,6 @@ public class AdminDTO {
 	@Size(min=5,max=20)
 	private String password;
 
-	private String role;
-
 	public AdminDTO() {
 		super();
 	}
@@ -64,21 +62,5 @@ public class AdminDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	@Override
-	public String toString() {
-		return "AdminDTO ["+ " adminFirstName=" + adminFirstName + ", adminLastName="
-				+ adminLastName + ", email=" + email + ", password=" + password + ", role=" + role + "]";
-	}
-	
-	
 
 }
