@@ -51,6 +51,7 @@ class LoanServiceImplTest {
 		LoanApplication newLoan = serviceTest.applyLoan(loan, property, file);
 		logger.info("Test running for applying loan: " + loan);
 		assertEquals(loan.getPrincipal(), newLoan.getPrincipal());
+
 	}
 
 	@Test

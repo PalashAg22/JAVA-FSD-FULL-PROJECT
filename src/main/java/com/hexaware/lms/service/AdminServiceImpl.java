@@ -22,14 +22,23 @@ public class AdminServiceImpl implements IAdminService {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+
 	@Autowired
 	private JwtService jwtService;
+
 	@Autowired
 	private AdminRepository repo;
 
-	@Override
+	public AdminServiceImpl(AuthenticationManager authenticationManager, JwtService jwtService, AdminRepository repo) {
+		super();
+		this.authenticationManager = authenticationManager;
+		this.jwtService = jwtService;
+		this.repo = repo;
+	}
+
 	public String login(String username, String password) throws LoginCredentialsNotFound {
-		logger.info("Admin is logging in...");
+
+
 		String token = null;
 		Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(username, password));

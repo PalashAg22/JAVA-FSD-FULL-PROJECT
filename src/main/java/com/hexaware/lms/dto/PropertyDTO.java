@@ -1,5 +1,6 @@
 package com.hexaware.lms.dto;
 
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
@@ -48,4 +49,7 @@ public class PropertyDTO {
 	public void setPropertyValue(double propertyValue) {
 		this.propertyValue = propertyValue;
 	}
+
+
+
 }

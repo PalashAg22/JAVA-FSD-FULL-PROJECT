@@ -30,10 +30,12 @@ class CustomerServiceImplTest {
 	ICustomerService serviceTest;
 
 	@Test
+
 	void testLogin() throws LoginCredentialsNotFound {
 		String username="Surajkumar@gmail.com";
 		String password="password123";
 		assertNotNull(serviceTest.login(username, password));
+
 	}
 
 	@Test

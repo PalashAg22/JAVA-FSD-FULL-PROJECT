@@ -2,18 +2,25 @@ package com.hexaware.lms.entities;
 
 import java.time.LocalDate;
 
+import java.util.Arrays;
+
+
+
 import jakarta.persistence.CascadeType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 
 @Entity
 public class Customer {
+
 	@Id
 	@SequenceGenerator(name = "customer_sequence", initialValue = 1001)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")																					// value for id field in the																			

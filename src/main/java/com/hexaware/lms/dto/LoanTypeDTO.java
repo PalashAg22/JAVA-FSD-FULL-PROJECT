@@ -51,5 +51,6 @@ public class LoanTypeDTO {
 	public void setLoanManagementFees(double loanManagementFees) {
 		this.loanManagementFees = loanManagementFees;
 	}
+
 	
 }

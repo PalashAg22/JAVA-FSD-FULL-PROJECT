@@ -24,7 +24,7 @@ public class Admin{
 
 	private String password;
 	
-	@Column(columnDefinition = "varchar(5) default 'Admin'",nullable=false)
+	@Column(columnDefinition = "varchar(5) default 'ADMIN'",nullable=false)
 	private String role="ADMIN";
 	
 	public Admin() {
@@ -85,7 +85,9 @@ public class Admin{
 
 	@Override
 	public String toString() {
+
 		return "Admin [AdminId=" + adminId + ", adminFirstName=" + adminFirstName + ", adminLastName=" + adminLastName
+
 				+ ", email=" + email + ", password=" + password + ", role=" + role + "]";
 	}
 

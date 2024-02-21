@@ -32,17 +32,16 @@ public class SecurityConfig {
 	Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 	
 	@Autowired
-	JwtAuthFilter authFilter;
+	private JwtAuthFilter authFilter;
 
 	@Bean
-	UserDetailsService userDetailsService() {
+	public UserDetailsService userDetailsService() {
 		logger.info("returning new UserInfoUserDetailsService object");
 		return new UserInfoUserDetailsService();
 	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
 		return http.cors().and().csrf().disable().authorizeHttpRequests()
 				.requestMatchers("/api/customer/login", "/api/customer/register", "/api/admin/login",
 						"/v3/api-docs/**", "/swagger-ui/**","/swagger-resources/**").permitAll()
@@ -84,7 +83,9 @@ public class SecurityConfig {
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+
 	    	logger.info("Inside authenticationManager");
+
 		return config.getAuthenticationManager();
 	}
 

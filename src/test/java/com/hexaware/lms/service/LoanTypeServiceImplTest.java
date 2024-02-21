@@ -37,8 +37,10 @@ class LoanTypeServiceImplTest {
 		LoanTypeDTO loanTypeDto = new LoanTypeDTO("HOME LOAN",8.5,200.0);
 		log.info("Test running to create a new LoanType: "+loanTypeDto);
 		serviceTest.createLoanType(loanTypeDto);
+
 		LoanType newLoanType = serviceTest.searchDashboardLoansToApply("HOME LOAN");
 		assertEquals("HOME LOAN",newLoanType.getLoanTypeName());
+
 	}
 	
 	@Test

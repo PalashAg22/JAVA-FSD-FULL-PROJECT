@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import com.hexaware.lms.repository.UploadIdentityProofRepository;
 
 @Service
 public class CustomerServiceImpl implements ICustomerService {
+
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -64,6 +66,7 @@ public class CustomerServiceImpl implements ICustomerService {
 			throw new LoginCredentialsNotFound("Credentials not found");
 		}
 		return token;
+
 	}
 
 	@Override
@@ -93,6 +96,7 @@ public class CustomerServiceImpl implements ICustomerService {
 		customer.setCreditScore(customerDTO.getCreditScore());
 		customer.setPanCardNumber(customerDTO.getPanCardNumber());
 
+
 		CustomerProof customerProof = idUploadService.uploadPdf(file);
 		if (customerProof != null) {
 			logger.info("Customer Id Proof uploaded succesfully");
@@ -102,6 +106,7 @@ public class CustomerServiceImpl implements ICustomerService {
 		logger.info("Registering Customer: " + customer);
 		Customer addedCustomer = repo.save(customer);
 		logger.info("Registerd Customer: " + addedCustomer);
+
 		return true;
 	}
 
@@ -113,15 +118,17 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Override
 	public Customer viewCustomerDetailsById(long customerId) throws CustomerNotFoundException {
-		List<Customer> customers = repo.findAll();
-		boolean isPresent = false;
-		for (Customer c : customers) {
-			if (c.getCustomerId() == customerId) {
-				isPresent = true;
-				break;
-			}
-		}
-		if (!isPresent) {
+//		List<Customer> customers = repo.findAll();
+//		boolean isPresent = false;
+//		for (Customer c : customers) {
+//			if (c.getCustomerId() == customerId) {
+//				isPresent = true;
+//				break;
+//			}
+//		}
+		Stream<Customer> stream = repo.findAll().stream();
+		Customer isPresent = stream.filter(customers -> customers.getCustomerId()==customerId).findAny().orElse(null);
+		if (isPresent==null) {
 			logger.warn("No customer found re...");
 			throw new CustomerNotFoundException("No Customer found with id: " + customerId);
 		}

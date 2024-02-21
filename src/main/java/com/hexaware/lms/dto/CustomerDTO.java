@@ -20,8 +20,10 @@ public class CustomerDTO {
 	@Size(min = 3, max = 20, message = "Last name must be between 3 and 20 characters")
 	private String customerLastName;
 
+
 	@Positive(message = "Phone number must be a positive number")
 	@Digits(integer = 10, fraction = 0, message = "Phone number must be a 10-digit number")
+
 	private long phoneNumer;
 
 	@Email(message = "Invalid email format")
@@ -30,8 +32,10 @@ public class CustomerDTO {
 	@Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters")
 	private String password;
 
+
 	@Past(message = "Date of birth must be in the past")
 	private LocalDate dateOfBirth;
+
 
 	private String gender;
 
@@ -45,9 +49,21 @@ public class CustomerDTO {
 	@Max(value = 900, message = "Credit score cannot be more than 900")
 	private int creditScore;
 
-
 	@Pattern(regexp = "[A-Z]{5}\\d{4}[A-Z]")
+
 	private String panCardNumber;
+
+
+	private byte[] idProof;
+
+	private String role;///?
+
+
+	public CustomerDTO() {
+		super();
+	}
+
+
 
 	public String getCustomerFirstName() {
 		return customerFirstName;
@@ -136,4 +152,21 @@ public class CustomerDTO {
 	public void setPanCardNumber(String panCardNumber) {
 		this.panCardNumber = panCardNumber;
 	}
+
+	public byte[] getIdProof() {
+		return idProof;
+	}
+
+	public void setIdProof(byte[] idProof) {
+		this.idProof = idProof;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 }

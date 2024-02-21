@@ -23,10 +23,11 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-	Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
 
+	Logger loggers = LoggerFactory.getLogger(JwtAuthFilter.class);
+	
 	@Autowired
-	JwtService jwtService;
+	private JwtService jwtService;
 
 	@Autowired
 	private UserInfoUserDetailsService userDetailsService;
@@ -34,6 +35,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		loggers.info("0");
 		String authHeader = request.getHeader("Authorization");
 		String token = null;
 		String username = null;
@@ -42,19 +44,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			username = jwtService.extractUsername(token);
 		}
 
-		logger.info("extracted username from token ");
+		loggers.info("extracted username from token ");
 
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			loggers.info("0.1");
 			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+			loggers.info("validating username and userdetails");
+
 			boolean isTokenValid = jwtService.validateToken(token, userDetails);
 			if (isTokenValid) {
+
 				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
 						null, userDetails.getAuthorities());
 				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authToken);
-				logger.info("verified");
+
+				 loggers.info("verified");
+
 			}
 		}
+		loggers.info("0.2");
 		filterChain.doFilter(request, response);
 	}
 

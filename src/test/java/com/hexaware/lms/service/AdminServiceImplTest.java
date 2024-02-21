@@ -23,10 +23,12 @@ class AdminServiceImplTest {
 	IAdminService testAdmin;
 
 	@Test
+
 	void testLogin() throws LoginCredentialsNotFound {
 		String username="palash@hexaware.com";
 		String password="palash123";
 		assertNotNull(testAdmin.login(username, password));
+
 	}
 
 	@Test
@@ -35,8 +37,8 @@ class AdminServiceImplTest {
 		AdminDTO adminDto = new AdminDTO();
 		adminDto.setAdminFirstName("Palash");
 		adminDto.setAdminLastName("Agrawal");
-		adminDto.setEmail("Suraj123@hexaware.com");
-		adminDto.setPassword("suraj123");
+		adminDto.setEmail("palash@hexaware.com");
+		adminDto.setPassword("palash123");
 		log.info("Registering a new Admin: "+adminDto);
 		assertTrue(testAdmin.register(adminDto));
 	}

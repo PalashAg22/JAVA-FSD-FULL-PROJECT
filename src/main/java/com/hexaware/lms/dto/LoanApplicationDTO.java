@@ -71,5 +71,5 @@ public class LoanApplicationDTO {
 	public void setCustomerId(long l) {
 		this.customerId = l;
 	}
-	
+
 }

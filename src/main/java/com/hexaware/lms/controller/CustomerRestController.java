@@ -34,7 +34,6 @@ import com.hexaware.lms.exception.PropertyAlreadyExistException;
 import com.hexaware.lms.service.ICustomerService;
 import com.hexaware.lms.service.ILoanService;
 import com.hexaware.lms.service.ILoanTypeService;
-import com.hexaware.lms.service.IPropertyService;
 import com.hexaware.lms.service.JwtService;
 
 import jakarta.validation.Valid;
@@ -46,23 +45,23 @@ public class CustomerRestController {
 
 	Logger log = LoggerFactory.getLogger(CustomerRestController.class);
 
+	
 	@Autowired
-	JwtService jwtService;
+	private JwtService jwtService;
 
 	@Autowired
-	AuthenticationManager authenticationManager;
-
+	private AuthenticationManager authenticationManager;
+	
 	@Autowired
-	ICustomerService customerService;
-
+	private ICustomerService customerService;
+	
 	@Autowired
-	IPropertyService propService;
-
+	private ILoanService loanService;
+	
 	@Autowired
-	ILoanService loanService;
+	private ILoanTypeService loanTypeService;
 
-	@Autowired
-	ILoanTypeService loanTypeService;
+	
 
 	@PostMapping(value="/register",consumes="multipart/form-data")
 	public boolean registerCustomer(@RequestPart("register") @Valid CustomerDTO customerDTO,@RequestPart("file") MultipartFile file) throws DataAlreadyPresentException, IOException {
@@ -75,6 +74,7 @@ public class CustomerRestController {
 		log.info("Request received to login as user: " + loginDto.getUsername() + ", Password: "
 				+ loginDto.getPassword());
 		return customerService.login(loginDto.getUsername(), loginDto.getPassword());
+
 
 	}
  
@@ -126,7 +126,9 @@ public class CustomerRestController {
 
 	@GetMapping("/dashboard/{loanType}")
 	@PreAuthorize("hasAuthority('USER')")
+
 	public LoanType filterDashboardLoans(@PathVariable String loanType) throws LoanNotFoundException {
+
 		log.info("Request Received filter DashBoard Loans by type");
 		return loanTypeService.searchDashboardLoansToApply(loanType);
 	}

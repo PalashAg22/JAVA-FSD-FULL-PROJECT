@@ -58,12 +58,13 @@ public class AdminRestController {
 
 	@Autowired
 	private ICustomerService custService;
-	
+
 	@Autowired
 	private IUploadPropertyService uploadService;
 	
 	@Autowired
 	private IPropertyService propService;
+
 
 	@PostMapping("/createLoanType")
 	@PreAuthorize("hasAuthority('ADMIN')")
@@ -163,12 +164,16 @@ public class AdminRestController {
 	@ExceptionHandler({ LoanTypeAlreadyExistException.class })
 	public ResponseEntity<String> handleLoanTypeRelated(LoanTypeAlreadyExistException e) {
 		log.warn("Some Exception has Occurred....See the logs above and below.");
+
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
+
 	}
 
 	@ExceptionHandler({ CustomerNotFoundException.class })
 	public ResponseEntity<String> handleLoanTypeRelated(CustomerNotFoundException e) {
 		log.warn("Some Exception has Occurred....See the logs above and below.");
+
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
+
 	}
 }
