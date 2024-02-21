@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,15 +118,17 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Override
 	public Customer viewCustomerDetailsById(long customerId) throws CustomerNotFoundException {
-		List<Customer> customers = repo.findAll();
-		boolean isPresent = false;
-		for (Customer c : customers) {
-			if (c.getCustomerId() == customerId) {
-				isPresent = true;
-				break;
-			}
-		}
-		if (!isPresent) {
+//		List<Customer> customers = repo.findAll();
+//		boolean isPresent = false;
+//		for (Customer c : customers) {
+//			if (c.getCustomerId() == customerId) {
+//				isPresent = true;
+//				break;
+//			}
+//		}
+		Stream<Customer> stream = repo.findAll().stream();
+		Customer isPresent = stream.filter(customers -> customers.getCustomerId()==customerId).findAny().orElse(null);
+		if (isPresent==null) {
 			logger.warn("No customer found re...");
 			throw new CustomerNotFoundException("No Customer found with id: " + customerId);
 		}

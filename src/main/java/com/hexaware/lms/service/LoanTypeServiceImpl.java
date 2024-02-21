@@ -1,6 +1,7 @@
 package com.hexaware.lms.service;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,13 +33,16 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 
 	@Override
 	public void createLoanType(LoanTypeDTO loanTypeDto) throws LoanTypeAlreadyExistException {
-		List<LoanType> loanTypes = viewAvailableLoanType();
-		for (LoanType loan : loanTypes) {
-			if (loan.getLoanTypeName().equalsIgnoreCase(loanTypeDto.getLoanTypeName())) {
+
+		Stream<LoanType> stream = viewAvailableLoanType().stream();
+		LoanType isPresent = stream.filter(loan -> loan.getLoanTypeName().equalsIgnoreCase(loanTypeDto.getLoanTypeName()))
+														.findAny().orElse(null);
+			if(isPresent!=null) {
 				throw new LoanTypeAlreadyExistException(
 						"The loan-type with name " + loanTypeDto.getLoanTypeName() + " already exist");
-			}
-		}
+
+			}								
+														
 		LoanType loanType = new LoanType();
 		loanType.setLoanTypeName(loanTypeDto.getLoanTypeName());
 		loanType.setLoanInterestBaseRate(loanTypeDto.getLoanInterestBaseRate());
@@ -52,15 +56,15 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 
 		LoanType returnLoanType = null;
 		if (isLoanTypeValid(loanType)) {
-			List<LoanType> loanTypes = viewAvailableLoanType();
-			for (LoanType loan : loanTypes) {
-				if (loan.getLoanTypeName().equalsIgnoreCase(loanType)) {
-					throw new LoanNotFoundException("The loan-type with name " + loanType + " not exist");
-				}
-
+			Stream<LoanType> stream = viewAvailableLoanType().stream();
+			LoanType isPresent = stream.filter(loan -> loan.getLoanTypeName().equalsIgnoreCase(loanType))
+					.findAny().orElse(null);
+			if(isPresent == null) {
+				throw new LoanNotFoundException("The loan-type with name " + loanType + " not exist");
 			}
+			
 			logger.info("Customer is Searching for Loan Type: " + loanType);
-			returnLoanType = repo.findAllByLoanTypeName(loanType);
+			returnLoanType = isPresent;
 		}
 		return returnLoanType;
 
@@ -91,6 +95,7 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 			logger.info("entered loanType is correct");
 			return true;
 		}
+		logger.warn("validations failed for entered loanType");
 		return false;
 	}
 
@@ -100,6 +105,7 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 			logger.info("entered loanId is correct");
 			return true;
 		}
+		logger.warn("validations failed for entered loan id");
 		return false;
 	}
 

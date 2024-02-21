@@ -21,18 +21,13 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
 	Logger logger = LoggerFactory.getLogger(JwtService.class);
-<<<<<<< HEAD
+
 	public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
 	public String generateToken(String username) {
 		logger.info("4");
   logger.info("Generating token for username: {}", username);
-=======
-	public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";;
 
-	public String generateToken(String username) {
-		logger.info("Generating token for username: {}", username);
->>>>>>> main
 		Map<String, Object> claims = new HashMap<>();
 		return createToken(claims, username);
 	}

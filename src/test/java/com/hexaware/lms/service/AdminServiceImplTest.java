@@ -23,19 +23,12 @@ class AdminServiceImplTest {
 	IAdminService testAdmin;
 
 	@Test
-<<<<<<< HEAD
-	void testLogin() {
-		String username="palash@hexaware.com";
-		String password="password123";
-		boolean flag= testService.login(username, password);
-		assertTrue(flag);
-		
-=======
+
 	void testLogin() throws LoginCredentialsNotFound {
 		String username="palash@hexaware.com";
 		String password="palash123";
 		assertNotNull(testAdmin.login(username, password));
->>>>>>> main
+
 	}
 
 	@Test
@@ -45,12 +38,7 @@ class AdminServiceImplTest {
 		adminDto.setAdminFirstName("Palash");
 		adminDto.setAdminLastName("Agrawal");
 		adminDto.setEmail("palash@hexaware.com");
-<<<<<<< HEAD
 		adminDto.setPassword("palash123");
-		adminDto.setRole("ADMIN");
-=======
-		adminDto.setPassword("suraj123");
->>>>>>> main
 		log.info("Registering a new Admin: "+adminDto);
 		assertTrue(testAdmin.register(adminDto));
 	}

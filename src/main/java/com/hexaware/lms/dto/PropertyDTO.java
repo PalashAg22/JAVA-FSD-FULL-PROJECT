@@ -1,5 +1,6 @@
 package com.hexaware.lms.dto;
 
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
@@ -13,12 +14,6 @@ public class PropertyDTO {
 
 	@Min(1000)
 	private double propertyValue;
-
-	@Lob
-	private byte[] propertyProof;
-
-	private long loanApplicationId;///
-
 
 	public PropertyDTO() {
 		super();
@@ -55,20 +50,6 @@ public class PropertyDTO {
 		this.propertyValue = propertyValue;
 	}
 
-	public byte[] getPropertyProof() {
-		return propertyProof;
-	}
 
-	public void setPropertyProof(byte[] propertyProof) {
-		this.propertyProof = propertyProof;
-	}
-
-	public Long getLoanApplicationId() {
-		return loanApplicationId;
-	}
-
-	public void setLoanApplicationId(int loanApplicationId) {
-		this.loanApplicationId = loanApplicationId;
-	}
 
 }

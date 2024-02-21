@@ -30,17 +30,12 @@ class CustomerServiceImplTest {
 	ICustomerService serviceTest;
 
 	@Test
-<<<<<<< HEAD
-	void testLogin() {
-		String username="suraj@kumar.com";
-		String password="password123";
-		assertTrue(serviceTest.login(username, password));
-=======
+
 	void testLogin() throws LoginCredentialsNotFound {
 		String username="Surajkumar@gmail.com";
 		String password="password123";
 		assertNotNull(serviceTest.login(username, password));
->>>>>>> main
+
 	}
 
 	@Test

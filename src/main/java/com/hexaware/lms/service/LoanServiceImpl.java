@@ -1,7 +1,9 @@
 package com.hexaware.lms.service;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +68,7 @@ public class LoanServiceImpl implements ILoanService {
 		String panCard=customer.getPanCardNumber();
 		int creditScore=customer.getCreditScore();
 		if(age<=18 && age>=60) {
-			throw new CustomerNotEligibleException("You are not eligible apply for a loan from our bank.");
+			throw new CustomerNotEligibleException("You are not eligible to apply for a loan from our bank.");
 		}
 		if(creditScore<500) {
 			throw new CustomerNotEligibleException("Your Credit score is too low to apply for a new loan");
@@ -137,25 +139,31 @@ public class LoanServiceImpl implements ILoanService {
 	public List<LoanApplication> filterAppliedLoanByType(long customerId, String loanType)
 			throws LoanNotFoundException {
 		if (isLoanTypeValid(loanType)) {
-			List<LoanApplication> list = loanRepo.findAllByCustomerCustomerId(customerId);
-			boolean isPresent = false;
-
-			logger.info("searching for loanType");
-			for (LoanApplication lp : list) {
-				if (lp.getLoanType().getLoanTypeName().equals(loanType)) {
-					logger.info("loanTtype found");
-
-					isPresent = true;
-					break;
-				}
-			}
-			if (!isPresent) {
+//			List<LoanApplication> list = loanRepo.findAllByCustomerCustomerId(customerId);
+//			boolean isPresent = false;
+//
+//			logger.info("searching for loanType");
+//			for (LoanApplication lp : list) {
+//				if (lp.getLoanType().getLoanTypeName().equals(loanType)) {
+//					logger.info("loanTtype found");
+//
+//					isPresent = true;
+//					break;
+//				}
+//			}
+			
+			Stream<LoanApplication> stream = loanRepo.findAllByCustomerCustomerId(customerId).stream();
+			List<LoanApplication> isPresent = stream
+					.filter(loanApplication -> 
+					loanApplication.getLoanType().getLoanTypeName().equalsIgnoreCase(loanType))
+					.collect(Collectors.toList());
+			if (isPresent==null || isPresent.isEmpty()) {
 
 				logger.warn("No loan of type " + loanType + " found for that user");
-				throw new LoanNotFoundException("You have not applied for any loan of type" + loanType);
+				throw new LoanNotFoundException("You have not applied for any loan of type " + loanType);
 			}
 			logger.info("Loan Application with customerId " + customerId + " and loanType " + loanType + " is present");
-			return loanRepo.filterAppliedLoanByType(customerId, loanType);
+			return isPresent;
 		}
 		return null;
 
@@ -168,21 +176,28 @@ public class LoanServiceImpl implements ILoanService {
 		List<LoanApplication> loans = null;
 		if (isLoanStatusValid(status)) {
 
-			boolean isPresent = false;
-			for (LoanApplication lp : loans) {
-				if (lp.getStatus().equals(status)) {
-					logger.info("Loan status found...");
-					isPresent = true;
-					break;
-				}
-			}
-			if (!isPresent) {
+//			boolean isPresent = false;
+//			for (LoanApplication lp : loans) {
+//				if (lp.getStatus().equals(status)) {
+//					logger.info("Loan status found...");
+//					isPresent = true;
+//					break;
+//				}
+//			}
+//			
+			Stream<LoanApplication> stream = loanRepo.findAllByCustomerCustomerId(customerId).stream();
+			List<LoanApplication> isPresent = stream
+					.filter(loanApplication -> 
+					loanApplication.getStatus().equalsIgnoreCase(status))
+					.collect(Collectors.toList());
+			if (isPresent==null|| isPresent.isEmpty()) {
 				logger.warn("No loan of status " + status + " found for that user");
 				throw new LoanNotFoundException("None of your loan is " + status);
 			}
 			logger.info("Loan Application with customerId " + customerId + " and status " + status + " is present");
 
-			loans = loanRepo.filterAppliedLoanByStatus(customerId, status);
+			//loans = loanRepo.filterAppliedLoanByStatus(customerId, status);
+			loans = isPresent;
 		}
 		return loans;
 	}
@@ -192,23 +207,25 @@ public class LoanServiceImpl implements ILoanService {
 
 		LoanApplication loan = null;
 		if (isLoanIdValid(loanId)) {
-			List<LoanApplication> loans = loanRepo.findAllByCustomerCustomerId(customerId);
-			boolean isPresent = false;
-			for (LoanApplication lp : loans) {
-				if (lp.getLoanId() == loanId) {
-					logger.info("Loan is present for the customer...");
-					isPresent = true;
-					break;
-				}
-			}
-			if (!isPresent) {
+			//List<LoanApplication> loans = loanRepo.findAllByCustomerCustomerId(customerId);
+//			boolean isPresent = false;
+//			for (LoanApplication lp : loans) {
+//				if (lp.getLoanId() == loanId) {
+//					logger.info("Loan is present for the customer...");
+//					isPresent = true;
+//					break;
+//				}
+//			}
+			Stream<LoanApplication> stream = loanRepo.findAllByCustomerCustomerId(customerId).stream();
+			LoanApplication isPresent = stream.filter(loans -> loans.getLoanId() == loanId).findAny().orElse(null);
+			if (isPresent==null) {
 
 				logger.warn("Customer has input wrong loan number " + loanId + " to search for...");
 				throw new LoanNotFoundException("No Loan found with that loan number " + loanId);
 			}
 			logger.info("Loan Application with customerId " + customerId + " and loanId " + loanId + " is present");
 
-			loan = loanRepo.findByLoanId(customerId, loanId);
+			loan = isPresent;
 		}
 		return loan;
 
@@ -261,6 +278,7 @@ public class LoanServiceImpl implements ILoanService {
 			logger.info("entered loanType is correct");
 			return true;
 		}
+		logger.info("validations failed for entered loan type");
 		return false;
 	}
 
@@ -270,6 +288,7 @@ public class LoanServiceImpl implements ILoanService {
 			logger.info("entered loanId is correct");
 			return true;
 		}
+		logger.warn("validation failed for entered loanId");
 		return false;
 	}
 
@@ -281,6 +300,7 @@ public class LoanServiceImpl implements ILoanService {
 			logger.info("entered loan application status is correct");
 			return true;
 		}
+		logger.warn("validation failed for entered status");
 		return false;
 	}
 

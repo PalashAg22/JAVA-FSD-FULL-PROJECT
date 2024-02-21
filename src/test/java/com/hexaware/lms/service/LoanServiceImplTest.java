@@ -35,23 +35,6 @@ class LoanServiceImplTest {
 		LoanApplicationDTO loan = new LoanApplicationDTO();
 		PropertyDTO property = new PropertyDTO();
 
-<<<<<<< HEAD
-		loan.setCustomerId(1001);
-		loan.setLoanTypeId(5);
-		loan.setPrincipal(3500000);
-		loan.setTenureInMonths(48);
-		loan.setLoanApplyDate(LocalDate.now());
-//		loan.setInterestRate(19.5);
-//		loan.setStatus("APPROVED");
-
-		property.setPropertyAddress("PUNE");
-		property.setPropertyAreaInm2(7500);
-		property.setPropertyValue(120000);
-		property.setPropertyProof(new byte[5]);
-		LoanApplication newLoan= serviceTest.applyLoan(loan,property);
-		logger.info("Test running for applying loan: "+loan);
-		assertEquals(loan.getPrincipal(),newLoan.getPrincipal());
-=======
 		loan.setCustomerId(1053);
 		loan.setLoanTypeId(3);
 		loan.setPrincipal(97384735);
@@ -68,7 +51,7 @@ class LoanServiceImplTest {
 		LoanApplication newLoan = serviceTest.applyLoan(loan, property, file);
 		logger.info("Test running for applying loan: " + loan);
 		assertEquals(loan.getPrincipal(), newLoan.getPrincipal());
->>>>>>> main
+
 	}
 
 	@Test
