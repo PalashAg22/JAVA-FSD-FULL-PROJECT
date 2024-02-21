@@ -118,7 +118,6 @@ public class CustomerRestController {
 	}
 
 	@GetMapping("/dashboard")
-	@PreAuthorize("hasAuthority('USER')")
 	public List<LoanType> viewAllAvailableLoans() {
 		log.info("Customer is logged In");
 		return loanTypeService.viewAvailableLoanType();
@@ -126,9 +125,7 @@ public class CustomerRestController {
 
 	@GetMapping("/dashboard/{loanType}")
 	@PreAuthorize("hasAuthority('USER')")
-
 	public LoanType filterDashboardLoans(@PathVariable String loanType) throws LoanNotFoundException {
-
 		log.info("Request Received filter DashBoard Loans by type");
 		return loanTypeService.searchDashboardLoansToApply(loanType);
 	}

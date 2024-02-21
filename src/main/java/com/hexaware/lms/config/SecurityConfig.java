@@ -43,10 +43,13 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http.cors().and().csrf().disable().authorizeHttpRequests()
-				.requestMatchers("/api/customer/login", "/api/customer/register", "/api/admin/login",
+				.requestMatchers("/api/customer/login", "/api/customer/register","/api/customer/dashboard", "/api/admin/login",
 						"/v3/api-docs/**", "/swagger-ui/**","/swagger-resources/**").permitAll()
+				.requestMatchers("/api/customer/**").hasAuthority("USER")
+				.requestMatchers("/api/admin/**").hasAuthority("ADMIN")
 				.and()
-				.authorizeHttpRequests().anyRequest().authenticated().and().sessionManagement()
+//				.authorizeHttpRequests().anyRequest().authenticated().and()
+				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authenticationProvider(authenticationProvider())
 				.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class).build();
