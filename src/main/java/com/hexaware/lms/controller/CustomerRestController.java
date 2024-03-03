@@ -71,7 +71,7 @@ public class CustomerRestController {
 		LoanApplicationRequestDTO requestDTO = LoanApplicationRequestDTOMapper.mapFromString(loanRequest);
 		LoanApplication loanApplication = loanService.applyLoan(requestDTO.getLoanApplicationDto(),
 				requestDTO.getPropertyDto(), file);
-		return loanApplication==null;
+		return loanApplication !=null;
 	}
 	
 	@PostMapping(value="/update-loan", consumes="multipart/form-data")
