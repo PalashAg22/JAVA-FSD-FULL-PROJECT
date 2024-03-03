@@ -1,7 +1,5 @@
 package com.hexaware.lms.entities;
 
-import com.hexaware.lms.entities.PropertyProof.Builder;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,8 +31,12 @@ public class CustomerProof {
 		this.mainFile = mainFile;
 	}
 	
-	
-	
+	public long getCustomerProofId() {
+		return customerProofId;
+	}
+	public void setCustomerProofId(long customerProofId) {
+		this.customerProofId = customerProofId;
+	}
 	public String getFileName() {
 		return fileName;
 	}
@@ -61,8 +63,6 @@ public class CustomerProof {
         private String fileName;
         private String fileType;
         private byte[] mainFile;
-
-        public Builder() {}
 
         public Builder propertyProofId(long customerProofId) {
             this.customerProofId = customerProofId;

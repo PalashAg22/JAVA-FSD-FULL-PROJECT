@@ -31,6 +31,10 @@ public class Admin{
 		super();
 	}
 
+	public void setAdminId(long adminId) {
+		this.adminId = adminId;
+	}
+
 	public Admin(String adminFirstName, String adminLastName, String email, String password) {
 		super();
 		this.adminFirstName = adminFirstName;

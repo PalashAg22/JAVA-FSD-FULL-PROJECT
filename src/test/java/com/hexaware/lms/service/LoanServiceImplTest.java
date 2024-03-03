@@ -56,24 +56,26 @@ class LoanServiceImplTest {
 
 	@Test
 	void testInterestCalculator() {
+		long loanApplicationId=2002;
 		long customerId = 1001;
 		double principal = 10000000;
 		double rate = 10;
 		int time = 72;
 		double calculatedInterest = principal * rate * (time / 12);
-		double returnedInterest = serviceTest.interestCalculator(customerId);
+		double returnedInterest = serviceTest.interestCalculator(loanApplicationId,customerId);
 		logger.info("Test running to calculate interest");
 		assertEquals(calculatedInterest, returnedInterest);
 	}
 
 	@Test
 	void testEmiCalculator() {
+		long loanApplicationId=2002;
 		long customerId = 1001;
 		double p = 10000000;
 		double r = 10;
 		int t = 72;
 		double calculatedEmi = (p * r * Math.pow((1 + r), t)) / (Math.pow((1 + r), (t - 1)));
-		double returnedEmi = serviceTest.emiCalculator(customerId);
+		double returnedEmi = serviceTest.emiCalculator(loanApplicationId,customerId);
 		logger.info("Test running to calculate EMI");
 		logger.info("Calulated: " + calculatedEmi);
 		logger.info("Returned: " + returnedEmi);

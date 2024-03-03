@@ -44,7 +44,7 @@ class CustomerServiceImplTest {
 		customer.setCustomerFirstName("Suraj");
 		customer.setCustomerLastName("Kumar");
 		customer.setEmail("Surajkumar@gmail.com");
-		customer.setPhoneNumer(735564612L);
+		customer.setPhoneNumber(735564612L);
 		customer.setPassword("password123");
 		customer.setDateOfBirth(LocalDate.of(2010, 10, 10));
 		customer.setAddress("Muzaffarpur");

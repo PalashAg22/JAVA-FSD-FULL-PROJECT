@@ -25,7 +25,6 @@ public class JwtService {
 	public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
 	public String generateToken(String username) {
-		logger.info("4");
   logger.info("Generating token for username: {}", username);
 
 		Map<String, Object> claims = new HashMap<>();
@@ -33,7 +32,6 @@ public class JwtService {
 	}
 
 	public String createToken(Map<String, Object> claims, String username) {
-		logger.info("5");
 		return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
 				.signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
@@ -58,7 +56,9 @@ public class JwtService {
 
 	public String extractUsername(String token) {
 		logger.info("Extracting username from token");
-		return extractClaim(token, Claims::getSubject);
+		String userName= extractClaim(token, Claims::getSubject);
+		logger.info("Extracted username from token: "+userName);
+		return userName;
 	}
 
 	public Date extractExpiration(String token) {

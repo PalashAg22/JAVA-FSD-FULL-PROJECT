@@ -1,7 +1,6 @@
 package com.hexaware.lms.service;
 
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hexaware.lms.dto.AdminDTO;
 import com.hexaware.lms.exception.DataAlreadyPresentException;
-import com.hexaware.lms.exception.LoginCredentialsNotFound;
 
 @SpringBootTest
 class AdminServiceImplTest {
@@ -21,15 +19,6 @@ class AdminServiceImplTest {
 	
 	@Autowired
 	IAdminService testAdmin;
-
-	@Test
-
-	void testLogin() throws LoginCredentialsNotFound {
-		String username="palash@hexaware.com";
-		String password="palash123";
-		assertNotNull(testAdmin.login(username, password));
-
-	}
 
 	@Test
 	void testRegister() throws DataAlreadyPresentException {

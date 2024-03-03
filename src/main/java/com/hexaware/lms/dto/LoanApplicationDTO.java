@@ -2,20 +2,30 @@ package com.hexaware.lms.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 public class LoanApplicationDTO {
+	private long loanApplicationId;
+	
 	@Min(5000)
 	@Max(10000000)
 	private double principal;
-	
+
 	@Min(6)
 	@Max(72)
 	private int tenureInMonths;
 	
+	@NotBlank(message = "Loan type name cannot be blank")
+	private String loanTypeName;
+
+	@Positive(message = "Loan type ID must be a positive number")
 	private long loanTypeId;
-	
+
+	@Positive(message = "Property ID must be a positive number")
 	private long propertyId;
-	
+
+	@Positive(message = "Customer ID must be a positive number")
 	private long customerId;
 
 	public LoanApplicationDTO() {
@@ -31,9 +41,28 @@ public class LoanApplicationDTO {
 		this.propertyId = propertyId;
 		this.customerId = customerId;
 	}
+	
+	
+
+	public long getLoanApplicationId() {
+		return loanApplicationId;
+	}
+
+	public void setLoanApplicationId(long loanApplicationId) {
+		this.loanApplicationId = loanApplicationId;
+	}
 
 	public double getPrincipal() {
 		return principal;
+	}
+	
+
+	public String getLoanTypeName() {
+		return loanTypeName;
+	}
+
+	public void setLoanTypeName(String loanTypeName) {
+		this.loanTypeName = loanTypeName;
 	}
 
 	public void setPrincipal(double principal) {

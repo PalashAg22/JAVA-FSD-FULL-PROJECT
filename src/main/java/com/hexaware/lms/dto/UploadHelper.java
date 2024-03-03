@@ -21,6 +21,7 @@ public class UploadHelper {
         try {
             outputStream.close();
         } catch (Exception ignored) {
+        	ignored.printStackTrace();
         }
         return outputStream.toByteArray();
     }
@@ -39,6 +40,7 @@ public class UploadHelper {
             }
             outputStream.close();
         } catch (Exception ignored) {
+        	ignored.printStackTrace();
         }
         return outputStream.toByteArray();
     }

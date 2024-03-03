@@ -11,7 +11,7 @@ import com.hexaware.lms.entities.Customer;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer,Long>{
 
-	@Query("select c from Customer c where c.phoneNumer = ?1")
+	@Query("select c from Customer c where c.phoneNumber = ?1")
 	Customer findByPhoneNumber(long phoneNumber);
 
 	@Query("select c from Customer c where c.email =?1")	

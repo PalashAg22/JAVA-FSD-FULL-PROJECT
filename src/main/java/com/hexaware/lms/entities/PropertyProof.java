@@ -33,8 +33,6 @@ public class PropertyProof {
         private String type;
         private byte[] propertyData;
 
-        public Builder() {}
-
         public Builder propertyProofId(long propertyProofId) {
             this.propertyProofId = propertyProofId;
             return this;

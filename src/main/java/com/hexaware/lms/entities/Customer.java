@@ -2,18 +2,12 @@ package com.hexaware.lms.entities;
 
 import java.time.LocalDate;
 
-import java.util.Arrays;
-
-
-
 import jakarta.persistence.CascadeType;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
@@ -32,7 +26,7 @@ public class Customer {
 	@Column(name = "lastName")
 	private String customerLastName;
 
-	private long phoneNumer;
+	private long phoneNumber;
 
 	private String email;
 
@@ -97,12 +91,12 @@ public class Customer {
 		this.customerLastName = customerLastName;
 	}
 
-	public long getPhoneNumer() {
-		return phoneNumer;
+	public long getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setPhoneNumer(long phoneNumer) {
-		this.phoneNumer = phoneNumer;
+	public void setPhoneNumber(long phoneNumer) {
+		this.phoneNumber = phoneNumer;
 	}
 
 	public String getEmail() {
@@ -183,14 +177,6 @@ public class Customer {
 
 	public void setRole(String role) {
 		this.role = role;
-	}
-
-	@Override
-	public String toString() {
-		return "Customer [customerId=" + customerId + ", customerFirstName=" + customerFirstName + ", customerLastName="
-				+ customerLastName + ", phoneNumer=" + phoneNumer + ", email=" + email + ", password=" + password
-				+ ", dateOfBirth=" + dateOfBirth + ", address=" + address + ", country=" + country + ", state=" + state
-				+ ", creditScore=" + creditScore + ", panCardNumber=" + panCardNumber +", role=" + role + "]";
 	}
 
 }

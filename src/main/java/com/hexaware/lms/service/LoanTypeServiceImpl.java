@@ -34,22 +34,20 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 	@Override
 	public void createLoanType(LoanTypeDTO loanTypeDto) throws LoanTypeAlreadyExistException {
 
-		Stream<LoanType> stream = viewAvailableLoanType().stream();
-		LoanType isPresent = stream.filter(loan -> loan.getLoanTypeName().equalsIgnoreCase(loanTypeDto.getLoanTypeName()))
-														.findAny().orElse(null);
-			if(isPresent!=null) {
-				throw new LoanTypeAlreadyExistException(
-						"The loan-type with name " + loanTypeDto.getLoanTypeName() + " already exist");
+	    if (viewAvailableLoanType().stream()
+	            .anyMatch(loan -> loan.getLoanTypeName().equalsIgnoreCase(loanTypeDto.getLoanTypeName()))) {
+	        throw new LoanTypeAlreadyExistException(
+	                "The loan-type with name " + loanTypeDto.getLoanTypeName() + " already exists");
+	    }
 
-			}								
-														
-		LoanType loanType = new LoanType();
-		loanType.setLoanTypeName(loanTypeDto.getLoanTypeName());
-		loanType.setLoanInterestBaseRate(loanTypeDto.getLoanInterestBaseRate());
-		loanType.setLoanManagementFees(loanTypeDto.getLoanManagementFees());
-		logger.info("Creating Loan Type: " + loanType);
-		repo.save(loanType);
+	    LoanType loanType = new LoanType();
+	    loanType.setLoanTypeName(loanTypeDto.getLoanTypeName());
+	    loanType.setLoanInterestBaseRate(loanTypeDto.getLoanInterestBaseRate());
+	    loanType.setLoanManagementFees(loanTypeDto.getLoanManagementFees());
+	    logger.info("Creating Loan Type: " + loanType.toString());
+	    repo.save(loanType);
 	}
+
 
 	@Override
 	public LoanType searchDashboardLoansToApply(String loanType) throws LoanNotFoundException {
@@ -88,7 +86,7 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 
 	public boolean isLoanTypeValid(String loanType) {
 		loanType = loanType.strip();
-		logger.info("validating entered loanType");
+		logger.info("Validating entered loanType");
 		if ((loanType != null && loanType.length() > 0) && (loanType.equalsIgnoreCase("Home Loan")
 				|| loanType.equalsIgnoreCase("Gold Loan") || loanType.equalsIgnoreCase("Business Loan")
 				|| loanType.equalsIgnoreCase("Vehicle Loan") || loanType.equalsIgnoreCase("Personal Loan"))) {

@@ -10,5 +10,5 @@ public interface IUploadPropertyService {
 
 	PropertyProof uploadPdf(MultipartFile file) throws IOException;
 
-	byte[] downloadImage(String fileName);
+	byte[] downloadImageBytes(long propertyProofId);
 }

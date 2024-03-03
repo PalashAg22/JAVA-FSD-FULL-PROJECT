@@ -10,5 +10,5 @@ public interface IUploadIdProofService {
 
 	CustomerProof uploadPdf(MultipartFile file) throws IOException;
 
-	byte[] downloadImage(String fileName);
+	byte[] downloadImageBytes(long idProofId);
 }

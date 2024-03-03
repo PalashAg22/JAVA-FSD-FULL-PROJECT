@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.hexaware.lms.dto.CustomerDTO;
 import com.hexaware.lms.entities.Customer;
+import com.hexaware.lms.entities.CustomerLoginResponse;
 import com.hexaware.lms.entities.CustomerProof;
 import com.hexaware.lms.exception.CustomerNotFoundException;
 import com.hexaware.lms.exception.DataAlreadyPresentException;
@@ -50,29 +51,32 @@ public class CustomerServiceImpl implements ICustomerService {
 	PasswordEncoder passwordEncoder;
 
 	@Override
-	public String login(String username, String password) throws LoginCredentialsNotFound {
-		logger.info("Customer is logging in...");
-		String token = null;
+	public CustomerLoginResponse login(String username, String password) throws LoginCredentialsNotFound {
+		logger.info("Someone is logging in...");
+		CustomerLoginResponse response = new CustomerLoginResponse();
 		Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		if (authentication.isAuthenticated()) {
-			token = jwtService.generateToken(username);
+			String token = jwtService.generateToken(username);
+			Customer customer = getCustomerByEmail(username);
+			response.setJwtToken(token);
+			response.setCustomer(customer);
 			if (token != null) {
-				logger.info("Token for User: " + token);
+				logger.info("Token for Customer: " + token);
 			} else {
 				logger.warn("Token not generated");
 			}
 		} else {
 			throw new LoginCredentialsNotFound("Credentials not found");
 		}
-		return token;
-
+		return response;
 	}
 
 	@Override
 	public boolean register(CustomerDTO customerDTO, MultipartFile file)
 			throws DataAlreadyPresentException, IOException {
-		Customer customerByPhone = getCustomerByPhoneNumber(customerDTO.getPhoneNumer());
+		logger.info("New Registration Request for: "+customerDTO);
+		Customer customerByPhone = getCustomerByPhoneNumber(customerDTO.getPhoneNumber());
 		Customer customerByEmail = getCustomerByEmail(customerDTO.getEmail());
 		if ((customerByPhone != null || customerByEmail != null)) {
 			logger.warn("User is trying to enter DUPLICATE data while registering");
@@ -82,7 +86,7 @@ public class CustomerServiceImpl implements ICustomerService {
 		customer.setCustomerFirstName(customerDTO.getCustomerFirstName());
 		customer.setCustomerLastName(customerDTO.getCustomerLastName());
 		customer.setEmail(customerDTO.getEmail());
-		customer.setPhoneNumer(customerDTO.getPhoneNumer());
+		customer.setPhoneNumber(customerDTO.getPhoneNumber());
 		customer.setPassword(passwordEncoder.encode(customerDTO.getPassword()));
 		LocalDate dob = customerDTO.getDateOfBirth();
 		customer.setDateOfBirth(dob);
@@ -118,14 +122,6 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Override
 	public Customer viewCustomerDetailsById(long customerId) throws CustomerNotFoundException {
-//		List<Customer> customers = repo.findAll();
-//		boolean isPresent = false;
-//		for (Customer c : customers) {
-//			if (c.getCustomerId() == customerId) {
-//				isPresent = true;
-//				break;
-//			}
-//		}
 		Stream<Customer> stream = repo.findAll().stream();
 		Customer isPresent = stream.filter(customers -> customers.getCustomerId()==customerId).findAny().orElse(null);
 		if (isPresent==null) {
@@ -145,6 +141,11 @@ public class CustomerServiceImpl implements ICustomerService {
 	public Customer getCustomerByEmail(String email) {
 		logger.info("Finding " + email + " in database");
 		return repo.findByEmail(email).orElse(null);
+	}
+
+	@Override
+	public Customer updateCustomerAccount(Customer customer) {
+		return repo.save(customer);
 	}
 
 }

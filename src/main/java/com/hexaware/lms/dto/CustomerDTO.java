@@ -13,6 +13,9 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public class CustomerDTO {
+	
+	@Min(value=1001 ,message="It is auto-generated but starts from 1001")
+	private int customerId;
 
 	@Size(min = 3, max = 20, message = "First name must be between 3 and 20 characters")
 	private String customerFirstName;
@@ -23,20 +26,18 @@ public class CustomerDTO {
 
 	@Positive(message = "Phone number must be a positive number")
 	@Digits(integer = 10, fraction = 0, message = "Phone number must be a 10-digit number")
-
-	private long phoneNumer;
+	private long phoneNumber;
 
 	@Email(message = "Invalid email format")
 	private String email;
 
-	@Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters")
+	@Size(min = 8, max = 20, message = "Password must be between 8 and 20 characters")
 	private String password;
 
 
 	@Past(message = "Date of birth must be in the past")
 	private LocalDate dateOfBirth;
-
-
+	
 	private String gender;
 
 	@Size(max = 100, message = "Address must be less than or equal to 100 characters")
@@ -50,14 +51,7 @@ public class CustomerDTO {
 	private int creditScore;
 
 	@Pattern(regexp = "[A-Z]{5}\\d{4}[A-Z]")
-
 	private String panCardNumber;
-
-
-	private byte[] idProof;
-
-	private String role;///?
-
 
 	public CustomerDTO() {
 		super();
@@ -81,8 +75,22 @@ public class CustomerDTO {
 		this.customerLastName = customerLastName;
 	}
 
-	public long getPhoneNumer() {
-		return phoneNumer;
+	
+	
+	public int getCustomerId() {
+		return customerId;
+	}
+
+
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+
+
+
+	public long getPhoneNumber() {
+		return phoneNumber;
 	}
 
 	public String getGender() {
@@ -93,8 +101,8 @@ public class CustomerDTO {
 		this.gender = gender;
 	}
 
-	public void setPhoneNumer(long phoneNumer) {
-		this.phoneNumer = phoneNumer;
+	public void setPhoneNumber(long phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getEmail() {
@@ -153,20 +161,14 @@ public class CustomerDTO {
 		this.panCardNumber = panCardNumber;
 	}
 
-	public byte[] getIdProof() {
-		return idProof;
-	}
 
-	public void setIdProof(byte[] idProof) {
-		this.idProof = idProof;
-	}
 
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
+	@Override
+	public String toString() {
+		return "CustomerDTO [customerFirstName=" + customerFirstName + ", customerLastName=" + customerLastName
+				+ ", phoneNumer=" + phoneNumber + ", email=" + email + ", password=" + password + ", dateOfBirth="
+				+ dateOfBirth + ", gender=" + gender + ", address=" + address + ", state=" + state + ", creditScore="
+				+ creditScore + ", panCardNumber=" + panCardNumber + "]";
 	}
 
 }

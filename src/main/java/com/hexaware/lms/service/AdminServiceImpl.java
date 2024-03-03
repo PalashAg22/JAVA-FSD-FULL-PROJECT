@@ -1,5 +1,7 @@
 package com.hexaware.lms.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.hexaware.lms.dto.AdminDTO;
 import com.hexaware.lms.entities.Admin;
+import com.hexaware.lms.entities.AdminLoginResponse;
 import com.hexaware.lms.exception.DataAlreadyPresentException;
 import com.hexaware.lms.exception.LoginCredentialsNotFound;
 import com.hexaware.lms.repository.AdminRepository;
@@ -36,25 +39,6 @@ public class AdminServiceImpl implements IAdminService {
 		this.repo = repo;
 	}
 
-	public String login(String username, String password) throws LoginCredentialsNotFound {
-
-
-		String token = null;
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-		if (authentication.isAuthenticated()) {
-			token = jwtService.generateToken(username);
-			if (token != null) {
-				logger.info("Token Generated for Admin: " + token);
-			} else {
-				logger.warn("Token not generated");
-			}
-		} else {
-			throw new LoginCredentialsNotFound("Credentials not matched");
-		}
-		return token;
-	}
-
 	@Override
 	public boolean register(AdminDTO adminDto) throws DataAlreadyPresentException {
 		Admin localAdmin = repo.findByEmail(adminDto.getEmail()).orElse(null);
@@ -69,6 +53,49 @@ public class AdminServiceImpl implements IAdminService {
 		Admin savedAdmin = repo.save(admin);
 		logger.info("Admin Created: " + savedAdmin);
 		return true;
+	}
+
+	@Override
+	public AdminLoginResponse login(String username, String password) throws LoginCredentialsNotFound {
+		logger.info("Admin is logging in...");
+		AdminLoginResponse response=new AdminLoginResponse();
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		if (authentication.isAuthenticated()) {
+			String token = jwtService.generateToken(username);
+			Admin admin = getAdminByEmail(username);
+			response.setJwtToken(token);
+			response.setAdmin(admin);
+			if (token != null) {
+				logger.info("Token for Admin: " + token);
+			} else {
+				logger.warn("Token not generated");
+			}
+		} else {
+			throw new LoginCredentialsNotFound("Credentials not found");
+		}
+		return response;
+	}
+	
+	public Admin getAdminByEmail(String email) {
+		return repo.findByEmail(email).orElse(null);
+	}
+
+	@Override
+	public boolean updateAccount(AdminDTO adminDto) {
+		Admin admin = new Admin();
+		admin.setAdminId(adminDto.getAdminId());
+		admin.setAdminFirstName(adminDto.getAdminFirstName());
+		admin.setAdminLastName(adminDto.getAdminLastName());
+		admin.setEmail(adminDto.getEmail());
+		admin.setPassword(new BCryptPasswordEncoder().encode(adminDto.getPassword()));
+		repo.save(admin);
+		return true;		
+	}
+
+	@Override
+	public List<Admin> getAllAdmins() {
+		return repo.findAll();
 	}
 
 }

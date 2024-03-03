@@ -19,8 +19,8 @@ public interface LoanRepository extends JpaRepository<LoanApplication, Long> {
 	@Modifying
 	void updateLoanStatus(String status, long loanId);
 
-	@Query("select lp from LoanApplication lp where lp.customer.customerId = ?1")
-	LoanApplication propertiesToCalculate(long customerId);
+	@Query("select lp from LoanApplication lp where lp.loanId=?1 and lp.customer.customerId = ?2")
+	LoanApplication propertiesToCalculate(long loanApplicationId,long customerId);
 
 	@Query("select lp from LoanApplication lp where lp.customer.customerId=?1 and lp.loanType.loanTypeName=?2")
 	List<LoanApplication> filterAppliedLoanByType(long custmoerId, String loanTypeName);

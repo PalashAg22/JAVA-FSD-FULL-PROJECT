@@ -19,18 +19,17 @@ public class UploadPropertyServiceImpl implements IUploadPropertyService {
 
 	@Override
 	public PropertyProof uploadPdf(MultipartFile file) throws IOException {
-		PropertyProof propertyProof = uploadRepo.save(new PropertyProof.Builder().name(file.getOriginalFilename())
+		return uploadRepo.save(new PropertyProof.Builder().name(file.getOriginalFilename())
 				.type(file.getContentType()).propertyData(UploadHelper.compressImage(file.getBytes())).build());
-		if (propertyProof != null) {
-			return propertyProof;
-		}
-		return null;
 	}
 
 	@Override
-	public byte[] downloadImage(String fileName) {
-		Optional<PropertyProof> dbImageData = uploadRepo.findByName(fileName);
-		byte[] images = UploadHelper.decompressImage(dbImageData.get().getPropertyData());
-		return images;
+	public byte[] downloadImageBytes(long propertyProofId) {
+		Optional<PropertyProof> propertyProofFile = uploadRepo.findById(propertyProofId);
+		if(propertyProofFile.isPresent()) {
+			return UploadHelper.decompressImage(propertyProofFile.get().getPropertyData());
+		}
+		return new byte[0];
 	}
+
 }

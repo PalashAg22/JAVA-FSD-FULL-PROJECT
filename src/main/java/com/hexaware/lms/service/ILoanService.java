@@ -26,14 +26,18 @@ public interface ILoanService {
 
 	List<LoanApplication> allAppliedLoansOfCustomerForAdmin(); 
 
-	double interestCalculator(long customerId);
-
-	double emiCalculator(long customerId);
+	double interestCalculator(long loanId,long customerId);
 
 	double emiCalculator(double principal, double rate, int tenure);
 
 	LoanApplication searchAppliedLoan(long customerId, long loanId) throws LoanNotFoundException;
 
 	LoanApplication searchLoanById(long loanId) throws LoanNotFoundException;
+
+	double emiCalculator(long loanId, long customerId);
+	
+	LoanApplication updateLoan(LoanApplicationDTO loan, PropertyDTO propertyDto, MultipartFile file) throws PropertyAlreadyExistException, IOException;
+
+	void cancelLoanApplication(long loanId);
 
 }

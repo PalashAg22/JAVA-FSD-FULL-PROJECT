@@ -51,6 +51,11 @@ public class LoanType{
 	}
 	public void setLoanManagementFees(double loanManagementFees) {
 		this.loanManagementFees = loanManagementFees;
+	}
+	@Override
+	public String toString() {
+		return "LoanType [loanTypeId=" + loanTypeId + ", loanTypeName=" + loanTypeName + ", loanInterestBaseRate="
+				+ loanInterestBaseRate + ", loanManagementFees=" + loanManagementFees + "]";
 	}	
 
 }

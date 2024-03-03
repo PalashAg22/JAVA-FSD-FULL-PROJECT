@@ -25,7 +25,7 @@ public class LoanApplication {
 	
 	private int tenureInMonths;
 	
-	private String status="Pending";
+	private String status="PENDING";
 	
 	private LocalDate loanApplyDate = LocalDate.now();
 	
@@ -103,14 +103,6 @@ public class LoanApplication {
 		this.loanType = loanType;
 	}
 
-	public PropertyInfo getProperty() {
-		return propertyInfo;
-	}
-
-	public void setProperty(PropertyInfo propertyInfo) {
-		this.propertyInfo = propertyInfo;
-	}
-
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -119,16 +111,20 @@ public class LoanApplication {
 		this.customer = customer;
 	}
 
-	@Override
-	public String toString() {
-		return "LoanApplication [loanId=" + loanId + ", principal=" + principal + ", interestRate=" + interestRate
-				+ ", tenureInMonths=" + tenureInMonths + ", status=" + this.getStatus() + ", loanApplyDate=" + loanApplyDate
-				+ ", loanType=" + loanType.getLoanTypeName() + ", property=" + propertyInfo.getPropertyId() + ", customer=" + customer.getCustomerFirstName() 
-				+ "]";
+	public PropertyInfo getPropertyInfo() {
+		return propertyInfo;
 	}
 
-	
+	public void setPropertyInfo(PropertyInfo propertyInfo) {
+		this.propertyInfo = propertyInfo;
+	}
 
-	
+	public void setLoanId(long loanId) {
+		this.loanId = loanId;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 }

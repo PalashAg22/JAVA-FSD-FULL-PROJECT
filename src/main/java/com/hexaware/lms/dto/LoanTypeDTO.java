@@ -2,19 +2,18 @@ package com.hexaware.lms.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public class LoanTypeDTO {
-	
-	@Pattern(regexp="^[A-Z0-9\s-]{1,20}$")
+	@Size(min = 6, message = "Loan type name must be at least 6 characters")
 	private String loanTypeName;
-	
-	@Min(8)
-	@Max(30)
+
+	@Min(value = 8, message = "Interest base rate must be at least 8")
+	@Max(value = 30, message = "Interest base rate cannot be greater than 30")
 	private double loanInterestBaseRate;
-	
-	@Min(1000)
-	@Max(20000)
+
+	@Min(value = 1000, message = "Management fees must be at least 1000")
+	@Max(value = 20000, message = "Management fees cannot be greater than 20000")
 	private double loanManagementFees;
 	
 	public LoanTypeDTO() {
@@ -50,6 +49,12 @@ public class LoanTypeDTO {
 
 	public void setLoanManagementFees(double loanManagementFees) {
 		this.loanManagementFees = loanManagementFees;
+	}
+
+	@Override
+	public String toString() {
+		return "LoanTypeDTO [loanTypeName=" + loanTypeName + ", loanInterestBaseRate=" + loanInterestBaseRate
+				+ ", loanManagementFees=" + loanManagementFees + "]";
 	}
 
 	

@@ -1,22 +1,28 @@
 package com.hexaware.lms.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class AdminDTO {
 	
+	private long adminId;
+	
+	@NotBlank(message = "First name cannot be blank")
+    @Size(min = 3, max = 20, message = "First name must be between 3 and 20 characters")
+    private String adminFirstName;
 
-	@Size(min=3,max=20)
-	private String adminFirstName;
+    @NotBlank(message = "Last name cannot be blank")
+    @Size(min = 3, max = 20, message = "Last name must be between 3 and 20 characters")
+    private String adminLastName;
 
-	@Size(min=3,max=20)
-	private String adminLastName;
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Email should be valid")
+    private String email;
 
-	@Email
-	private String email;
-
-	@Size(min=5,max=20)
-	private String password;
+    @NotBlank(message = "Password cannot be blank")
+    @Size(min = 8, max = 20, message = "Password must be between 8 and 20 characters")
+    private String password;
 
 	public AdminDTO() {
 		super();
@@ -30,6 +36,14 @@ public class AdminDTO {
 		this.password = password;
 	}
 
+
+	public long getAdminId() {
+		return adminId;
+	}
+
+	public void setAdminId(long adminId) {
+		this.adminId = adminId;
+	}
 
 	public String getAdminFirstName() {
 		return adminFirstName;

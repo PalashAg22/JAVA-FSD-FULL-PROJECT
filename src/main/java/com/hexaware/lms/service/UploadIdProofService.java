@@ -16,23 +16,19 @@ public class UploadIdProofService implements IUploadIdProofService {
 
 	@Autowired
 	private UploadIdentityProofRepository uploadIdRepo;
-	
+
 	@Override
 	public CustomerProof uploadPdf(MultipartFile file) throws IOException {
-		CustomerProof customerProof = uploadIdRepo.save(new CustomerProof.Builder()
-						.name(file.getOriginalFilename())
-						.type(file.getContentType())
-						.idProofData(UploadHelper.compressImage(file.getBytes())).build());
-		if(customerProof!=null) {
-			return customerProof;
-		}
-		return null;
+		return uploadIdRepo.save(new CustomerProof.Builder().name(file.getOriginalFilename())
+				.type(file.getContentType()).idProofData(UploadHelper.compressImage(file.getBytes())).build());
 	}
-	
+
 	@Override
-	public byte[] downloadImage(String fileName){
-        Optional<CustomerProof> dbImageData = uploadIdRepo.findByFileName(fileName);
-        byte[] images=UploadHelper.decompressImage(dbImageData.get().getMainFile());
-        return images;
-    }
+	public byte[] downloadImageBytes(long idProofId) {
+		Optional<CustomerProof> customerIdProof = uploadIdRepo.findById(idProofId);
+		if(customerIdProof.isPresent()) {
+			return UploadHelper.decompressImage(customerIdProof.get().getMainFile());
+		}
+		return new byte[0];
+	}
 }

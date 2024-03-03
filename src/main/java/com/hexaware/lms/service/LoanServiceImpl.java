@@ -1,6 +1,7 @@
 package com.hexaware.lms.service;
 
-import java.time.LocalDate;
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,6 +26,7 @@ import com.hexaware.lms.repository.CustomerRepository;
 import com.hexaware.lms.repository.LoanRepository;
 import com.hexaware.lms.repository.LoanTypeRepository;
 import com.hexaware.lms.repository.PropertyInfoRepository;
+import com.hexaware.lms.repository.UploadPropertyRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -51,21 +53,21 @@ public class LoanServiceImpl implements ILoanService {
 	
 	@Autowired
 	PropertyInfoRepository propRepo;
-
+	
+	@Autowired
+	UploadPropertyRepository uploadPropertyRepo;
+	
 	@Override
 	public LoanApplication applyLoan(LoanApplicationDTO loanDto, PropertyDTO propertyDto,MultipartFile file)
 
 			throws PropertyAlreadyExistException, java.io.IOException, CustomerNotEligibleException {
 
-		long loanTypeId = loanDto.getLoanTypeId();
 		long customerId = loanDto.getCustomerId();
-
-		LoanType loanType = loanTypeRepo.findById(loanTypeId).orElse(null);
-		double interestRate = loanTypeRepo.findLoanInterestBaseRateByLoanId(loanDto.getLoanTypeId());
+		LoanType loanType = loanTypeRepo.findAllByLoanTypeName(loanDto.getLoanTypeName());
+		double interestRate = loanType.getLoanInterestBaseRate();
 		Customer customer = customerRepo.findById(customerId).orElse(null);
 		
 		int age=customer.getAge();
-		String panCard=customer.getPanCardNumber();
 		int creditScore=customer.getCreditScore();
 		if(age<=18 && age>=60) {
 			throw new CustomerNotEligibleException("You are not eligible to apply for a loan from our bank.");
@@ -73,10 +75,6 @@ public class LoanServiceImpl implements ILoanService {
 		if(creditScore<500) {
 			throw new CustomerNotEligibleException("Your Credit score is too low to apply for a new loan");
 		}
-		
-
-		LocalDate loanApplicationDate = LocalDate.now();
-
 
 		LoanApplication loan = new LoanApplication();
 		loan.setCustomer(customer);
@@ -106,26 +104,82 @@ public class LoanServiceImpl implements ILoanService {
 		PropertyProof proof = uploadService.uploadPdf(file);
 	    		
 		property.setPropertyProof(proof);
-		loan.setProperty(property);
+		loan.setPropertyInfo(property);
 		logger.info("loanApplication submitted successfully");
 		return loanRepo.save(loan);
 	}
+	
+	@Override
+	public LoanApplication updateLoan(LoanApplicationDTO loan, PropertyDTO propertyDto, MultipartFile file) throws PropertyAlreadyExistException, IOException {
+		Customer customer = customerRepo.findById(loan.getCustomerId()).orElse(null);
+		LoanType loanType = loanTypeRepo.findAllByLoanTypeName(loan.getLoanTypeName());
+		double interestRate = loanType.getLoanInterestBaseRate();
+		LoanApplication loanApp = loanRepo.findById(loan.getLoanApplicationId()).orElse(null);
+		PropertyInfo propertyInfo = loanApp.getPropertyInfo();
+		long propertyProofId = propertyInfo.getPropertyProof().getPropertyProofId();
+		
+		loanApp.setLoanId(loan.getLoanApplicationId());
+		loanApp.setCustomer(customer);
+		loanApp.setLoanType(loanType);
+		loanApp.setPrincipal(loan.getPrincipal());
+		loanApp.setTenureInMonths(loan.getTenureInMonths());
+		loanApp.setInterestRate(interestRate);
+		
+		String propertyDtoAddress = propertyDto.getPropertyAddress();
+		double propertyDtoArea = propertyDto.getPropertyAreaInm2();
+		PropertyInfo tempProperty = propRepo.getProperty(propertyDtoAddress, propertyDtoArea);
+
+		logger.info("Property details read...");
+		if (tempProperty != null) {
+			logger.warn("User is entering duplicate property details");
+			throw new PropertyAlreadyExistException("Property details already taken.");
+		}
+		propertyInfo.setPropertyAddress(propertyDto.getPropertyAddress());
+		propertyInfo.setPropertyAreaInm2(propertyDto.getPropertyAreaInm2());
+		propertyInfo.setPropertyValue(propertyDto.getPropertyValue());
+		
+		logger.info("Property details saved...");
+				
+		PropertyProof proof = uploadPropertyRepo.findById(propertyProofId).orElse(null);
+		proof.setName(file.getName());
+		proof.setPropertyData(file.getBytes());
+		proof.setType(file.getContentType());
+		uploadPropertyRepo.save(proof);
+	    
+		propertyInfo.setPropertyProof(proof);
+		propRepo.save(propertyInfo);
+		loanApp.setPropertyInfo(propertyInfo);
+		logger.info("loanApplication submitted successfully");
+		return loanRepo.save(loanApp);
+	}
+	
+	@Override
+	public void cancelLoanApplication(long loanId) {
+		logger.info("request for cancellation having loan id: "+ loanId);
+		LoanApplication loan = loanRepo.findById(loanId).orElse(null);
+		loan.setStatus("CANCELLED");
+		loanRepo.save(loan);
+	}
 
 	@Override
-	public double interestCalculator(long customerId) {
-		LoanApplication loan = loanRepo.propertiesToCalculate(customerId);
+	public double interestCalculator(long loanId,long customerId) {
+		LoanApplication loan = loanRepo.propertiesToCalculate(loanId,customerId);
 		logger.info("Interest is being calculated for the customer: " + customerId);
 		return (loan.getPrincipal() * loan.getInterestRate() * loan.getTenureInMonths()) / 12;
 	}
 
 	@Override
-	public double emiCalculator(double principal, double rate, int tenure) {
-		return (principal * rate * Math.pow((1 + rate), tenure)) / (Math.pow((1 + rate), (tenure - 1)));
-	}
+	public  double emiCalculator(double principal, double rate, int tenure) {
+        double monthlyRate = rate / 1200.0;
+        double emi = principal * monthlyRate / (1 - Math.pow(1 + monthlyRate, -tenure));
+        DecimalFormat df = new DecimalFormat("#.##");
+        emi = Double.parseDouble(df.format(emi));
+        return emi;
+    }
 
 	@Override
-	public double emiCalculator(long customerId) {
-		LoanApplication loan = loanRepo.propertiesToCalculate(customerId);
+	public double emiCalculator(long loanId,long customerId) {
+		LoanApplication loan = loanRepo.propertiesToCalculate(loanId,customerId);
 		double p = loan.getPrincipal();
 		double r = loan.getInterestRate();
 		double t = loan.getTenureInMonths();
@@ -138,20 +192,7 @@ public class LoanServiceImpl implements ILoanService {
 	@Override
 	public List<LoanApplication> filterAppliedLoanByType(long customerId, String loanType)
 			throws LoanNotFoundException {
-		if (isLoanTypeValid(loanType)) {
-//			List<LoanApplication> list = loanRepo.findAllByCustomerCustomerId(customerId);
-//			boolean isPresent = false;
-//
-//			logger.info("searching for loanType");
-//			for (LoanApplication lp : list) {
-//				if (lp.getLoanType().getLoanTypeName().equals(loanType)) {
-//					logger.info("loanTtype found");
-//
-//					isPresent = true;
-//					break;
-//				}
-//			}
-			
+		if (isLoanTypeValid(loanType)) {			
 			Stream<LoanApplication> stream = loanRepo.findAllByCustomerCustomerId(customerId).stream();
 			List<LoanApplication> isPresent = stream
 					.filter(loanApplication -> 
@@ -175,16 +216,6 @@ public class LoanServiceImpl implements ILoanService {
 
 		List<LoanApplication> loans = null;
 		if (isLoanStatusValid(status)) {
-
-//			boolean isPresent = false;
-//			for (LoanApplication lp : loans) {
-//				if (lp.getStatus().equals(status)) {
-//					logger.info("Loan status found...");
-//					isPresent = true;
-//					break;
-//				}
-//			}
-//			
 			Stream<LoanApplication> stream = loanRepo.findAllByCustomerCustomerId(customerId).stream();
 			List<LoanApplication> isPresent = stream
 					.filter(loanApplication -> 
@@ -195,8 +226,6 @@ public class LoanServiceImpl implements ILoanService {
 				throw new LoanNotFoundException("None of your loan is " + status);
 			}
 			logger.info("Loan Application with customerId " + customerId + " and status " + status + " is present");
-
-			//loans = loanRepo.filterAppliedLoanByStatus(customerId, status);
 			loans = isPresent;
 		}
 		return loans;
@@ -207,15 +236,6 @@ public class LoanServiceImpl implements ILoanService {
 
 		LoanApplication loan = null;
 		if (isLoanIdValid(loanId)) {
-			//List<LoanApplication> loans = loanRepo.findAllByCustomerCustomerId(customerId);
-//			boolean isPresent = false;
-//			for (LoanApplication lp : loans) {
-//				if (lp.getLoanId() == loanId) {
-//					logger.info("Loan is present for the customer...");
-//					isPresent = true;
-//					break;
-//				}
-//			}
 			Stream<LoanApplication> stream = loanRepo.findAllByCustomerCustomerId(customerId).stream();
 			LoanApplication isPresent = stream.filter(loans -> loans.getLoanId() == loanId).findAny().orElse(null);
 			if (isPresent==null) {
@@ -283,7 +303,7 @@ public class LoanServiceImpl implements ILoanService {
 	}
 
 	public boolean isLoanIdValid(long loanId) {
-		logger.info("validating entered loanId");
+		logger.info("Validating entered loanId");
 		if (loanId >= 2001 && loanId <= 5000) {
 			logger.info("entered loanId is correct");
 			return true;
@@ -294,13 +314,13 @@ public class LoanServiceImpl implements ILoanService {
 
 	public boolean isLoanStatusValid(String status) {
 		status = status.strip();
-		logger.info("validating entered loan application status");
+		logger.info("Validating entered loan application status");
 		if ((status != null && status.length() > 0) && (status.equalsIgnoreCase("Pending")
-				|| status.equalsIgnoreCase("Approved") || status.equalsIgnoreCase("Rejected"))) {
-			logger.info("entered loan application status is correct");
+				|| status.equalsIgnoreCase("Approved") || status.equalsIgnoreCase("Rejected") || status.equalsIgnoreCase("In-Progress") || status.equalsIgnoreCase("Cancelled"))) {
+			logger.info("Entered loan application status is correct");
 			return true;
 		}
-		logger.warn("validation failed for entered status");
+		logger.warn("Validation failed for entered status");
 		return false;
 	}
 

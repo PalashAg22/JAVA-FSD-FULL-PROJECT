@@ -1,18 +1,17 @@
 package com.hexaware.lms.dto;
 
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
 public class PropertyDTO {
 
-	@Size(min=10)
+	@Size(min = 10, message = "Property address must be at least 10 characters")
 	private String propertyAddress;
 
-	@Min(10000)
+	@Min(value = 10000, message = "Property area must be at least 10000 m²")
 	private double propertyAreaInm2;
 
-	@Min(1000)
+	@Min(value = 1000, message = "Property value must be at least 1000")
 	private double propertyValue;
 
 	public PropertyDTO() {
@@ -49,7 +48,5 @@ public class PropertyDTO {
 	public void setPropertyValue(double propertyValue) {
 		this.propertyValue = propertyValue;
 	}
-
-
 
 }
