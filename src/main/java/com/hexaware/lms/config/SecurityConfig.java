@@ -59,13 +59,11 @@ public class SecurityConfig {
 	 public CorsFilter corsFilter() {
       CorsConfiguration config = new CorsConfiguration();
       config.setAllowCredentials(true);
-      config.addAllowedOrigin("http://localhost:4200");
+      config.addAllowedOrigin("http://fsd-final-project-angular.s3-website-us-east-1.amazonaws.com");
       config.addAllowedHeader("*");
       config.addAllowedMethod("*");
-      
       UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
       source.registerCorsConfiguration("/**", config);
-      
       return new CorsFilter(source);
   }
 

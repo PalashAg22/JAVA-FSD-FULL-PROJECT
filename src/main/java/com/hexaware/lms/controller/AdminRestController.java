@@ -42,7 +42,7 @@ import com.hexaware.lms.service.UploadIdProofService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin("http://fsd-final-project-angular.s3-website-us-east-1.amazonaws.com")
 @RestController
 @RequestMapping("/api/admin")
 @PreAuthorize("hasAuthority('ADMIN')")

@@ -41,7 +41,7 @@ import com.hexaware.lms.service.ILoanTypeService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin("http://fsd-final-project-angular.s3-website-us-east-1.amazonaws.com")
 @RestController
 @RequestMapping("/api/customer")
 @PreAuthorize("hasAuthority('USER')")
