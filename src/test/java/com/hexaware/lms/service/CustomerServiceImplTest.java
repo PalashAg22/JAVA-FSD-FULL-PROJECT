@@ -24,7 +24,7 @@ import com.hexaware.lms.exception.LoginCredentialsNotFound;
 @SpringBootTest
 class CustomerServiceImplTest {
 
-	Logger log = LoggerFactory.getLogger(AdminServiceImplTest.class);
+	Logger log = LoggerFactory.getLogger(CustomerServiceImplTest.class);
 	
 	@Autowired
 	ICustomerService serviceTest;

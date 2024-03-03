@@ -20,7 +20,7 @@ import com.hexaware.lms.exception.LoanTypeAlreadyExistException;
 @SpringBootTest
 class LoanTypeServiceImplTest {
 
-	Logger log = LoggerFactory.getLogger(AdminServiceImplTest.class);
+	Logger log = LoggerFactory.getLogger(LoanTypeServiceImplTest.class);
 	
 	@Autowired
 	ILoanTypeService serviceTest;
