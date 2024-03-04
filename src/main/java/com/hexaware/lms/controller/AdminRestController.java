@@ -84,10 +84,9 @@ public class AdminRestController {
 	}
 	
 	@PostMapping("/createLoanType")
-	public String createNewLoanType(@RequestBody @Valid LoanTypeDTO loanTypeDto) throws LoanTypeAlreadyExistException {
+	public void createNewLoanType(@RequestBody @Valid LoanTypeDTO loanTypeDto) throws LoanTypeAlreadyExistException {
 		log.info("Request received to create a new loanType: " + loanTypeDto);
 		loanTypeService.createLoanType(loanTypeDto);
-		return "Loan Type created";
 	}
 
 	@PostMapping("/createNewAdmin")

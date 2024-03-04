@@ -8,11 +8,11 @@ public class LoanTypeDTO {
 	@Size(min = 6, message = "Loan type name must be at least 6 characters")
 	private String loanTypeName;
 
-	@Min(value = 8, message = "Interest base rate must be at least 8")
+	@Min(value = 4, message = "Interest base rate must be at least 4")
 	@Max(value = 30, message = "Interest base rate cannot be greater than 30")
 	private double loanInterestBaseRate;
 
-	@Min(value = 1000, message = "Management fees must be at least 1000")
+	@Min(value = 0, message = "Management fees must be at least 1000")
 	@Max(value = 20000, message = "Management fees cannot be greater than 20000")
 	private double loanManagementFees;
 	
