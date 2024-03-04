@@ -41,7 +41,7 @@ public class LoanTypeServiceImpl implements ILoanTypeService {
 	    }
 
 	    LoanType loanType = new LoanType();
-	    loanType.setLoanTypeName(loanTypeDto.getLoanTypeName());
+	    loanType.setLoanTypeName(loanTypeDto.getLoanTypeName().toUpperCase());
 	    loanType.setLoanInterestBaseRate(loanTypeDto.getLoanInterestBaseRate());
 	    loanType.setLoanManagementFees(loanTypeDto.getLoanManagementFees());
 	    logger.info("Creating Loan Type: " + loanType.toString());
