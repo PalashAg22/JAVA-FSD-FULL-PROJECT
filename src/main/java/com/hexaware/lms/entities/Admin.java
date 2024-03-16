@@ -14,6 +14,9 @@ public class Admin{
 	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="admin_sequence")
 	private long adminId;
 	
+	@Column(name="profile")
+	private String profileImage;
+	
 	@Column(name = "firstName")
 	private String adminFirstName;
 	
@@ -45,6 +48,14 @@ public class Admin{
 
 	public long getAdminId() {
 		return adminId;
+	}
+
+	public String getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
 	}
 
 	public String getAdminFirstName() {

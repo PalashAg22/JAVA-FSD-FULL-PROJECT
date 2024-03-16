@@ -3,6 +3,7 @@ package com.hexaware.lms.repository;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,8 @@ public interface AdminRepository extends JpaRepository<Admin,Long>{
 
 	@Query("select a from Admin a where a.email=?1")
 	Optional<Admin> findByEmail(String email);
+	
+	@Modifying
+	@Query("update Admin d set d.profileImage=?1 where d.adminId=?2")
+	void updateAdminProfilePic(String fileName,long adminId);
 }
