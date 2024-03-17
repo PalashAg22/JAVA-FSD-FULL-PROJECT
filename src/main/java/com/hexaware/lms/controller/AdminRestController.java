@@ -157,7 +157,6 @@ public class AdminRestController {
 	        HttpHeaders headers = new HttpHeaders();
 	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 	        headers.setContentDisposition(ContentDisposition.builder("attachment").filename("filename.ext").build());
-
 	        return ResponseEntity.ok()
 	                .headers(headers)
 	                .body(fileBytes);
@@ -174,7 +173,6 @@ public class AdminRestController {
 	        HttpHeaders headers = new HttpHeaders();
 	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 	        headers.setContentDisposition(ContentDisposition.builder("attachment").filename("filename.ext").build());
-
 	        return ResponseEntity.ok()
 	                .headers(headers)
 	                .body(fileBytes);
@@ -186,16 +184,12 @@ public class AdminRestController {
 	@ExceptionHandler({ LoanTypeAlreadyExistException.class })
 	public ResponseEntity<String> handleLoanTypeRelated(LoanTypeAlreadyExistException e) {
 		log.warn("Some Exception has Occurred....See the logs above and below.");
-
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
-
 	}
 
 	@ExceptionHandler({ CustomerNotFoundException.class })
 	public ResponseEntity<String> handleLoanTypeRelated(CustomerNotFoundException e) {
 		log.warn("Some Exception has Occurred....See the logs above and below.");
-
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
-
 	}
 }

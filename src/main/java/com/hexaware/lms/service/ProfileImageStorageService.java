@@ -55,22 +55,21 @@ public class ProfileImageStorageService {
 	        return "File uploaded : " + fileName;
 	    }
 
-	    public String deleteFile(String fileName,long userId) {
-	        if(fileName != null) {
-	        	s3Client.deleteObject(bucketName, fileName);
+	    public String deleteFile(String fileName, long userId) {
+	        if (fileName != null || !fileName.equals("null")) {
+	            s3Client.deleteObject(bucketName, fileName);
 	        }
-	        Customer customer=null;
-	    	Admin admin=null;
-			customer = custRepo.findById(userId).orElse(customer);
-			admin = adminRepo.findById(userId).orElse(admin);
-	        if(customer!=null) {
-	    		custRepo.updateCustomerProfilePic(null, userId);
-	    	}
-	        if(admin!=null) {
-	    		adminRepo.updateAdminProfilePic(null, userId);
-	    	}
-	        return fileName;
+	        Customer customer = custRepo.findById(userId).orElse(null);
+	        Admin admin = adminRepo.findById(userId).orElse(null);
+	        if (customer != null) {
+	            custRepo.updateCustomerProfilePic(null, userId);
+	        }
+	        if (admin != null) {
+	            adminRepo.updateAdminProfilePic(null, userId);
+	        }
+	        return "File deleted successfully";
 	    }
+
 
 
 	    private File convertMultiPartFileToFile(MultipartFile file) {

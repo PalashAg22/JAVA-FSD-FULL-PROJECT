@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -47,12 +48,17 @@ public class ProfileImageStorageController {
 
 
 	@DeleteMapping("/delete/{userId}/{fileName}")
-	public ResponseEntity<Map<String, String>> deleteFile(@PathVariable String fileName, @PathVariable long userId) {
-	    String deletedFileName = service.deleteFile(fileName, userId);
-	    Map<String, String> response = new HashMap<>();
-	    response.put("message", "File deleted successfully");
-	    response.put("fileName:", deletedFileName);
-	    return ResponseEntity.ok().body(response);
+	public ResponseEntity<Map<String, String>> deleteFile(@PathVariable long userId, @PathVariable String fileName ) {
+	    try {
+	        String deletedFileName = service.deleteFile(fileName, userId);
+	        Map<String, String> response = new HashMap<>();
+	        response.put("message", "File deleted successfully");
+	        response.put("fileName", deletedFileName);
+	        return ResponseEntity.ok().body(response);
+	    } catch (Exception e) {
+	        Map<String, String> response = new HashMap<>();
+	        response.put("error", "Failed to delete file");
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	    }
 	}
-
 }

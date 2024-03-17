@@ -85,6 +85,14 @@ public class AdminDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@Override
+	public String toString() {
+		return "AdminDTO [adminId=" + adminId + ", profileImage=" + profileImage + ", adminFirstName=" + adminFirstName
+				+ ", adminLastName=" + adminLastName + ", email=" + email + ", password=" + password + "]";
 	}	
+	
+	
 
 }
