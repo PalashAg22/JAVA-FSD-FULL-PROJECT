@@ -19,6 +19,9 @@ public class Customer {
 	@SequenceGenerator(name = "customer_sequence", initialValue = 1001)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")																					// value for id field in the																			
 	private long customerId;
+	
+	@Column(name="profile")
+	private String profileImage;
 
 	@Column(name = "firstName")
 	private String customerFirstName;
@@ -57,6 +60,14 @@ public class Customer {
 
 	public long getCustomerId() {
 		return customerId;
+	}
+
+	public String getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
 	}
 
 	public String getCustomerFirstName() {

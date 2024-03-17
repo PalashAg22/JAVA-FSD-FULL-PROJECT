@@ -8,6 +8,8 @@ public class AdminDTO {
 	
 	private long adminId;
 	
+	private String profileImage;
+	
 	@NotBlank(message = "First name cannot be blank")
     @Size(min = 3, max = 20, message = "First name must be between 3 and 20 characters")
     private String adminFirstName;
@@ -39,6 +41,14 @@ public class AdminDTO {
 
 	public long getAdminId() {
 		return adminId;
+	}
+
+	public String getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
 	}
 
 	public void setAdminId(long adminId) {
@@ -75,6 +85,14 @@ public class AdminDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@Override
+	public String toString() {
+		return "AdminDTO [adminId=" + adminId + ", profileImage=" + profileImage + ", adminFirstName=" + adminFirstName
+				+ ", adminLastName=" + adminLastName + ", email=" + email + ", password=" + password + "]";
 	}	
+	
+	
 
 }

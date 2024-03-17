@@ -16,6 +16,8 @@ public class CustomerDTO {
 	
 	@Min(value=1001 ,message="It is auto-generated but starts from 1001")
 	private int customerId;
+	
+	private String profileImage;
 
 	@Size(min = 3, max = 20, message = "First name must be between 3 and 20 characters")
 	private String customerFirstName;
@@ -57,7 +59,13 @@ public class CustomerDTO {
 		super();
 	}
 
+	public String getProfileImage() {
+		return profileImage;
+	}
 
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
 
 	public String getCustomerFirstName() {
 		return customerFirstName;

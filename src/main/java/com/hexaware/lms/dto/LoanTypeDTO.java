@@ -12,6 +12,7 @@ public class LoanTypeDTO {
 	@Max(value = 30, message = "Interest base rate cannot be greater than 30")
 	private double loanInterestBaseRate;
 
+
 	@Min(value = 0, message = "Management fees must be at least 0")
 	@Max(value = 20000, message = "Management fees cannot be greater than 20000")
 	private double loanManagementFees;

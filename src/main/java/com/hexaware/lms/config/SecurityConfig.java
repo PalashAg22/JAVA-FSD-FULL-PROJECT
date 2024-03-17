@@ -30,7 +30,7 @@ import com.hexaware.lms.filter.JwtAuthFilter;
 public class SecurityConfig {
 
 	Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
-	
+
 	@Autowired
 	private JwtAuthFilter authFilter;
 
@@ -43,29 +43,27 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http.cors().and().csrf().disable().authorizeHttpRequests()
-				.requestMatchers("/api/customer/login","/api/admin/login", "/api/customer/register","/api/dashboard","/api/contactUs","/api/checkEMI/{principal}/{rate}/{tenure}",
-						"/v3/api-docs/**", "/swagger-ui/**","/swagger-resources/**").permitAll()
-				.and()
-				.authorizeHttpRequests().anyRequest().authenticated()
-				.and()
-				.sessionManagement()
+				.requestMatchers("/api/customer/login", "/api/admin/login", "/api/customer/register", "/api/dashboard",
+						"/api/contactUs", "/api/checkEMI/{principal}/{rate}/{tenure}", "/v3/api-docs/**",
+						"/swagger-ui/**", "/swagger-resources/**")
+				.permitAll().and().authorizeHttpRequests().anyRequest().authenticated().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authenticationProvider(authenticationProvider())
 				.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class).build();
 
 	}
-	
+
 	@Bean
-	 public CorsFilter corsFilter() {
-      CorsConfiguration config = new CorsConfiguration();
-      config.setAllowCredentials(true);
-      config.addAllowedOrigin("http://fsd-final-project-angular.s3-website-us-east-1.amazonaws.com");
-      config.addAllowedHeader("*");
-      config.addAllowedMethod("*");
-      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-      source.registerCorsConfiguration("/**", config);
-      return new CorsFilter(source);
-  }
+	public CorsFilter corsFilter() {
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.addAllowedOrigin("http://localhost:4200");
+		config.addAllowedHeader("*");
+		config.addAllowedMethod("*");
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
+		return new CorsFilter(source);
+	}
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
@@ -83,11 +81,8 @@ public class SecurityConfig {
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-
-	    	logger.info("Inside authenticationManager");
-
+		logger.info("Inside authenticationManager");
 		return config.getAuthenticationManager();
 	}
-
 
 }
