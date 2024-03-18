@@ -31,7 +31,7 @@ public class CustomerDTOMapper {
 			customerDTO.setPassword(password);
 			customerDTO.setDateOfBirth(dateOfBirth);
 			customerDTO.setGender(gender);
-			customerDTO.setAddress(fullAddress); // Map fullAddress to address field
+			customerDTO.setAddress(fullAddress);
 			customerDTO.setState(state);
 			customerDTO.setCreditScore(creditScore);
 			customerDTO.setPanCardNumber(panCardNumber);

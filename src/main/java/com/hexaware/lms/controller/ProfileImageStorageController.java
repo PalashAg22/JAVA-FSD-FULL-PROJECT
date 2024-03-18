@@ -3,6 +3,8 @@ package com.hexaware.lms.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,8 @@ import com.hexaware.lms.service.ProfileImageStorageService;
 @RequestMapping("/api/file")
 @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
 public class ProfileImageStorageController {
+	
+	Logger log = LoggerFactory.getLogger(ProfileImageStorageController.class);
 
 	@Autowired
 	private ProfileImageStorageService service;
@@ -30,25 +34,27 @@ public class ProfileImageStorageController {
 	@PostMapping("/updateProfileImage/{userId}/{fileName}")
 	public ResponseEntity<Map<String, String>> updateProfile(@RequestParam(value = "file") MultipartFile file,
 	        @PathVariable String fileName, @PathVariable long userId) {
-	    if (fileName.equals("null") || fileName == null) {
+		log.info("Request received to upload file: "+fileName);
+//	    if (fileName.equals("null") || fileName == null) {
 	        String uploadedFileName = service.uploadFile(file, userId);
 	        Map<String, String> response = new HashMap<>();
 	        response.put("message", "File uploaded successfully");
 	        response.put("fileName", uploadedFileName);
 	        return ResponseEntity.ok().body(response);
-	    } else {
-	        service.deleteFile(fileName, userId);
-	        String uploadedFileName = service.uploadFile(file, userId);
-	        Map<String, String> response = new HashMap<>();
-	        response.put("message", "File uploaded successfully");
-	        response.put("fileName", uploadedFileName);
-	        return ResponseEntity.ok().body(response);
-	    }
+//	    } else {
+//	        service.deleteFile(fileName, userId);
+//	        String uploadedFileName = service.uploadFile(file, userId);
+//	        Map<String, String> response = new HashMap<>();
+//	        response.put("message", "File uploaded successfully");
+//	        response.put("fileName", uploadedFileName);
+//	        return ResponseEntity.ok().body(response);
+//	    }
 	}
 
 
 	@DeleteMapping("/delete/{userId}/{fileName}")
 	public ResponseEntity<Map<String, String>> deleteFile(@PathVariable long userId, @PathVariable String fileName ) {
+		log.info("Request received to delete file: "+fileName);
 	    try {
 	        String deletedFileName = service.deleteFile(fileName, userId);
 	        Map<String, String> response = new HashMap<>();

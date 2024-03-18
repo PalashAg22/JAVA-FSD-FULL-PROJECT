@@ -56,16 +56,16 @@ public class ProfileImageStorageService {
 	    }
 
 	    public String deleteFile(String fileName, long userId) {
-	        if (fileName != null || !fileName.equals("null")) {
-	            s3Client.deleteObject(bucketName, fileName);
-	        }
+//	        if (fileName != null && !fileName.equals("null")) {
+//	            s3Client.deleteObject(bucketName, fileName);
+//	        }
 	        Customer customer = custRepo.findById(userId).orElse(null);
 	        Admin admin = adminRepo.findById(userId).orElse(null);
 	        if (customer != null) {
-	            custRepo.updateCustomerProfilePic(null, userId);
+	            custRepo.updateCustomerProfilePic("null", userId);
 	        }
 	        if (admin != null) {
-	            adminRepo.updateAdminProfilePic(null, userId);
+	            adminRepo.updateAdminProfilePic("null", userId);
 	        }
 	        return "File deleted successfully";
 	    }
