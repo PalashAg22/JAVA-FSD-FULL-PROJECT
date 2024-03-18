@@ -19,7 +19,7 @@ public interface CustomerRepository extends JpaRepository<Customer,Long>{
 	Optional<Customer> findByEmail(String email);
 	
 	@Modifying
-	@Query("update Customer c set c.profileImage=?1 where c.customerId=?2")
-	void updateCustomerProfilePic(String fileName,long customerId);
+	@Query("update Customer c set c.profileImage=?1,c.image=?2 where c.customerId=?3")
+	void updateCustomerProfilePic(String fileName,byte[] file,long customerId);
 	
 }

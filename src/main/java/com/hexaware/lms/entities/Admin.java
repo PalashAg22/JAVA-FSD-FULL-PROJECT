@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.SequenceGenerator;
 
 @Entity
@@ -26,6 +27,9 @@ public class Admin{
 	private String email;
 
 	private String password;
+	
+	@Lob
+	private byte[] image;
 	
 	@Column(columnDefinition = "varchar(5) default 'ADMIN'",nullable=false)
 	private String role="ADMIN";
@@ -97,6 +101,14 @@ public class Admin{
 	public void setRole(String role) {
 		this.role = role;
 	}
+	
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
 
 	@Override
 	public String toString() {
@@ -104,10 +116,5 @@ public class Admin{
 		return "Admin [AdminId=" + adminId + ", adminFirstName=" + adminFirstName + ", adminLastName=" + adminLastName
 
 				+ ", email=" + email + ", password=" + password + ", role=" + role + "]";
-	}
-
-	
-	
-	
-	
+	}	
 }

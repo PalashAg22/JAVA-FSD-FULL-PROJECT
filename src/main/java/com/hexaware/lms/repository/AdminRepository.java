@@ -16,6 +16,6 @@ public interface AdminRepository extends JpaRepository<Admin,Long>{
 	Optional<Admin> findByEmail(String email);
 	
 	@Modifying
-	@Query("update Admin d set d.profileImage=?1 where d.adminId=?2")
-	void updateAdminProfilePic(String fileName,long adminId);
+	@Query("update Admin d set d.profileImage=?1 ,d.image=?2 where d.adminId=?3")
+	void updateAdminProfilePic(String fileName,byte[] file,long adminId);
 }

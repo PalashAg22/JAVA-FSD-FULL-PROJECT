@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 
@@ -22,6 +23,9 @@ public class Customer {
 	
 	@Column(name="profile")
 	private String profileImage;
+	
+	@Lob
+	private byte[] image;
 
 	@Column(name = "firstName")
 	private String customerFirstName;
@@ -68,6 +72,14 @@ public class Customer {
 
 	public void setProfileImage(String profileImage) {
 		this.profileImage = profileImage;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 
 	public String getCustomerFirstName() {
