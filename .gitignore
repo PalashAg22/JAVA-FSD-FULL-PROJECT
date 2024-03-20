@@ -9,6 +9,3 @@
 
 # Ignore log files
 *.log
-
-# Ignore application properties file
-/src/main/resources/application.properties
